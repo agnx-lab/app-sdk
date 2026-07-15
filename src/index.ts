@@ -16,4 +16,5 @@ export type {
   WorkspaceAppModule,
   WorkspaceAppPickFilesInput,
   WorkspaceAppRunContext,
+  WorkspaceAppStorageApi,
 } from "./host-api";
