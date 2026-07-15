@@ -1,0 +1,23 @@
+{
+  "name": "@getagnx/app-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agnx 工作区 Mini-App 通用协议 surface（类型 + activate(host)）；与具体行业 App 无关。",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "react-native": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "react-native": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
