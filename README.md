@@ -58,4 +58,9 @@ export default mod;
 
 ## 与 skill
 
-未来 `agnx-app` skill：`npm i @getagnx/app-sdk` → 按本 README / JSDoc 实现 `activate(host)` → 放入或安装到 apps。
+`agnx-app` skill（智能体代写微应用）：
+
+- 本机：`~/.agents/skills/agnx-app/SKILL.md`
+- 仓库：`skills/agnx-app/SKILL.md`
+
+流程：`npm i @getagnx/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
