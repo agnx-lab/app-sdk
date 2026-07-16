@@ -21,7 +21,7 @@ export interface WorkspaceAppRunContext {
 
 /**
  * 经宿主托管后的文件引用。
- * - `uri` 通常是 `$AGNX_HOME/app-data/<appId>/…` 或兼容期的 desktop-attachments 绝对路径
+ * - `uri` 通常是 `$AGNX_HOME/apps/data/<appId>/…` 或兼容期的 desktop-attachments 绝对路径
  * - 播放 / 预览前请调用 `host.files.resolveObjectUrl`
  */
 export interface WorkspaceAppManagedFile {
@@ -46,7 +46,7 @@ export interface WorkspaceAppPickFilesInput {
   accept?: string;
   filterLabel?: string;
   /**
-   * 写入该 App 的数据根（`$AGNX_HOME/app-data/<appId>/files/`）。
+   * 写入该 App 的数据根（`$AGNX_HOME/apps/data/<appId>/files/`）。
    * 强烈建议外置 App 传入自己的 `manifest.id`，以便卸载时可选清数据且跨重启可播放。
    */
   appId?: string;
@@ -55,7 +55,7 @@ export interface WorkspaceAppPickFilesInput {
 /** App 运行时数据路径合同（与 `$AGNX_HOME/apps/<id>` 代码根分离）。 */
 export interface WorkspaceAppStorageApi {
   /**
-   * 返回 `$AGNX_HOME/app-data/<appId>/`（保证目录存在）。
+   * 返回 `$AGNX_HOME/apps/data/<appId>/`（保证目录存在）。
    * App 应把数据库、用户上传等写入此树，**不要**写进 `apps/<id>/`。
    */
   getDataRoot(appId: string): Promise<string>;
@@ -65,7 +65,7 @@ export interface WorkspaceAppStorageApi {
    */
   clearData(appId: string): Promise<void>;
   /**
-   * 读写 JSON 文档（落在 `app-data/<appId>/state/<key>.json`）。
+   * 读写 JSON 文档（落在 `apps/data/<appId>/state/<key>.json`）。
    * 经 daemon 时 Web / Native / Desktop 共享同一真相源（对齐项目/对话等四视图）。
    * `key` 仅允许 `[A-Za-z0-9._-]+`。
    */
@@ -121,7 +121,7 @@ export interface WorkspaceAppHostApi {
     resolveObjectUrl(uri: string): Promise<string>;
   };
 
-  /** 运行时数据根（默认 `$AGNX_HOME/app-data/<appId>`）。 */
+  /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;
 
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */

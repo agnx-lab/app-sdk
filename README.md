@@ -41,13 +41,13 @@ export default mod;
 
 ## Host 表面（摘要）
 
-| 分组 | API                                                                                                                        |
-| ---- | -------------------------------------------------------------------------------------------------------------------------- |
-| 贡献 | `registerPrimarySegment` / `ItemProvider` / `Command` / `MiniApp` / `ItemMenu` / `Shortcut`                                |
-| 导航 | `openMiniAppTab` / `requestPrimaryView`                                                                                    |
-| 文件 | `files.pickAndImport` / `files.resolveObjectUrl`                                                                           |
-| 存储 | `storage.getDataRoot` / `clearData` / **`readJson` / `writeJson`**（`app-data/<id>/state/<key>.json`，经 daemon 三端共享） |
-| 平台 | `platform.isWeb`                                                                                                           |
+| 分组 | API                                                                                                                         |
+| ---- | --------------------------------------------------------------------------------------------------------------------------- |
+| 贡献 | `registerPrimarySegment` / `ItemProvider` / `Command` / `MiniApp` / `ItemMenu` / `Shortcut`                                 |
+| 导航 | `openMiniAppTab` / `requestPrimaryView`                                                                                     |
+| 文件 | `files.pickAndImport` / `files.resolveObjectUrl`                                                                            |
+| 存储 | `storage.getDataRoot` / `clearData` / **`readJson` / `writeJson`**（`apps/data/<id>/state/<key>.json`，经 daemon 三端共享） |
+| 平台 | `platform.isWeb`                                                                                                            |
 
 **禁止**在本包增加行业语义（如 `pickMusic`）。过滤扩展名等由 App 自己传入 `files.pickAndImport`。
 
