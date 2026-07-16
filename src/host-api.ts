@@ -123,6 +123,11 @@ export interface WorkspaceAppHostApi {
   registerItemMenu(contribution: WorkspaceAppItemMenuContribution): void;
   /** 注册快捷键（合并进宿主帮助面板；优先 `workspace.app.*` actionId）。 */
   registerShortcut(contribution: WorkspaceAppShortcutContribution): void;
+  /**
+   * 列表项打开 Tab 前的准备回调（按 appId）。
+   * 例如 Music 在打开单例播放器 Tab 前先 `setNowPlaying(itemId)`。
+   */
+  registerListItemOpenPreparer(appId: string, preparer: (itemId: string) ***REMOVED*** void): () ***REMOVED*** void;
 
   /** 在当前工作区打开 Mini-App Tab。 */
   openMiniAppTab(input: {
