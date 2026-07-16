@@ -23,6 +23,7 @@ export function activate(host: WorkspaceAppHostApi): void {
     appId,
     label: "Demo",
     order: 60,
+    icon: "sticky-note", // optional; host maps known keys → Lucide
   });
   host.registerCommand({
     id: "demo.open",

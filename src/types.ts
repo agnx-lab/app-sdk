@@ -26,6 +26,11 @@ export interface WorkspaceAppPrimarySegmentContribution {
   /** 越小越靠前；内置默认 10/20/30/40。 */
   order: number;
   keywords?: readonly string[];
+  /**
+   * 侧栏/命令面板主视图图标键（宿主映射到 Lucide 等）。
+   * 例：`sticky-note`、`music`；未提供时宿主用通用回落图标。
+   */
+  icon?: string;
   /** 关联的 itemProvider 贡献 id；阶段 B 可暂空，仅占位分段目录。 */
   itemProviderId?: string;
   /** 关联的 organize / PrimaryListBlock id。 */
