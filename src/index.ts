@@ -18,4 +18,6 @@ export type {
   WorkspaceAppPickFilesInput,
   WorkspaceAppRunContext,
   WorkspaceAppStorageApi,
+  WorkspaceAppSyncApi,
+  WorkspaceAppSyncEvent,
 } from "./host-api";

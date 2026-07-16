@@ -73,6 +73,31 @@ export interface WorkspaceAppStorageApi {
   writeJson(appId: string, key: string, value: unknown): Promise<void>;
 }
 
+/** 可选跨端实时同步（§10.7）：存储 ≠ 同步；未接入则零流量。 */
+export interface WorkspaceAppSyncEvent {
+  appId: string;
+  channel: string;
+  revision: string | number;
+  publisherClientId?: string;
+  payload?: unknown;
+}
+
+export interface WorkspaceAppSyncApi {
+  /** 写完 storage 后发布 revision ping；daemon 扇出到其他已连接端。 */
+  publish(input: {
+    appId: string;
+    channel: string;
+    revision: string | number;
+    payload?: unknown;
+  }): void;
+  /** 订阅本 App（可选 channel）事件；返回取消订阅。 */
+  subscribe(input: {
+    appId: string;
+    channel?: string;
+    onEvent: (event: WorkspaceAppSyncEvent) ***REMOVED*** void;
+  }): () ***REMOVED*** void;
+}
+
 /**
  * 宿主实现的完整表面。外置 `main` 只允许依赖本接口。
  *
@@ -123,6 +148,12 @@ export interface WorkspaceAppHostApi {
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;
+
+  /**
+   * 可选跨端实时同步（§10.7）。
+   * 需要对话级三端即时更新时再接；未提供 / 未调用则仅 storage 落盘。
+   */
+  sync?: WorkspaceAppSyncApi;
 
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */
   platform: {
