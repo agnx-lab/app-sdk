@@ -48,6 +48,7 @@ export default mod;
 | 文件 | `files.pickAndImport` / `files.resolveObjectUrl`                                                                            |
 | 存储 | `storage.getDataRoot` / `clearData` / **`readJson` / `writeJson`**（`apps/data/<id>/state/<key>.json`，经 daemon 三端共享） |
 | 平台 | `platform.isWeb`                                                                                                            |
+| 同步 | **规划中（可选）**：`sync.subscribe` / `sync.publish` — 需要对话级三端实时时再接；未接则仅 storage 落盘。权威见活页 §10.7   |
 
 **禁止**在本包增加行业语义（如 `pickMusic`）。过滤扩展名等由 App 自己传入 `files.pickAndImport`。
 
