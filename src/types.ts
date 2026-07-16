@@ -19,6 +19,14 @@ export interface WorkspaceAppListItem {
   };
 }
 
+/**
+ * App 可直接贡献的图标组件（推荐）；与宿主同树挂载，无需宿主硬编码 per-App 图标。
+ * 也可用 string 键走宿主通用别名表（非业务特判）。
+ */
+export type WorkspaceAppIcon =
+  | string
+  | ((props: { size?: number | string; color?: string; absoluteStrokeWidth?: boolean }) ***REMOVED*** unknown);
+
 export interface WorkspaceAppPrimarySegmentContribution {
   id: string;
   appId: WorkspaceAppId;
@@ -27,10 +35,10 @@ export interface WorkspaceAppPrimarySegmentContribution {
   order: number;
   keywords?: readonly string[];
   /**
-   * 侧栏/命令面板主视图图标键（宿主映射到 Lucide 等）。
-   * 例：`sticky-note`、`music`；未提供时宿主用通用回落图标。
+   * 侧栏/命令面板主视图图标。
+   * 推荐传 Lucide 等组件；string 仅作宿主通用别名键，宿主不得为单个 App 特判。
    */
-  icon?: string;
+  icon?: WorkspaceAppIcon;
   /** 关联的 itemProvider 贡献 id；阶段 B 可暂空，仅占位分段目录。 */
   itemProviderId?: string;
   /** 关联的 organize / PrimaryListBlock id。 */
@@ -62,17 +70,14 @@ export interface WorkspaceAppCommandContribution {
   }) ***REMOVED*** void | Promise<void>;
 }
 
-/**
- * App 可注册的快捷键贡献 — 宿主合并进键盘绑定表（阶段 D 外置 App 同走此协议）。
- * 外置 App 优先使用 `workspace.app.*`；内置亦可复用宿主已有 KeyboardActionId（如 notes）。
- */
+/** 外置 App 优先使用 `workspace.app.*`；sectionId/sectionTitle 由 App 自带，宿主不预留 per-App 帮助分组。 */
 export interface WorkspaceAppShortcutContribution {
   id: string;
   appId: WorkspaceAppId;
   actionId: string;
   helpId: string;
   label: string;
-  /** 帮助面板分组 id；内置如 notes / navigation。 */
+  /** 帮助面板分组 id（自由字符串，由 App 自定）。 */
   sectionId: string;
   sectionTitle: string;
   macCombo: string;
