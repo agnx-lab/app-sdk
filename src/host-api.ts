@@ -64,6 +64,13 @@ export interface WorkspaceAppStorageApi {
    * 不会删除 `apps/<id>` 代码目录。
    */
   clearData(appId: string): Promise<void>;
+  /**
+   * 读写 JSON 文档（落在 `app-data/<appId>/state/<key>.json`）。
+   * 经 daemon 时 Web / Native / Desktop 共享同一真相源（对齐项目/对话等四视图）。
+   * `key` 仅允许 `[A-Za-z0-9._-]+`。
+   */
+  readJson(appId: string, key: string): Promise<unknown | null>;
+  writeJson(appId: string, key: string, value: unknown): Promise<void>;
 }
 
 /**
