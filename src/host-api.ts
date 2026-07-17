@@ -246,10 +246,18 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
-   * 宿主代发 HTTP JSON（Electron 主进程 net.fetch），供 Mini-App 访问本机 sidecar 等。
+   * 宿主代发 HTTP JSON（Electron 主进程 net.fetch），供 Mini-App 访问远端聚合源 / 本机 sidecar。
    */
   http: {
-    fetchJson(url: string, init?: { timeoutMs?: number }): Promise<unknown>;
+    fetchJson(
+      url: string,
+      init?: {
+        method?: "GET" | "POST";
+        headers?: Record<string, string>;
+        body?: string;
+        timeoutMs?: number;
+      },
+    ): Promise<unknown>;
   };
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
