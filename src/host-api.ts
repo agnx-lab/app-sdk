@@ -123,6 +123,24 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
   enableVisibilityToggle?: boolean;
   onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
   onClose?: () ***REMOVED*** void;
+  /**
+   * 编辑布局底部「详情」——打开宿主 view-detail 风格信息 sheet。
+   * Mini-App 只提供回调；弹层由宿主渲染。
+   */
+  detailAction?: {
+    label?: string;
+    onPress: () ***REMOVED*** void;
+  };
+}
+
+export interface WorkspaceAppDetailRow {
+  label: string;
+  value: string;
+}
+
+export interface WorkspaceAppOpenDetailSheetInput {
+  title: string;
+  rows: WorkspaceAppDetailRow[];
 }
 
 /** 瞬时快捷键（按顺序分配 Option/Alt 1–n），用于操作栏悬停提示。 */
@@ -151,6 +169,11 @@ export interface WorkspaceAppUiApi {
   registerTransientShortcuts(
     shortcuts: readonly WorkspaceAppTransientShortcutInput[],
   ): WorkspaceAppTransientShortcutSession;
+  /**
+   * 打开宿主详情 sheet（与侧栏/命令面板 View details 同类信息弹层）。
+   * Mini-App 不得自造第二套详情浮层。
+   */
+  openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
 }
 
 /**
