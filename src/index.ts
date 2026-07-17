@@ -12,6 +12,9 @@ export type {
 } from "./types";
 export { BUILTIN_WORKSPACE_APP_ID } from "./types";
 export type {
+  WorkspaceAppActionBarLayout,
+  WorkspaceAppActionLayoutItem,
+  WorkspaceAppCustomizeActionLayoutInput,
   WorkspaceAppHostApi,
   WorkspaceAppManagedFile,
   WorkspaceAppModule,
@@ -20,4 +23,5 @@ export type {
   WorkspaceAppStorageApi,
   WorkspaceAppSyncApi,
   WorkspaceAppSyncEvent,
+  WorkspaceAppUiApi,
 } from "./host-api";

@@ -99,6 +99,42 @@ export interface WorkspaceAppSyncApi {
 }
 
 /**
+ * 操作栏布局（与宿主 ActionBarLayout 对齐）：
+ * bar = 外露；overflow = 更多菜单；hidden = 不显示。
+ */
+export interface WorkspaceAppActionBarLayout {
+  bar: string[];
+  overflow: string[];
+  hidden?: string[];
+}
+
+export interface WorkspaceAppActionLayoutItem {
+  id: string;
+  label: string;
+  /** 是否允许在编辑布局里隐藏；默认 true */
+  canHide?: boolean;
+}
+
+export interface WorkspaceAppCustomizeActionLayoutInput {
+  title?: string;
+  layout: WorkspaceAppActionBarLayout;
+  defaultLayout: WorkspaceAppActionBarLayout;
+  items: WorkspaceAppActionLayoutItem[];
+  enableVisibilityToggle?: boolean;
+  onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
+  onClose?: () ***REMOVED*** void;
+}
+
+/** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
+export interface WorkspaceAppUiApi {
+  /**
+   * 打开宿主「编辑布局」sheet（与消息 footer / 工作区工具栏 / 安卓 Tab 同源）。
+   * Mini-App 不得自造第二套布局编辑器。
+   */
+  customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
+}
+
+/**
  * 宿主实现的完整表面。外置 `main` 只允许依赖本接口。
  *
  * @example
@@ -159,6 +195,12 @@ export interface WorkspaceAppHostApi {
    * 需要对话级三端即时更新时再接；未提供 / 未调用则仅 storage 落盘。
    */
   sync?: WorkspaceAppSyncApi;
+
+  /**
+   * 宿主 UI 表面（编辑布局等）。
+   * 复用壳层组件；Mini-App 不要自造平行实现。
+   */
+  ui: WorkspaceAppUiApi;
 
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */
   platform: {
