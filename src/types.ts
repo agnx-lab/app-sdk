@@ -61,6 +61,26 @@ export interface WorkspaceAppItemProviderContribution {
   search?: (query: string) ***REMOVED*** WorkspaceAppListItem[] | Promise<WorkspaceAppListItem[]>;
 }
 
+/** 命令面板 / 侧栏列表分组与排序（与内置四分段 organize 同形）。 */
+export interface WorkspaceAppOrganizeContext {
+  query: string;
+  surface: "sidebar-classic" | "sidebar-wechat" | "command-center";
+}
+
+export interface WorkspaceAppOrganizeGroup {
+  key: string;
+  title: string;
+  items: WorkspaceAppListItem[];
+  subgroups?: WorkspaceAppOrganizeGroup[];
+}
+
+export interface WorkspaceAppOrganizeContribution {
+  id: string;
+  appId: WorkspaceAppId;
+  label: string;
+  organize: (input: WorkspaceAppOrganizeContext) ***REMOVED*** WorkspaceAppOrganizeGroup[];
+}
+
 export interface WorkspaceAppCommandContribution {
   id: string;
   appId: WorkspaceAppId;

@@ -8,6 +8,7 @@ import type {
   WorkspaceAppItemProviderContribution,
   WorkspaceAppListItem,
   WorkspaceAppMiniAppContribution,
+  WorkspaceAppOrganizeContribution,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
 } from "./types";
@@ -50,6 +51,15 @@ export interface WorkspaceAppPickFilesInput {
    * 强烈建议外置 App 传入自己的 `manifest.id`，以便卸载时可选清数据且跨重启可播放。
    */
   appId?: string;
+}
+
+/** 将网络资源托管到 `$AGNX_HOME/apps/data/<appId>/files/`。 */
+export interface WorkspaceAppImportRemoteFileInput {
+  appId: string;
+  url: string;
+  title?: string;
+  fileName?: string;
+  mimeType?: string;
 }
 
 /** App 运行时数据路径合同（与 `$AGNX_HOME/apps/<id>` 代码根分离）。 */
@@ -193,6 +203,11 @@ export interface WorkspaceAppHostApi {
   registerPrimarySegment(contribution: WorkspaceAppPrimarySegmentContribution): void;
   /** 注册主视图下列表数据源。 */
   registerItemProvider(contribution: WorkspaceAppItemProviderContribution): void;
+  /**
+   * 注册列表分组 / 排序（命令面板与侧栏同构 organize）。
+   * 与 `primarySegment.organizeBlockId` 对齐；Music / Notes 后续分组排序走此口，禁止宿主 per-App 特判。
+   */
+  registerOrganize(contribution: WorkspaceAppOrganizeContribution): void;
   /** 注册命令面板可搜索命令。 */
   registerCommand(contribution: WorkspaceAppCommandContribution): void;
   /** 注册 Mini-App Tab 面板（自定义 React 组件）。 */
@@ -226,6 +241,7 @@ export interface WorkspaceAppHostApi {
    */
   files: {
     pickAndImport(input?: WorkspaceAppPickFilesInput): Promise<WorkspaceAppManagedFile[]>;
+    importFromUrl(input: WorkspaceAppImportRemoteFileInput): Promise<WorkspaceAppManagedFile>;
     resolveObjectUrl(uri: string): Promise<string>;
   };
 

@@ -7,6 +7,9 @@ export type {
   WorkspaceAppItemProviderContribution,
   WorkspaceAppListItem,
   WorkspaceAppMiniAppContribution,
+  WorkspaceAppOrganizeContribution,
+  WorkspaceAppOrganizeContext,
+  WorkspaceAppOrganizeGroup,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
 } from "./types";
@@ -18,6 +21,7 @@ export type {
   WorkspaceAppDetailRow,
   WorkspaceAppHostApi,
   WorkspaceAppManagedFile,
+  WorkspaceAppImportRemoteFileInput,
   WorkspaceAppModule,
   WorkspaceAppOpenDetailSheetInput,
   WorkspaceAppPickFilesInput,
