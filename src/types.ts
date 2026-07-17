@@ -99,6 +99,8 @@ export interface WorkspaceAppMiniAppContribution {
   id: string;
   appId: WorkspaceAppId;
   title: string;
+  /** Tab / 切换器 leading 图标；推荐 Lucide 组件。 */
+  icon?: WorkspaceAppIcon;
   /** 阶段 C 再挂载真实组件；阶段 B 仅登记槽位。 */
   component?: unknown;
   /** 标签标题：同步读当前 entity（可接 store.getState）。 */
