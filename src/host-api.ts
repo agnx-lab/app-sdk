@@ -230,7 +230,8 @@ export interface WorkspaceAppUiApi {
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
   /**
    * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。
-   * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；未激活不 preventDefault。
+   * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；
+   * 激活时优先于宿主全局 ⌥N（跳 Tab / Android 等）；未激活不 preventDefault。
    */
   registerTransientShortcuts(
     shortcuts: readonly WorkspaceAppTransientShortcutInput[],
