@@ -204,6 +204,10 @@ export interface WorkspaceAppActionOverflowMenuProps {
   triggerSize?: number;
   triggerColor?: string;
   testID?: string;
+  /** 悬停某菜单项时回调；移出项/旁路面板时传 null */
+  onItemHoverChange?: (id: string | null) ***REMOVED*** void;
+  /** 悬停旁路面板（如音量条），渲染在菜单项列表右侧，同属菜单表面不外点关闭 */
+  hoverSidePanel?: unknown;
 }
 
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
