@@ -32,6 +32,8 @@ export interface WorkspaceAppManagedFile {
   mimeType?: string;
   /** local = 本机导入；remote = 网络资源（若宿主支持）。 */
   origin?: "local" | "remote";
+  /** 落盘字节数；下载成功时应 > 0。 */
+  byteSize?: number;
 }
 
 /**
