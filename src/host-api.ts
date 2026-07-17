@@ -4,6 +4,7 @@
 // 把产物放到 `$AGNX_HOME/apps/<appId>/`。不要 import `@getagnx/app` 内部路径。
 import type {
   WorkspaceAppCommandContribution,
+  WorkspaceAppIcon,
   WorkspaceAppItemMenuContribution,
   WorkspaceAppItemProviderContribution,
   WorkspaceAppListItem,
@@ -176,6 +177,37 @@ export interface WorkspaceAppTransientShortcutRegisterOptions {
   isActive?: () ***REMOVED*** boolean;
 }
 
+/** 打开宿主复用的 DropdownMenu（与文件树 / 工具栏 overflow 同源）。 */
+export interface WorkspaceAppMenuAnchor {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export type WorkspaceAppMenuItem =
+  | { type: "separator" }
+  | {
+      type: "item";
+      id: string;
+      label: string;
+      /** 传 Lucide 组件；宿主渲染为 leading，禁止 Mini-App 自造菜单行 */
+      icon?: WorkspaceAppIcon;
+      /** 键帽序列，交宿主 `<Shortcut keys={…} />` 渲染（如 `["alt","1"]`） */
+      shortcutKeys?: readonly string[];
+      disabled?: boolean;
+    };
+
+export interface WorkspaceAppOpenMenuInput {
+  anchor: WorkspaceAppMenuAnchor;
+  items: readonly WorkspaceAppMenuItem[];
+  side?: "top" | "bottom" | "left" | "right";
+  align?: "start" | "center" | "end";
+  onSelect: (id: string) ***REMOVED*** void;
+  onClose?: () ***REMOVED*** void;
+  testID?: string;
+}
+
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
@@ -196,6 +228,11 @@ export interface WorkspaceAppUiApi {
    * Mini-App 不得自造第二套详情浮层。
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
+  /**
+   * 打开宿主 DropdownMenu（与文件树工具栏「…」overflow 同源：分割线、Shortcut 键帽）。
+   * Mini-App 不得自造第二套右键/三点菜单样式。
+   */
+  openMenu(input: WorkspaceAppOpenMenuInput): void;
 }
 
 /**
