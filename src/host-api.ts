@@ -177,14 +177,7 @@ export interface WorkspaceAppTransientShortcutRegisterOptions {
   isActive?: () ***REMOVED*** boolean;
 }
 
-/** 打开宿主复用的 DropdownMenu（与文件树 / 工具栏 overflow 同源）。 */
-export interface WorkspaceAppMenuAnchor {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
+/** 更多菜单行（与工具栏 overflow 同源数据结构）。 */
 export type WorkspaceAppMenuItem =
   | { type: "separator" }
   | {
@@ -198,13 +191,18 @@ export type WorkspaceAppMenuItem =
       disabled?: boolean;
     };
 
-export interface WorkspaceAppOpenMenuInput {
-  anchor: WorkspaceAppMenuAnchor;
+export interface WorkspaceAppActionOverflowMenuProps {
   items: readonly WorkspaceAppMenuItem[];
+  onSelect: (id: string) ***REMOVED*** void;
+  /** 底部追加「编辑布局」，与 WorkspacePaneToolbar overflow 同源 */
+  showEditLayout?: boolean;
+  editLayoutLabel?: string;
+  onEditLayout?: () ***REMOVED*** void;
+  moreLabel?: string;
   side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
-  onSelect: (id: string) ***REMOVED*** void;
-  onClose?: () ***REMOVED*** void;
+  triggerSize?: number;
+  triggerColor?: string;
   testID?: string;
 }
 
@@ -229,10 +227,10 @@ export interface WorkspaceAppUiApi {
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
   /**
-   * 打开宿主 DropdownMenu（与文件树工具栏「…」overflow 同源：分割线、Shortcut 键帽）。
-   * Mini-App 不得自造第二套右键/三点菜单样式。
+   * 与 WorkspacePaneToolbar「…」overflow **同一套** DropdownMenu 装配。
+   * Mini-App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
    */
-  openMenu(input: WorkspaceAppOpenMenuInput): void;
+  ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
 }
 
 /**
