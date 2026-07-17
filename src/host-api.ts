@@ -231,6 +231,21 @@ export interface WorkspaceAppUiApi {
    * Mini-App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
    */
   ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
+  /**
+   * 宿主悬停 tip（Tooltip + ShortcutTooltipContent 键帽）。
+   * Mini-App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。
+   */
+  ActionTooltip: (props: WorkspaceAppActionTooltipProps) ***REMOVED*** unknown;
+}
+
+export interface WorkspaceAppActionTooltipProps {
+  label: string;
+  /** 如 `["alt","1"]`；由宿主 Shortcut 渲染键帽，禁止写进 label */
+  shortcutKeys?: readonly string[];
+  side?: "top" | "bottom" | "left" | "right";
+  /** 为 false 时不包 tip，只渲染 children（音量非静音等） */
+  enabled?: boolean;
+  children: unknown;
 }
 
 /**

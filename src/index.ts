@@ -25,6 +25,7 @@ export type {
   WorkspaceAppModule,
   WorkspaceAppOpenDetailSheetInput,
   WorkspaceAppActionOverflowMenuProps,
+  WorkspaceAppActionTooltipProps,
   WorkspaceAppMenuItem,
   WorkspaceAppPickFilesInput,
   WorkspaceAppRunContext,
