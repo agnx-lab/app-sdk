@@ -204,9 +204,16 @@ export interface WorkspaceAppActionOverflowMenuProps {
   triggerSize?: number;
   triggerColor?: string;
   testID?: string;
-  /** 悬停某菜单项时回调；移出项/旁路面板时传 null */
+  /**
+   * 通用：悬停某菜单项时回调；移出项或旁路飞出层时传 null。
+   * 与 `hoverSidePanel` 配套，供 Mini-App 驱动「菜单内悬停 → 外侧飞出」而不自造菜单。
+   */
   onItemHoverChange?: (id: string | null) ***REMOVED*** void;
-  /** 悬停旁路面板（如音量条），渲染在菜单项列表右侧，同属菜单表面不外点关闭 */
+  /**
+   * 通用：悬停旁路飞出层（音量条等任意内容）。
+   * 宿主绝对定位到菜单卡片右侧外侧，**不参与布局测量**，不会把 align=end 的菜单位置挤偏；
+   * 同属下拉表面，调节时不外点关闭菜单。
+   */
   hoverSidePanel?: unknown;
 }
 
