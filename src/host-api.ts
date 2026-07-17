@@ -211,7 +211,8 @@ export interface WorkspaceAppActionOverflowMenuProps {
   onItemHoverChange?: (id: string | null) ***REMOVED*** void;
   /**
    * 通用：悬停旁路飞出层（音量条等任意内容）。
-   * 宿主绝对定位到菜单卡片右侧外侧，**不参与布局测量**，不会把 align=end 的菜单位置挤偏；
+   * 宿主绝对定位到菜单卡片右侧外侧，并与当前悬停菜单行垂直对齐；
+   * **不参与布局测量**，不会把 align=end 的菜单位置挤偏；
    * 同属下拉表面，调节时不外点关闭菜单。
    */
   hoverSidePanel?: unknown;
