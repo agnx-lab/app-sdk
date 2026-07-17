@@ -113,6 +113,11 @@ export interface WorkspaceAppItemMenuContribution {
   /** 作用于哪个 primary segment / provider。 */
   segmentId: string;
   label: string;
+  /**
+   * 菜单 leading 图标（必填）。
+   * 推荐传 Lucide 组件；宿主不得仅靠 menu id 猜测图标。
+   */
+  icon: WorkspaceAppIcon;
   /** 按条目动态文案（如置顶 / 取消置顶）。 */
   resolveLabel?: (item: WorkspaceAppListItem) ***REMOVED*** string;
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
