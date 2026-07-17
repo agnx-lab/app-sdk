@@ -108,6 +108,11 @@ export interface WorkspaceAppShortcutContribution {
   macCombo: string;
   nonMacCombo: string;
   helpKeys: readonly string[];
+  /**
+   * 仅当 Mini-App 瞬时快捷键面激活时匹配（如音乐播放器可见）。
+   * 用于 ⌥N 等与「跳 Tab」同 chord 的表面专属键，并可进入设置页 Rebind。
+   */
+  requireTransientSurfaceActive?: boolean;
   run?: (context?: {
     serverId?: string;
     workspaceId?: string;

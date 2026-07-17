@@ -176,13 +176,15 @@ export interface WorkspaceAppTransientShortcutRegisterOptions {
    */
   isActive?: () ***REMOVED*** boolean;
   /**
-   * 写入全局 Shortcuts 帮助面板的分组（与 `registerShortcut` 的 section 同构）。
-   * 仅文档/帮助；按键仍由瞬时监听按 `isActive` 消费，不进入统一绑定表。
+   * 写入全局 Shortcuts 帮助面板，并注册可 Rebind 的 `registerShortcut` 绑定。
+   * 需同时传 `appId`。
    */
   helpSection?: {
     id: string;
     title: string;
   };
+  /** 与 helpSection 配对；用于贡献注册 / 卸载。 */
+  appId?: string;
 }
 
 /** 更多菜单行（与工具栏 overflow 同源数据结构）。 */
