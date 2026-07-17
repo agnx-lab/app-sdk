@@ -50,6 +50,15 @@ export default mod;
 | 平台 | `platform.isWeb`                                                                                                            |
 | 同步 | **`sync?.publish` / `sync?.subscribe`**（§10.7：revision ping 经 daemon WS；可选接入）                                      |
 
+### 何时接 sync（S4）
+
+1. **只 storage**：数据只需本端持久、对端下次打开再读即可。
+2. **storage + sync**：写共享 JSON 后要让**已打开**的其他客户端即时 rehydrate（Notes/Music 列表）。
+3. **不要**为 Agent 对话再包一层 sync（已有 daemon WS）。
+4. 未 `subscribe` 的 App：零开销。
+
+样例见 `packages/mini-apps/agnx.notes` / `com.example.music` 的 store 写后 publish。
+
 **禁止**在本包增加行业语义（如 `pickMusic`）。过滤扩展名等由 App 自己传入 `files.pickAndImport`。
 
 ## 产物放置
