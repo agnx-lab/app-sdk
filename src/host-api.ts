@@ -186,6 +186,11 @@ export type WorkspaceAppMenuItem =
       label: string;
       /** 传 Lucide 组件；宿主渲染为 leading，禁止 Mini-App 自造菜单行 */
       icon?: WorkspaceAppIcon;
+      /**
+       * 与栏上同一数据源的强调态（如已置顶）：宿主用 accent 着色/填充 leading，
+       * 避免菜单内永远 muted、栏上却高亮的不一致。
+       */
+      active?: boolean;
       /** 键帽序列，交宿主 `<Shortcut keys={…} />` 渲染（如 `["alt","1"]`） */
       shortcutKeys?: readonly string[];
       disabled?: boolean;
@@ -206,16 +211,14 @@ export interface WorkspaceAppActionOverflowMenuProps {
   testID?: string;
   /**
    * 通用：悬停某菜单项时回调；移出项或旁路飞出层时传 null。
-   * 与 `hoverSidePanel` 配套，供 Mini-App 驱动「菜单内悬停 → 外侧飞出」而不自造菜单。
+   * 与 `renderHoverSidePanel` 配套。
    */
   onItemHoverChange?: (id: string | null) ***REMOVED*** void;
   /**
-   * 通用：悬停旁路飞出层（音量条等任意内容）。
-   * 宿主把飞出层挂在对应菜单行上，绝对定位到该行右侧外侧（位置由行结构定死，不依赖测量）；
-   * **不参与布局测量**，不会把 align=end 的菜单位置挤偏；
-   * 同属下拉表面，调节时不外点关闭菜单。
+   * 通用：按悬停项 id 渲染卡片外侧飞出层（进度条 / 数值器 / 输入框等由调用方决定）。
+   * 挂在对应行右侧，位置由行结构定死；不参与布局测量；同属下拉表面。
    */
-  hoverSidePanel?: unknown;
+  renderHoverSidePanel?: (id: string) ***REMOVED*** unknown;
 }
 
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
