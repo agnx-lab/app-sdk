@@ -30,6 +30,7 @@ export type {
   WorkspaceAppSyncApi,
   WorkspaceAppSyncEvent,
   WorkspaceAppTransientShortcutInput,
+  WorkspaceAppTransientShortcutRegisterOptions,
   WorkspaceAppTransientShortcutSession,
   WorkspaceAppUiApi,
 } from "./host-api";

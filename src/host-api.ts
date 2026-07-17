@@ -168,6 +168,14 @@ export interface WorkspaceAppTransientShortcutSession {
   dispose: () ***REMOVED*** void;
 }
 
+export interface WorkspaceAppTransientShortcutRegisterOptions {
+  /**
+   * 仅当返回 true 时消费 ⌥/Alt+1–9。
+   * 用于「当前焦点 Tab 独占」：未激活时不得抢其它 Tab（如 Android）的同名快捷键。
+   */
+  isActive?: () ***REMOVED*** boolean;
+}
+
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
@@ -176,10 +184,12 @@ export interface WorkspaceAppUiApi {
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
   /**
-   * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。后一次注册覆盖前一次；调用 dispose 卸载。
+   * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。
+   * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；未激活不 preventDefault。
    */
   registerTransientShortcuts(
     shortcuts: readonly WorkspaceAppTransientShortcutInput[],
+    options?: WorkspaceAppTransientShortcutRegisterOptions,
   ): WorkspaceAppTransientShortcutSession;
   /**
    * 打开宿主详情 sheet（与侧栏/命令面板 View details 同类信息弹层）。
