@@ -125,6 +125,19 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
   onClose?: () ***REMOVED*** void;
 }
 
+/** 瞬时快捷键（按顺序分配 Option/Alt 1–n），用于操作栏悬停提示。 */
+export interface WorkspaceAppTransientShortcutInput {
+  id: string;
+  label: string;
+  run: () ***REMOVED*** void;
+}
+
+export interface WorkspaceAppTransientShortcutSession {
+  /** 含快捷键提示的悬停 / title 文案，如「置顶 (⌥1)」 */
+  getTitle: (id: string) ***REMOVED*** string;
+  dispose: () ***REMOVED*** void;
+}
+
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
@@ -132,6 +145,12 @@ export interface WorkspaceAppUiApi {
    * Mini-App 不得自造第二套布局编辑器。
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
+  /**
+   * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。后一次注册覆盖前一次；调用 dispose 卸载。
+   */
+  registerTransientShortcuts(
+    shortcuts: readonly WorkspaceAppTransientShortcutInput[],
+  ): WorkspaceAppTransientShortcutSession;
 }
 
 /**

@@ -12,6 +12,11 @@ export interface WorkspaceAppListItem {
   subtitle?: string;
   updatedAt?: number;
   keywords?: string[];
+  /**
+   * 侧栏 / 命令面板列表置顶。
+   * 宿主通用列表按 pinned 优先排序；由 App 经 itemProvider 提供。
+   */
+  pinned?: boolean;
   open?: {
     panelId: string;
     entityId: string;
@@ -108,5 +113,7 @@ export interface WorkspaceAppItemMenuContribution {
   /** 作用于哪个 primary segment / provider。 */
   segmentId: string;
   label: string;
+  /** 按条目动态文案（如置顶 / 取消置顶）。 */
+  resolveLabel?: (item: WorkspaceAppListItem) ***REMOVED*** string;
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
 }
