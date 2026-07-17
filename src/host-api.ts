@@ -175,6 +175,14 @@ export interface WorkspaceAppTransientShortcutRegisterOptions {
    * 用于「当前焦点 Tab 独占」：未激活时不得抢其它 Tab（如 Android）的同名快捷键。
    */
   isActive?: () ***REMOVED*** boolean;
+  /**
+   * 写入全局 Shortcuts 帮助面板的分组（与 `registerShortcut` 的 section 同构）。
+   * 仅文档/帮助；按键仍由瞬时监听按 `isActive` 消费，不进入统一绑定表。
+   */
+  helpSection?: {
+    id: string;
+    title: string;
+  };
 }
 
 /** 更多菜单行（与工具栏 overflow 同源数据结构）。 */
@@ -232,6 +240,7 @@ export interface WorkspaceAppUiApi {
    * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。
    * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；
    * 激活时优先于宿主全局 ⌥N（跳 Tab / Android 等）；未激活不 preventDefault。
+   * 可选 `helpSection`：写入全局 Shortcuts 帮助面板独立分组（仅文档，不进统一绑定表）。
    */
   registerTransientShortcuts(
     shortcuts: readonly WorkspaceAppTransientShortcutInput[],
