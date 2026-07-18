@@ -65,6 +65,31 @@ export interface WorkspaceAppImportRemoteFileInput {
   mimeType?: string;
 }
 
+/** 选目录（桌面对话框；非桌面返回 null）。 */
+export interface WorkspaceAppPickDirectoryInput {
+  title?: string;
+  defaultPath?: string;
+}
+
+/** 把多份托管本地文件打成 ZIP 写入用户选定目录。 */
+export interface WorkspaceAppExportZipInput {
+  /** 导出 ZIP 文件名，可无 `.zip` 后缀。 */
+  fileName: string;
+  entries: readonly { name: string; uri: string }[];
+  title?: string;
+}
+
+export interface WorkspaceAppExportZipResult {
+  path: string;
+  byteSize: number;
+  entryCount: number;
+}
+
+export interface WorkspaceAppDeleteUrisResult {
+  deleted: string[];
+  skipped: string[];
+}
+
 /** App 运行时数据路径合同（与 `$AGNX_HOME/apps/<id>` 代码根分离）。 */
 export interface WorkspaceAppStorageApi {
   /**
@@ -203,7 +228,9 @@ export type WorkspaceAppMenuItem =
        * 避免菜单内永远 muted、栏上却高亮的不一致。
        */
       active?: boolean;
-      /** 键帽序列，交宿主 `<Shortcut keys={…} />` 渲染（如 `["alt","1"]`） */
+      /** 危险操作（删除等）：宿主用 destructive 着色 */
+      destructive?: boolean;
+      /** 键帽序列，交宿主 `<Shortcut keys={…} />` 渲染（如 `["alt","p"]`） */
       shortcutKeys?: readonly string[];
       disabled?: boolean;
     };
@@ -334,10 +361,23 @@ export interface WorkspaceAppHostApi {
     pickAndImport(input?: WorkspaceAppPickFilesInput): Promise<WorkspaceAppManagedFile[]>;
     importFromUrl(input: WorkspaceAppImportRemoteFileInput): Promise<WorkspaceAppManagedFile>;
     resolveObjectUrl(uri: string): Promise<string>;
+    /** 桌面选目录；取消或非桌面返回 null。 */
+    pickDirectory(input?: WorkspaceAppPickDirectoryInput): Promise<string | null>;
+    /**
+     * 删除托管路径（仅 `$AGNX_HOME/apps/data` 内）。
+     * 用于曲目删除等「列表 + 物理文件」同语义清理。
+     */
+    deleteUris(uris: readonly string[]): Promise<WorkspaceAppDeleteUrisResult>;
+    /**
+     * 选目录后把 entries 打成 ZIP 写入该目录。
+     * 仅桌面；entries.uri 必须是 apps/data 内本地路径。
+     */
+    exportZip(input: WorkspaceAppExportZipInput): Promise<WorkspaceAppExportZipResult | null>;
   };
 
   /**
    * 宿主代发 HTTP JSON（Electron 主进程 net.fetch），供 Mini-App 访问远端聚合源 / 本机 sidecar。
+   * 另可选：媒体 Range 代理（流式播放，非整文件下载）。
    */
   http: {
     fetchJson(
@@ -349,6 +389,42 @@ export interface WorkspaceAppHostApi {
         timeoutMs?: number;
       },
     ): Promise<unknown>;
+    /**
+     * 将 http(s) 音视频 URL 换成本机 Range 代理地址，供 `<audio>` / `<video>` 流式播放。
+     * 非 Electron 时原样返回（passthrough）。
+     */
+    createMediaProxyUrl?(input: {
+      url: string;
+      referer?: string;
+    }): Promise<{ proxyUrl: string; id: string }>;
+  };
+
+  /**
+   * 可选：隐藏浏览器会话截流（屏外加载第三方页，拦截 audio/*）。
+   * 仅桌面 Electron；爬取/站点脚本仍在 Mini-App，宿主只提供通用会话能力。
+   */
+  browserSession?: {
+    captureMedia(input: {
+      pageUrl?: string;
+      /** 内置站点动作；优先于裸 pageUrl 导航策略 */
+      preset?: "pixabay-music-search" | "soundstripe-library-search" | "soundstripe-home" | "none";
+      query?: string;
+      clickButtonText?: string;
+      timeoutMs?: number;
+      /** true=只刮搜索列表，不点播放 */
+      listOnly?: boolean;
+    }): Promise<{
+      mediaUrls: string[];
+      tracks?: Array<{
+        title: string;
+        artist?: string;
+        pageUrl?: string;
+        mediaUrl?: string;
+      }>;
+      finalUrl: string;
+      title: string;
+      preset: string;
+    }>;
   };
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */

@@ -41,14 +41,16 @@ export default mod;
 
 ## Host 表面（摘要）
 
-| 分组 | API                                                                                                                         |
-| ---- | --------------------------------------------------------------------------------------------------------------------------- |
-| 贡献 | `registerPrimarySegment` / `ItemProvider` / `Command` / `MiniApp` / `ItemMenu` / `Shortcut`                                 |
-| 导航 | `openMiniAppTab` / `requestPrimaryView`                                                                                     |
-| 文件 | `files.pickAndImport` / `files.resolveObjectUrl`                                                                            |
-| 存储 | `storage.getDataRoot` / `clearData` / **`readJson` / `writeJson`**（`apps/data/<id>/state/<key>.json`，经 daemon 三端共享） |
-| 平台 | `platform.isWeb`                                                                                                            |
-| 同步 | **`sync?.publish` / `sync?.subscribe`**（§10.7：revision ping 经 daemon WS；可选接入）                                      |
+| 分组       | API                                                                                                                         |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 贡献       | `registerPrimarySegment` / `ItemProvider` / `Command` / `MiniApp` / `ItemMenu` / `Shortcut`                                 |
+| 导航       | `openMiniAppTab` / `requestPrimaryView`                                                                                     |
+| 文件       | `files.pickAndImport` / `files.resolveObjectUrl`                                                                            |
+| 存储       | `storage.getDataRoot` / `clearData` / **`readJson` / `writeJson`**（`apps/data/<id>/state/<key>.json`，经 daemon 三端共享） |
+| HTTP       | `http.fetchJson`（主进程 JSON）；可选 **`http.createMediaProxyUrl`**（localhost Range 流式代理）                            |
+| 浏览器会话 | 可选 **`browserSession.captureMedia`**（屏外页截 `audio/*`；桌面 Electron）                                                 |
+| 平台       | `platform.isWeb`                                                                                                            |
+| 同步       | **`sync?.publish` / `sync?.subscribe`**（§10.7：revision ping 经 daemon WS；可选接入）                                      |
 
 ### 何时接 sync（S4）
 

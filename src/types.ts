@@ -17,6 +17,16 @@ export interface WorkspaceAppListItem {
    * 宿主通用列表按 pinned 优先排序；由 App 经 itemProvider 提供。
    */
   pinned?: boolean;
+  /**
+   * 侧栏当前高亮行（如音乐 now-playing）。
+   * 宿主：`selected = item.active || item.id === selectedEntityId`；由 App 提供，禁止壳层 per-App 特判。
+   */
+  active?: boolean;
+  /**
+   * 侧栏 / 列表行左侧图片（封面等 http(s) 或本机路径）。
+   * 有则宿主优先绘制图片，失败再退回分段默认图标。
+   */
+  imageUrl?: string;
   open?: {
     panelId: string;
     entityId: string;
@@ -52,6 +62,11 @@ export interface WorkspaceAppPrimarySegmentContribution {
   emptyHint?: string;
   /** 空列表主按钮；宿主查找同 app 的 command 贡献并 run。 */
   emptyActionCommandId?: string;
+  /**
+   * 列表顶部常驻操作（命令 id 有序）。
+   * 有值时优先于 `emptyActionCommandId` 渲染横排按钮（如「打开播放器」「上传音乐」）。
+   */
+  listHeaderCommandIds?: readonly string[];
 }
 
 export interface WorkspaceAppItemProviderContribution {
@@ -147,5 +162,7 @@ export interface WorkspaceAppItemMenuContribution {
   icon: WorkspaceAppIcon;
   /** 按条目动态文案（如置顶 / 取消置顶）。 */
   resolveLabel?: (item: WorkspaceAppListItem) ***REMOVED*** string;
+  /** 菜单右侧键帽（如 `["alt","p"]`）；宿主用 Shortcut 渲染。 */
+  shortcutKeys?: readonly string[];
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
 }
