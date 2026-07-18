@@ -164,8 +164,10 @@ export interface WorkspaceAppTransientShortcutInput {
 }
 
 export interface WorkspaceAppTransientShortcutSession {
-  /** 含快捷键提示的悬停 / title 文案，如「置顶 (⌥1)」 */
+  /** 含快捷键提示的悬停 / title 文案，如「置顶 (⌥1)」；会反映 Rebind */
   getTitle: (id: string) ***REMOVED*** string;
+  /** 当前生效的键帽序列（含改绑），供 tip 渲染 */
+  getShortcutKeys: (id: string) ***REMOVED*** readonly string[] | undefined;
   dispose: () ***REMOVED*** void;
 }
 
