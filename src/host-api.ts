@@ -249,6 +249,18 @@ export interface WorkspaceAppActionOverflowMenuProps {
   triggerColor?: string;
   testID?: string;
   /**
+   * 可选列表行/卡片主体。宿主启用桌面右键 + 移动端长按，
+   * 菜单项与三点 **同一份 items**（宿主 ContextMenu 同源）。
+   * Mini-App 禁止再自造第二套右键/长按菜单。
+   */
+  surface?: unknown;
+  /**
+   * surface 布局：
+   * - `row`（默认）：「surface 弹性 + 三点」横排，适合歌曲行
+   * - `card`：三点浮在 surface 右上角，适合封面卡片
+   */
+  layout?: "row" | "card";
+  /**
    * 通用：悬停某菜单项时回调；移出项或旁路飞出层时传 null。
    * 与 `renderHoverSidePanel` 配套。
    */
