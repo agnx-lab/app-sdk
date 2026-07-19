@@ -96,6 +96,18 @@ export interface WorkspaceAppOrganizeContribution {
   organize: (input: WorkspaceAppOrganizeContext) ***REMOVED*** WorkspaceAppOrganizeGroup[];
 }
 
+export interface WorkspaceAppCommandSidebarAction {
+  /**
+   * 侧栏顶部按钮默认是否显示。
+   * 缺省 true（声明了 sidebarAction 即默认进侧栏按钮组）。
+   */
+  defaultVisible?: boolean;
+  /** 按钮文案；缺省用 command.title。 */
+  label?: string;
+  /** 越小越靠前；仅在侧栏按钮组 app 命令段内排序，缺省 100。 */
+  order?: number;
+}
+
 export interface WorkspaceAppCommandContribution {
   id: string;
   appId: WorkspaceAppId;
@@ -103,6 +115,17 @@ export interface WorkspaceAppCommandContribution {
   keywords?: readonly string[];
   /** 对应 keyboard-shortcuts help.id，用于命令面板展示快捷键。 */
   shortcutHelpId?: string;
+  /**
+   * 命令图标。侧栏顶部按钮 / 命令面板可共用；推荐 Lucide 组件或图片型组件。
+   * 宿主不得为具体业务 App 硬编码图标。
+   */
+  icon?: WorkspaceAppIcon;
+  /**
+   * 侧栏顶部按钮组入口。
+   * 有值时：该命令可出现在侧栏顶部按钮组，并进入「命令」编辑布局的「侧栏显示」段。
+   * 无值时：仅命令面板可搜，不进侧栏按钮组，也不出现在该编辑布局（避免与真实侧栏错位）。
+   */
+  sidebarAction?: WorkspaceAppCommandSidebarAction;
   run: (context?: {
     serverId?: string;
     workspaceId?: string;
