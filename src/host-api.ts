@@ -144,6 +144,12 @@ export interface WorkspaceAppActionBarLayout {
   bar: string[];
   overflow: string[];
   hidden?: string[];
+  /**
+   * 外露 bar 是否同时显示图标与文案（「显示完整」）。
+   * 与宿主 ActionBarLayout.showBarLabels 对齐；默认 false（仅图标）。
+   * 接入方即使当前 UI 不渲染文案，也应完整透传保存，避免公共编辑布局失效。
+   */
+  showBarLabels?: boolean;
 }
 
 export interface WorkspaceAppActionLayoutItem {
@@ -254,6 +260,18 @@ export interface WorkspaceAppActionOverflowMenuProps {
    * Mini-App 禁止再自造第二套右键/长按菜单。
    */
   surface?: unknown;
+  /**
+   * 是否渲染三点触发器。默认 true。
+   * 为 false 时必须同时传 `surface`，仅靠右键/长按打开同一份菜单
+   * （例如播放器标题区与底栏三点分置）。
+   */
+  showTrigger?: boolean;
+  /**
+   * surface 右键 / 长按菜单的锚点（公共合同，默认 `point`）。
+   * - `point`：跟鼠标 / 触控落点（宽 surface：标题区、搜索行等必须用这个）
+   * - `trigger`：钉在 surface 盒模型边缘（窄行触发器场景）
+   */
+  contextAnchor?: "point" | "trigger";
   /**
    * surface 布局：
    * - `row`（默认）：「surface 弹性 + 三点」横排，适合歌曲行
