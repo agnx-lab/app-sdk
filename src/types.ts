@@ -229,6 +229,15 @@ export interface WorkspaceAppItemMenuContribution {
   resolveLabel?: (item: WorkspaceAppListItem) ***REMOVED*** string;
   /** 菜单右侧键帽（如 `["alt","p"]`）；宿主用 Shortcut 渲染。 */
   shortcutKeys?: readonly string[];
+  /**
+   * 外露到侧栏列表项三点左侧（菜单外按钮）；hover 与三点同步可见。
+   */
+  showAsChromeAction?: boolean;
+  /**
+   * 是否仍出现在右键/三点菜单；默认 true。
+   * false 时仅 chrome 外露（需配合 showAsChromeAction）。
+   */
+  includeInMenu?: boolean;
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
 }
 
@@ -252,6 +261,15 @@ export interface WorkspaceAppTabContextMenuContribution {
   icon?: WorkspaceAppIcon;
   /** 越小越靠前；缺省 100。 */
   order?: number;
+  /**
+   * 外露到单标题 chrome / 侧栏 Tab 行三点左侧（菜单外按钮）。
+   */
+  showAsChromeAction?: boolean;
+  /**
+   * 是否仍出现在右键/三点菜单；默认 true。
+   * false 时仅 chrome 外露（需配合 showAsChromeAction）。
+   */
+  includeInMenu?: boolean;
   /** 动态文案。 */
   resolveLabel?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** string;
   /** 是否显示；缺省 true。在打开菜单时求值。 */
