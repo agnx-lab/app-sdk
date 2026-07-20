@@ -155,6 +155,8 @@ export interface WorkspaceAppActionBarLayout {
 export interface WorkspaceAppActionLayoutItem {
   id: string;
   label: string;
+  /** 编辑布局列表 leading；传 Lucide 组件，由宿主渲染 */
+  icon?: WorkspaceAppIcon;
   /** 是否允许在编辑布局里隐藏；默认 true */
   canHide?: boolean;
 }
