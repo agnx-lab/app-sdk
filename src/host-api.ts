@@ -243,6 +243,67 @@ export type WorkspaceAppMenuItem =
       disabled?: boolean;
     };
 
+/**
+ * Mini-App 动作贡献：只声明语义，外露 bar / 溢出投影由宿主 ActionBar 消化 layout。
+ * 业务禁止再手写 `if (showBarLabels)`。
+ */
+export interface WorkspaceAppActionContribution {
+  id: string;
+  label: string;
+  icon?: WorkspaceAppIcon;
+  onPress: () ***REMOVED*** void;
+  active?: boolean;
+  destructive?: boolean;
+  disabled?: boolean;
+  shortcutKeys?: readonly string[];
+  /** tip 文案；缺省用 label（可含更完整说明，仍不含快捷键字符串） */
+  tipLabel?: string;
+}
+
+/** 宿主 ActionBar 溢出三点的 chrome 选项（items 由 ActionBar 按 layout 投影生成）。 */
+export type WorkspaceAppActionBarOverflowProps = Omit<
+  WorkspaceAppActionOverflowMenuProps,
+  "items" | "onSelect"
+>;
+
+export interface WorkspaceAppActionBarProps {
+  layout: WorkspaceAppActionBarLayout;
+  /** 已知动作全集；bar/overflow 按 layout.id 取用 */
+  actions: readonly WorkspaceAppActionContribution[];
+  /**
+   * true：不渲染外露 bar，并把原 bar 投影进溢出菜单第一段（移动端小封面等）。
+   * 投影算法与 SDK `projectActionBarOverflowFold` 同源。
+   */
+  hideBar?: boolean;
+  /** rail 排布：`even` 用于大封面底栏均分 */
+  distribute?: "start" | "end" | "even";
+  iconSize?: number;
+  mutedColor?: string;
+  accentColor?: string;
+  /** 三点菜单 chrome；不传则不渲染溢出触发器 */
+  overflowMenu?: WorkspaceAppActionBarOverflowProps;
+  testID?: string;
+}
+
+export interface WorkspaceAppActionBarButtonProps {
+  label: string;
+  /** 由 ActionBar 从 layout.showBarLabels 注入；业务勿自行分支 */
+  showBarLabels: boolean;
+  tipLabel?: string;
+  shortcutKeys?: readonly string[];
+  tipSide?: "top" | "bottom" | "left" | "right";
+  active?: boolean;
+  destructive?: boolean;
+  disabled?: boolean;
+  onPress: () ***REMOVED*** void;
+  iconSize?: number;
+  mutedColor?: string;
+  accentColor?: string;
+  icon?: WorkspaceAppIcon;
+  testID?: string;
+  children?: unknown;
+}
+
 export interface WorkspaceAppActionOverflowMenuProps {
   items: readonly WorkspaceAppMenuItem[];
   onSelect: (id: string) ***REMOVED*** void;
@@ -319,6 +380,15 @@ export interface WorkspaceAppUiApi {
    * Mini-App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
    */
   ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
+  /**
+   * 按 layout 投影外露 bar + 溢出三点；自动消化 showBarLabels / hideBar。
+   * Mini-App 只交 contributions + rail 策略，禁止自绘「显示完整」分支。
+   */
+  ActionBar: (props: WorkspaceAppActionBarProps) ***REMOVED*** unknown;
+  /**
+   * 单个 bar 按钮（图标或图标+文案）；一般由 ActionBar 内部使用，也可单独复用。
+   */
+  ActionBarButton: (props: WorkspaceAppActionBarButtonProps) ***REMOVED*** unknown;
   /**
    * 宿主悬停 tip（Tooltip + ShortcutTooltipContent 键帽）。
    * Mini-App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。

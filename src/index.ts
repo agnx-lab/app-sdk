@@ -28,6 +28,10 @@ export type {
   WorkspaceAppImportRemoteFileInput,
   WorkspaceAppModule,
   WorkspaceAppOpenDetailSheetInput,
+  WorkspaceAppActionContribution,
+  WorkspaceAppActionBarButtonProps,
+  WorkspaceAppActionBarOverflowProps,
+  WorkspaceAppActionBarProps,
   WorkspaceAppActionOverflowMenuProps,
   WorkspaceAppActionTooltipProps,
   WorkspaceAppMenuItem,
@@ -42,3 +46,8 @@ export type {
   WorkspaceAppTransientShortcutSession,
   WorkspaceAppUiApi,
 } from "./host-api";
+export {
+  projectActionBarOverflowFold,
+  type ProjectActionBarOverflowFoldInput,
+  type ProjectActionBarOverflowFoldResult,
+} from "./project-action-bar-overflow";
