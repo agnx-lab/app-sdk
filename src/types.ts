@@ -54,6 +54,12 @@ export interface WorkspaceAppPrimarySegmentContribution {
    * 推荐传 Lucide 等组件；string 仅作宿主通用别名键，宿主不得为单个 App 特判。
    */
   icon?: WorkspaceAppIcon;
+  /**
+   * 列表标题呈现（业务分段声明；宿主按此画，禁止壳层 if appId）。
+   * - default：仅 title（或宿主既有拼接策略）
+   * - inline-muted-subtitle：title 主色 + subtitle 灰色同行（如音乐歌名+艺人）
+   */
+  listTitlePresentation?: "default" | "inline-muted-subtitle";
   /** 关联的 itemProvider 贡献 id；阶段 B 可暂空，仅占位分段目录。 */
   itemProviderId?: string;
   /** 关联的 organize / PrimaryListBlock id。 */
@@ -80,6 +86,8 @@ export interface WorkspaceAppItemProviderContribution {
 export interface WorkspaceAppOrganizeContext {
   query: string;
   surface: "sidebar-classic" | "sidebar-wechat" | "command-center";
+  /** 当前列表 chrome 排序选项 id（由宿主 store 注入）。 */
+  sortOptionId?: string;
 }
 
 export interface WorkspaceAppOrganizeGroup {
@@ -89,11 +97,32 @@ export interface WorkspaceAppOrganizeGroup {
   subgroups?: WorkspaceAppOrganizeGroup[];
 }
 
+/** 列表 chrome 排序 cycle 选项（宿主绘制；App 只声明 id/文案）。 */
+export interface WorkspaceAppListSortOption {
+  id: string;
+  label: string;
+}
+
 export interface WorkspaceAppOrganizeContribution {
   id: string;
   appId: WorkspaceAppId;
   label: string;
   organize: (input: WorkspaceAppOrganizeContext) ***REMOVED*** WorkspaceAppOrganizeGroup[];
+  /**
+   * 侧栏 / 命令面板分组标题右侧排序 cycle。
+   * 有值时宿主展示并可驱动通用列表排序；无值则该分段不显示贡献型排序 chrome。
+   */
+  sortOptions?: readonly WorkspaceAppListSortOption[];
+  /** 默认排序选项；缺省取 sortOptions[0]。 */
+  defaultSortOptionId?: string;
+  /**
+   * 可选：按 sortOptionId 对已过滤 items 排序。
+   * 不提供时宿主按内置约定处理：`title`/`name` 名称；其余按 updatedAt 降序。
+   */
+  sortItems?: (
+    items: readonly WorkspaceAppListItem[],
+    sortOptionId: string,
+  ) ***REMOVED*** WorkspaceAppListItem[];
 }
 
 export interface WorkspaceAppCommandSidebarAction {

@@ -394,6 +394,11 @@ export interface WorkspaceAppUiApi {
    * Mini-App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。
    */
   ActionTooltip: (props: WorkspaceAppActionTooltipProps) ***REMOVED*** unknown;
+  /**
+   * 桌面原生确认框（可选 checkbox）。非桌面时返回 { confirmed: false }。
+   * 高敏操作（如 Frida/改签）必须先走此确认，禁止静默执行。
+   */
+  confirmRisk?(input: WorkspaceAppConfirmRiskInput): Promise<WorkspaceAppConfirmRiskResult>;
 }
 
 export interface WorkspaceAppActionTooltipProps {
@@ -404,6 +409,51 @@ export interface WorkspaceAppActionTooltipProps {
   /** 为 false 时不包 tip，只渲染 children（音量非静音等） */
   enabled?: boolean;
   children: unknown;
+}
+
+/** 桌面主进程在微应用 tools/ 白名单内执行 sidecar 工具。 */
+export interface WorkspaceAppRunToolInput {
+  /** 当前微应用 id；工具必须位于该 App 的本地目录 tools/ 下。 */
+  appId: string;
+  /** 相对路径，仅允许 `tools/*.py|sh|mjs|js`。 */
+  tool: string;
+  /** 传给工具的 argv（无 shell）。 */
+  args?: readonly string[];
+  /** 超时毫秒；默认约 10 分钟，上限约 20 分钟。 */
+  timeoutMs?: number;
+}
+
+export interface WorkspaceAppRunToolResult {
+  ok: boolean;
+  exitCode: number | null;
+  timedOut: boolean;
+  stdout: string;
+  stderr: string;
+  /** 工具 stdout 末行 `RESULT_JSON:{...}` 解析结果；无则 null。 */
+  resultJson: unknown | null;
+  progressTail: string[];
+  appDirPath: string;
+  toolPath: string;
+  dataRoot: string;
+  durationMs: number;
+}
+
+/** 桌面风险确认（强确认文案 + 可选勾选）。 */
+export interface WorkspaceAppConfirmRiskInput {
+  title?: string;
+  message: string;
+  okLabel?: string;
+  cancelLabel?: string;
+  kind?: "info" | "warning" | "error";
+  /** 有则弹出带 checkbox 的确认框。 */
+  checkboxLabel?: string;
+  checkboxChecked?: boolean;
+}
+
+export interface WorkspaceAppConfirmRiskResult {
+  confirmed: boolean;
+  /** 无 checkbox 时恒为 false。 */
+  dontAskAgain: boolean;
 }
 
 /**
@@ -543,6 +593,14 @@ export interface WorkspaceAppHostApi {
    * 复用壳层组件；Mini-App 不要自造平行实现。
    */
   ui: WorkspaceAppUiApi;
+
+  /**
+   * 可选：桌面 sidecar 工具运行器（主进程 spawn，仅 tools/ 白名单）。
+   * 非 Electron / 不可用时为 undefined；Mini-App 须自行降级提示。
+   */
+  tools?: {
+    run(input: WorkspaceAppRunToolInput): Promise<WorkspaceAppRunToolResult>;
+  };
 
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */
   platform: {

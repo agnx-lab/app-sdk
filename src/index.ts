@@ -7,6 +7,7 @@ export type {
   WorkspaceAppItemMenuContribution,
   WorkspaceAppItemProviderContribution,
   WorkspaceAppListItem,
+  WorkspaceAppListSortOption,
   WorkspaceAppMiniAppContribution,
   WorkspaceAppOrganizeContribution,
   WorkspaceAppOrganizeContext,
@@ -45,6 +46,10 @@ export type {
   WorkspaceAppTransientShortcutRegisterOptions,
   WorkspaceAppTransientShortcutSession,
   WorkspaceAppUiApi,
+  WorkspaceAppRunToolInput,
+  WorkspaceAppRunToolResult,
+  WorkspaceAppConfirmRiskInput,
+  WorkspaceAppConfirmRiskResult,
 } from "./host-api";
 export {
   projectActionBarOverflowFold,
