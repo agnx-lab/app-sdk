@@ -29,6 +29,8 @@ export type {
   WorkspaceAppImportRemoteFileInput,
   WorkspaceAppModule,
   WorkspaceAppOpenDetailSheetInput,
+  WorkspaceAppDetailSheetExtraRow,
+  WorkspaceAppRegisterDetailSheetExtrasInput,
   WorkspaceAppActionContribution,
   WorkspaceAppActionBarButtonProps,
   WorkspaceAppActionBarOverflowProps,

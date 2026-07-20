@@ -189,6 +189,20 @@ export interface WorkspaceAppOpenDetailSheetInput {
   rows: WorkspaceAppDetailRow[];
 }
 
+/** Mini-App 向宿主 View details 追加的行（可含自定义值区 ReactNode）。 */
+export interface WorkspaceAppDetailSheetExtraRow {
+  label: string;
+  value: string;
+  helpText?: string;
+  /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
+  valueContent?: unknown;
+}
+
+export interface WorkspaceAppRegisterDetailSheetExtrasInput {
+  appId: string;
+  buildRows: () ***REMOVED*** ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
+}
+
 /** 瞬时快捷键（按顺序分配 Option/Alt 1–n），用于操作栏悬停提示。 */
 export interface WorkspaceAppTransientShortcutInput {
   id: string;
@@ -375,6 +389,11 @@ export interface WorkspaceAppUiApi {
    * Mini-App 不得自造第二套详情浮层。
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
+  /**
+   * 向宿主 Tab「View details」追加本 App 的配置行（如行内编辑）。
+   * 返回注销函数；activate 卸载时应调用。
+   */
+  registerDetailSheetExtras(input: WorkspaceAppRegisterDetailSheetExtrasInput): () ***REMOVED*** void;
   /**
    * 与 WorkspacePaneToolbar「…」overflow **同一套** DropdownMenu 装配。
    * Mini-App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
@@ -605,6 +624,14 @@ export interface WorkspaceAppHostApi {
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */
   platform: {
     isWeb: boolean;
+  };
+
+  /**
+   * 可选：解析 Mini-App 包内静态站入口（`dist/game` / `game`）。
+   * Electron → `agnx-miniapp-static://`；Web/Native 直连 → daemon HTTP token 路径；不可用时返回 null。
+   */
+  miniAppStatic?: {
+    getEntryUrl(appId: string, entryPath?: string): Promise<string | null>;
   };
 }
 
