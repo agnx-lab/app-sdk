@@ -14,6 +14,8 @@ export type {
   WorkspaceAppOrganizeGroup,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
+  WorkspaceAppTabContextMenuContribution,
+  WorkspaceAppTabContextMenuContext,
 } from "./types";
 export { BUILTIN_WORKSPACE_APP_ID } from "./types";
 export type {

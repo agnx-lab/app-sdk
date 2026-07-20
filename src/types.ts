@@ -88,6 +88,8 @@ export interface WorkspaceAppOrganizeContext {
   surface: "sidebar-classic" | "sidebar-wechat" | "command-center";
   /** 当前列表 chrome 排序选项 id（由宿主 store 注入）。 */
   sortOptionId?: string;
+  /** 当前列表 chrome 分组选项 id（由宿主 store 注入）。 */
+  groupOptionId?: string;
 }
 
 export interface WorkspaceAppOrganizeGroup {
@@ -115,6 +117,12 @@ export interface WorkspaceAppOrganizeContribution {
   sortOptions?: readonly WorkspaceAppListSortOption[];
   /** 默认排序选项；缺省取 sortOptions[0]。 */
   defaultSortOptionId?: string;
+  /**
+   * 侧栏 / 命令面板分组标题右侧分组 cycle（与 sortOptions 独立，可组合）。
+   */
+  groupOptions?: readonly WorkspaceAppListSortOption[];
+  /** 默认分组选项；缺省取 groupOptions[0]。 */
+  defaultGroupOptionId?: string;
   /**
    * 可选：按 sortOptionId 对已过滤 items 排序。
    * 不提供时宿主按内置约定处理：`title`/`name` 名称；其余按 updatedAt 降序。
@@ -155,6 +163,11 @@ export interface WorkspaceAppCommandContribution {
    * 无值时：仅命令面板可搜，不进侧栏按钮组，也不出现在该编辑布局（避免与真实侧栏错位）。
    */
   sidebarAction?: WorkspaceAppCommandSidebarAction;
+  /**
+   * 为 true 时不进入命令面板（含命令分组布局）。
+   * 用于仅供 Tab 右键菜单 / 宿主内部调用的命令。
+   */
+  commandCenterHidden?: boolean;
   run: (context?: {
     serverId?: string;
     workspaceId?: string;
@@ -217,4 +230,33 @@ export interface WorkspaceAppItemMenuContribution {
   /** 菜单右侧键帽（如 `["alt","p"]`）；宿主用 Shortcut 渲染。 */
   shortcutKeys?: readonly string[];
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
+}
+
+/** Mini-App Tab 右键/菜单条贡献（宿主按 appId 合并，禁止 if appId 硬编码业务项）。 */
+export interface WorkspaceAppTabContextMenuContext {
+  appId: WorkspaceAppId;
+  panelId: string;
+  entityId: string;
+  tabId: string;
+}
+
+export interface WorkspaceAppTabContextMenuContribution {
+  id: string;
+  appId: WorkspaceAppId;
+  /** 仅匹配该 panel；缺省对该 app 下所有 mini-app Tab 生效。 */
+  panelId?: string;
+  label: string;
+  /**
+   * 菜单 leading 图标。推荐 Lucide 组件；宿主不得靠 menu id 猜图标。
+   */
+  icon?: WorkspaceAppIcon;
+  /** 越小越靠前；缺省 100。 */
+  order?: number;
+  /** 动态文案。 */
+  resolveLabel?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** string;
+  /** 是否显示；缺省 true。在打开菜单时求值。 */
+  isVisible?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** boolean;
+  /** 是否禁用；缺省 false。 */
+  isDisabled?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** boolean;
+  run: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** void | Promise<void>;
 }

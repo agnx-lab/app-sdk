@@ -12,6 +12,7 @@ import type {
   WorkspaceAppOrganizeContribution,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
+  WorkspaceAppTabContextMenuContribution,
 } from "./types";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
@@ -503,6 +504,8 @@ export interface WorkspaceAppHostApi {
   registerMiniApp(contribution: WorkspaceAppMiniAppContribution): void;
   /** 注册列表项菜单（侧栏 / 命令面板宿主壳注入）。 */
   registerItemMenu(contribution: WorkspaceAppItemMenuContribution): void;
+  /** Mini-App Tab 右键菜单项（按 appId 合并到宿主菜单）。 */
+  registerTabContextMenu(contribution: WorkspaceAppTabContextMenuContribution): void;
   /** 注册快捷键（合并进宿主帮助面板；优先 `workspace.app.*` actionId）。 */
   registerShortcut(contribution: WorkspaceAppShortcutContribution): void;
   /**
