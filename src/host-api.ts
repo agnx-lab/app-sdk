@@ -162,14 +162,33 @@ export interface WorkspaceAppActionLayoutItem {
   canHide?: boolean;
 }
 
-export interface WorkspaceAppCustomizeActionLayoutInput {
-  title?: string;
+/** 编辑布局附加段（壳层 / 实体等多段合同）。 */
+export interface WorkspaceAppActionLayoutSecondarySection {
+  /** 稳定键；写入 onSave 时用于区分；默认 `secondary` */
+  id?: string;
+  title: string;
   layout: WorkspaceAppActionBarLayout;
   defaultLayout: WorkspaceAppActionBarLayout;
   items: WorkspaceAppActionLayoutItem[];
+  onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
+}
+
+export interface WorkspaceAppCustomizeActionLayoutInput {
+  title?: string;
+  /**
+   * 主段布局（多段时通常为「壳层」；单段时即唯一段）。
+   * 与 secondarySection 同时传入时，弹层按「主段 → 分割线 → 附加段」渲染。
+   */
+  layout: WorkspaceAppActionBarLayout;
+  defaultLayout: WorkspaceAppActionBarLayout;
+  items: WorkspaceAppActionLayoutItem[];
+  /** 主段标题；多段时显示在主段列表上方 */
+  sectionTitle?: string;
   enableVisibilityToggle?: boolean;
   onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
   onClose?: () ***REMOVED*** void;
+  /** 附加段（实体菜单等）；与主段各自独立 bar/overflow/hidden，不可跨段拖拽 */
+  secondarySection?: WorkspaceAppActionLayoutSecondarySection;
   /**
    * 编辑布局底部「详情」——打开宿主 view-detail 风格信息 sheet。
    * Mini-App 只提供回调；弹层由宿主渲染。

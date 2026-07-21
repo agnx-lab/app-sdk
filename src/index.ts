@@ -21,6 +21,7 @@ export { BUILTIN_WORKSPACE_APP_ID } from "./types";
 export type {
   WorkspaceAppActionBarLayout,
   WorkspaceAppActionLayoutItem,
+  WorkspaceAppActionLayoutSecondarySection,
   WorkspaceAppCustomizeActionLayoutInput,
   WorkspaceAppDetailRow,
   WorkspaceAppDeleteUrisResult,
