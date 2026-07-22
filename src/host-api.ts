@@ -387,6 +387,38 @@ export interface WorkspaceAppActionOverflowMenuProps {
   renderHoverSidePanel?: (id: string) ***REMOVED*** unknown;
 }
 
+/** Mini-App → 宿主的氛围色种子（只传色，不传媒体）。 */
+export interface WorkspaceAppAtmosphereSeed {
+  primary: string;
+  secondary?: string;
+  tertiary?: string;
+  luminance?: "dark" | "light" | "unknown";
+  sourceId: string;
+  sourceLabel?: string;
+}
+
+export interface WorkspaceAppAtmospherePreset {
+  id: string;
+  name: string;
+  primary: string;
+  secondary?: string;
+  tertiary?: string;
+  luminance?: "dark" | "light" | "unknown";
+  builtin?: boolean;
+  createdAt?: number;
+}
+
+export type WorkspaceAppAtmosphereMode =
+  | { kind: "follow-app" }
+  | { kind: "preset"; presetId: string };
+
+export interface WorkspaceAppAtmosphereSnapshot {
+  mode: WorkspaceAppAtmosphereMode;
+  effective: WorkspaceAppAtmosphereSeed | null;
+  pane: WorkspaceAppAtmosphereSeed | null;
+  global: WorkspaceAppAtmospherePreset | null;
+}
+
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
@@ -394,6 +426,15 @@ export interface WorkspaceAppUiApi {
    * Mini-App 不得自造第二套布局编辑器。
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
+  /**
+   * 向宿主推送整应用氛围种子（只传颜色，不传封面/视频）。
+   * 渲染是否生效由宿主仲裁（跟随 App + 当前 focused pane）。
+   */
+  setAtmosphere(seed: WorkspaceAppAtmosphereSeed): void;
+  /** 清除该 source 的氛围种子；若其为当前有效源则回落全局。 */
+  clearAtmosphere(sourceId: string): void;
+  /** 只读快照：模式、有效色、pane 色、全局预设。 */
+  getAtmosphereSnapshot(): WorkspaceAppAtmosphereSnapshot;
   /**
    * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。
    * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；
