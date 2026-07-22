@@ -461,6 +461,10 @@ export interface WorkspaceAppUiApi {
    * Mini-App 不得自造第二套详情浮层。
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
+  /** 关闭 `openDetailSheet` 打开的详情；未打开时 no-op。 */
+  closeDetailSheet(): void;
+  /** 当前是否有 Mini-App 详情 sheet 打开（供 ⌥D 等快捷键切换）。 */
+  isDetailSheetOpen(): boolean;
   /**
    * 向宿主 Tab「View details」追加本 App 的配置行（如行内编辑）。
    * 返回注销函数；activate 卸载时应调用。
