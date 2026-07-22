@@ -202,6 +202,9 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
 export interface WorkspaceAppDetailRow {
   label: string;
   value: string;
+  helpText?: string;
+  /** 有则宿主渲染此节点代替纯文本 value（如氛围色操作区）。 */
+  valueContent?: unknown;
 }
 
 export interface WorkspaceAppOpenDetailSheetInput {
@@ -435,6 +438,14 @@ export interface WorkspaceAppUiApi {
   clearAtmosphere(sourceId: string): void;
   /** 只读快照：模式、有效色、pane 色、全局预设。 */
   getAtmosphereSnapshot(): WorkspaceAppAtmosphereSnapshot;
+  /** 写入「我的氛围」预设并可选切到该预设；返回预设 id。 */
+  addAtmospherePreset(input: {
+    name: string;
+    primary: string;
+    secondary?: string;
+    tertiary?: string;
+    luminance?: WorkspaceAppAtmosphereSeed["luminance"];
+  }): string;
   /**
    * 动态注册瞬时快捷键（默认 Option/Alt 1–n）。
    * 多 session 可并存，但只有 `isActive()` 为真的最上层会消费按键；
