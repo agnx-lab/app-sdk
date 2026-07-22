@@ -430,6 +430,27 @@ export interface WorkspaceAppUiApi {
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
   /**
+   * 打开「侧栏实体菜单」同源编辑布局（layoutKey = item-menu:appId:segmentId）。
+   * 播放器底栏 / 三点必须与侧栏右键共用此布局，禁止另存一份。
+   */
+  customizeItemMenuLayout(input: { appId: string; segmentId: string; title?: string }): void;
+  /** 读取侧栏实体菜单布局（已按 known contribution ids 归一化）。 */
+  getItemMenuLayout(input: { appId: string; segmentId: string }): WorkspaceAppActionBarLayout;
+  /** 订阅侧栏实体菜单布局变更（供播放器 ActionBar 热更新）。 */
+  subscribeItemMenuLayout(
+    input: { appId: string; segmentId: string },
+    onStoreChange: () ***REMOVED*** void,
+  ): () ***REMOVED*** void;
+  /**
+   * 仅当该表面尚无持久化布局时写入默认；用于首次把播放器默认 bar 与侧栏对齐。
+   * 已有用户布局时 no-op。
+   */
+  seedItemMenuLayoutIfAbsent(input: {
+    appId: string;
+    segmentId: string;
+    layout: WorkspaceAppActionBarLayout;
+  }): void;
+  /**
    * 向宿主推送整应用氛围种子（只传颜色，不传封面/视频）。
    * 渲染是否生效由宿主仲裁（跟随 App + 当前 focused pane）。
    */
