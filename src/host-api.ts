@@ -584,6 +584,32 @@ export interface WorkspaceAppConfirmRiskResult {
  * }
  * ```
  */
+
+/** Agent 可调用的 Mini-App 工具可见性闸门（P6）。 */
+export type WorkspaceAppAgentToolAvailability = "always" | "tab-open" | "tab-visible";
+
+export interface WorkspaceAppAgentToolContext {
+  appId: string;
+  tabId?: string | null;
+  agentId?: string | null;
+}
+
+export interface WorkspaceAppAgentToolDefinition {
+  /** 叶子名；完整逻辑名 agnx.app.<appId>.<name> */
+  name: string;
+  description: string;
+  /** JSON Schema object（可选；仅描述，daemon 作提示） */
+  inputSchema?: Record<string, unknown>;
+  execute: (input: unknown, ctx: WorkspaceAppAgentToolContext) ***REMOVED*** Promise<unknown> | unknown;
+}
+
+export interface WorkspaceAppRegisterAgentToolsInput {
+  appId: string;
+  tools: readonly WorkspaceAppAgentToolDefinition[];
+  /** 默认 always */
+  availability?: WorkspaceAppAgentToolAvailability;
+}
+
 export interface WorkspaceAppHostApi {
   /** 注册侧栏 / 命令面板「主视图」分段。 */
   registerPrimarySegment(contribution: WorkspaceAppPrimarySegmentContribution): void;
@@ -609,6 +635,12 @@ export interface WorkspaceAppHostApi {
    * 例如 Music 在打开单例播放器 Tab 前先 `setNowPlaying(itemId)`。
    */
   registerListItemOpenPreparer(appId: string, preparer: (itemId: string) ***REMOVED*** void): () ***REMOVED*** void;
+
+  /**
+   * 注册 Agent 可调用工具（L2）。与 registerCommand 平行，不自动从命令导出。
+   * 返回 unregister；App deactivate 时应调用。
+   */
+  registerAgentTools(input: WorkspaceAppRegisterAgentToolsInput): () ***REMOVED*** void;
 
   /** 在当前工作区打开 Mini-App Tab。 */
   openMiniAppTab(input: {
