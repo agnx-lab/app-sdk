@@ -806,6 +806,55 @@ export interface WorkspaceAppHostApi {
     }>;
   };
 
+  /**
+   * 可选特权：工作区 Browser View（桌面 WebContentsView 宿主）。
+   * 仅系统 first-party（如 com.agnx.browser）应调用；≠ browserSession 屏外媒体捕获。
+   * 非 Electron 时方法可能缺失或返回 unavailable。
+   */
+  browserView?: {
+    attach(input: {
+      browserId: string;
+      partition: string;
+      initialUrl?: string;
+      visible?: boolean;
+      bounds?: { x: number; y: number; width: number; height: number };
+    }): Promise<unknown>;
+    destroy(browserId: string): Promise<unknown>;
+    setBounds(
+      browserId: string,
+      bounds: { x: number; y: number; width: number; height: number },
+    ): Promise<unknown>;
+    setVisible(browserId: string, visible: boolean): Promise<unknown>;
+    navigate(browserId: string, url: string): Promise<unknown>;
+    goBack(browserId: string): Promise<unknown>;
+    goForward(browserId: string): Promise<unknown>;
+    reload(browserId: string, ignoreCache?: boolean): Promise<unknown>;
+    stop(browserId: string): Promise<unknown>;
+    executeJavaScript(browserId: string, code: string): Promise<unknown>;
+    getState(browserId: string): Promise<unknown>;
+    capturePreview(browserId: string): Promise<unknown>;
+    openDevTools(browserId: string): Promise<unknown>;
+    clearData(
+      browserId: string,
+      dataType?: "cookies" | "cache" | "storage" | "all",
+    ): Promise<unknown>;
+  };
+
+  /**
+   * 可选：打开工作区 Browser Tab（kind:"browser"）。
+   * 系统 Browser 微应用命令入口；第三方默认不应依赖。
+   */
+  openBrowserTab?(input?: {
+    initialUrl?: string;
+    profileId?: string;
+    serverId?: string;
+    workspaceId?: string;
+    currentPathname?: string | null;
+  }): {
+    browserId: string;
+    opened: boolean;
+  };
+
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;
 
