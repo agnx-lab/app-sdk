@@ -368,6 +368,11 @@ export interface WorkspaceAppActionOverflowMenuProps {
   align?: "start" | "center" | "end";
   triggerSize?: number;
   triggerColor?: string;
+  /**
+   * 可选触发器样式（由业务传入 token/hover，宿主不内置封面强化）。
+   * 可为静态 style，或 `({ hovered, pressed, open }) ***REMOVED*** style`。
+   */
+  triggerStyle?: unknown;
   testID?: string;
   /**
    * 可选列表行/卡片主体。宿主启用桌面右键 + 移动端长按，
