@@ -430,24 +430,54 @@ export interface WorkspaceAppUiApi {
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
   /**
-   * 打开「侧栏实体菜单」同源编辑布局（layoutKey = item-menu:appId:segmentId）。
-   * 播放器底栏 / 三点必须与侧栏右键共用此布局，禁止另存一份。
+   * 打开侧栏宿主 chrome 实体菜单编辑布局（layoutKey = item-menu:appId:segmentId）。
+   * 仅绑定侧栏/命令面板列表行表面；其它表面请用 customizeEntityMenuLayout。
    */
   customizeItemMenuLayout(input: { appId: string; segmentId: string; title?: string }): void;
   /** 读取侧栏实体菜单布局（已按 known contribution ids 归一化）。 */
   getItemMenuLayout(input: { appId: string; segmentId: string }): WorkspaceAppActionBarLayout;
-  /** 订阅侧栏实体菜单布局变更（供播放器 ActionBar 热更新）。 */
+  /** 订阅侧栏实体菜单布局变更。 */
   subscribeItemMenuLayout(
     input: { appId: string; segmentId: string },
     onStoreChange: () ***REMOVED*** void,
   ): () ***REMOVED*** void;
   /**
-   * 仅当该表面尚无持久化布局时写入默认；用于首次把播放器默认 bar 与侧栏对齐。
+   * 仅当侧栏表面尚无持久化布局时写入默认。
    * 已有用户布局时 no-op。
    */
   seedItemMenuLayoutIfAbsent(input: {
     appId: string;
     segmentId: string;
+    layout: WorkspaceAppActionBarLayout;
+  }): void;
+  /**
+   * 多表面实体菜单：同源动作目录、按 surfaceId 独立 layoutKey
+   * （entity-menu:appId:menuId:surfaceId）。
+   * 例：Music track 的 player / queue 与侧栏 item-menu 布局互不覆盖。
+   */
+  getEntityMenuLayout(input: {
+    appId: string;
+    menuId: string;
+    surfaceId: string;
+    knownIds: readonly string[];
+  }): WorkspaceAppActionBarLayout;
+  subscribeEntityMenuLayout(
+    input: { appId: string; menuId: string; surfaceId: string },
+    onStoreChange: () ***REMOVED*** void,
+  ): () ***REMOVED*** void;
+  customizeEntityMenuLayout(input: {
+    appId: string;
+    menuId: string;
+    surfaceId: string;
+    title?: string;
+    items: WorkspaceAppActionLayoutItem[];
+    defaultLayout?: WorkspaceAppActionBarLayout;
+  }): void;
+  seedEntityMenuLayoutIfAbsent(input: {
+    appId: string;
+    menuId: string;
+    surfaceId: string;
+    knownIds: readonly string[];
     layout: WorkspaceAppActionBarLayout;
   }): void;
   /**
