@@ -334,6 +334,11 @@ export interface WorkspaceAppActionBarProps {
   surfaceLayout?: "row" | "card";
   /** 三点菜单 chrome；不传则不渲染溢出触发器（仍可只画 bar） */
   overflowMenu?: WorkspaceAppActionBarOverflowProps;
+  /**
+   * 可选外露 bar 命中区样式（业务 token/hover；宿主不内置封面 scrim）。
+   * 可为静态 style，或 `({ hovered, pressed }) ***REMOVED*** style`。
+   */
+  barButtonStyle?: unknown;
   testID?: string;
 }
 
@@ -352,6 +357,11 @@ export interface WorkspaceAppActionBarButtonProps {
   mutedColor?: string;
   accentColor?: string;
   icon?: WorkspaceAppIcon;
+  /**
+   * 可选命中区样式（业务 token/hover；宿主不内置封面 scrim）。
+   * 可为静态 style，或 `({ hovered, pressed }) ***REMOVED*** style`。
+   */
+  hitStyle?: unknown;
   testID?: string;
   children?: unknown;
 }
