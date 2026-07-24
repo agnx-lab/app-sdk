@@ -480,6 +480,14 @@ export interface WorkspaceAppUiApi {
     knownIds: readonly string[];
     layout: WorkspaceAppActionBarLayout;
   }): void;
+  /** 写入多表面实体菜单布局（迁移默认 / App 内同步）。 */
+  setEntityMenuLayout(input: {
+    appId: string;
+    menuId: string;
+    surfaceId: string;
+    knownIds: readonly string[];
+    layout: WorkspaceAppActionBarLayout;
+  }): void;
   /**
    * 向宿主推送整应用氛围种子（只传颜色，不传封面/视频）。
    * 渲染是否生效由宿主仲裁（跟随 App + 当前 focused pane）。
