@@ -77,3 +77,12 @@ export default mod;
 - 仓库：`skills/agnx-app/SKILL.md`
 
 流程：`npm i @getagnx/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
+
+## UI / 氛围（Mini-App 默认）
+
+- 面板大面：`backgroundColor: "transparent"`，透出宿主氛围渐变。
+- 控件：`theme.colors.input` / `surface1` 或 `rgba(0,0,0,0.22)`；边框/字色用 `theme.colors.*`。
+- **不要**根节点实色 `theme.colors.background`（氛围不改写该 token，易出灰岛）。
+- 仅内容沉浸时调用 `host.ui.setAtmosphere` / `clearAtmosphere`；工具型 App 只消费、不推送。
+
+详见仓内 `docs/应用氛围色系统需求_app-atmosphere-system.md` 与 `agnx-app` skill「UI 主题与氛围」。
