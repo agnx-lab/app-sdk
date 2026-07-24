@@ -303,6 +303,10 @@ export type WorkspaceAppActionBarOverflowProps = Omit<
   "items" | "onSelect"
 >;
 
+/**
+ * 列表行 / 底栏动作整机：bar 外露 + 三点 +（可选）surface 右键/长按 + showBarLabels。
+ * Mini-App 应优先用 ActionBar，禁止再手拼 ActionBarButton + ActionOverflowMenu 第二套。
+ */
 export interface WorkspaceAppActionBarProps {
   layout: WorkspaceAppActionBarLayout;
   /** 已知动作全集；bar/overflow 按 layout.id 取用 */
@@ -317,7 +321,13 @@ export interface WorkspaceAppActionBarProps {
   iconSize?: number;
   mutedColor?: string;
   accentColor?: string;
-  /** 三点菜单 chrome；不传则不渲染溢出触发器 */
+  /**
+   * 列表行/卡片主体。提供后宿主渲染：
+   * `[surface 右键/长按][bar 外露][三点]`，菜单项与三点同源。
+   * 业务勿再自造第二套 ContextMenu。
+   */
+  surface?: unknown;
+  /** 三点菜单 chrome；不传则不渲染溢出触发器（仍可只画 bar） */
   overflowMenu?: WorkspaceAppActionBarOverflowProps;
   testID?: string;
 }
