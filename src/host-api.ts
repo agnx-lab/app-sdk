@@ -322,11 +322,16 @@ export interface WorkspaceAppActionBarProps {
   mutedColor?: string;
   accentColor?: string;
   /**
-   * 列表行/卡片主体。提供后宿主渲染：
-   * `[surface 右键/长按][bar 外露][三点]`，菜单项与三点同源。
+   * 列表行/卡片主体。提供后宿主渲染 surface 右键/长按，与三点同源菜单项。
    * 业务勿再自造第二套 ContextMenu。
    */
   surface?: unknown;
+  /**
+   * surface 与 chrome 几何（勿与 `layout` 动作布局混淆）：
+   * - `row`（默认）：`[surface | bar | 三点]` 横排（歌曲行）
+   * - `card`：surface 铺满，bar+三点浮在右上角（封面卡片，对齐 OverflowMenu.layout=card）
+   */
+  surfaceLayout?: "row" | "card";
   /** 三点菜单 chrome；不传则不渲染溢出触发器（仍可只画 bar） */
   overflowMenu?: WorkspaceAppActionBarOverflowProps;
   testID?: string;
