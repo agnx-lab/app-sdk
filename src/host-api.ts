@@ -546,6 +546,15 @@ export interface WorkspaceAppUiApi {
     options?: WorkspaceAppTransientShortcutRegisterOptions,
   ): WorkspaceAppTransientShortcutSession;
   /**
+   * 打开 Mini-App「Agent Context」对齐看板（本 App 可调工具 + 上下文路径）。
+   * 与 Agent Tab 的 Agent Context 入口对齐；勿自造第二套浮层。
+   */
+  openAppAgentContext(input: { appId: string }): void;
+  /** 关闭 `openAppAgentContext` 打开的看板；未打开时 no-op。 */
+  closeAppAgentContext(): void;
+  /** 当前是否有 App Agent Context 看板打开。 */
+  isAppAgentContextOpen(): boolean;
+  /**
    * 打开宿主详情 sheet（与侧栏/命令面板 View details 同类信息弹层）。
    * Mini-App 不得自造第二套详情浮层。
    */
