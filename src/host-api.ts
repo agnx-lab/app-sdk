@@ -14,6 +14,7 @@ import type {
   WorkspaceAppShortcutContribution,
   WorkspaceAppTabContextMenuContribution,
 } from "./types";
+import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
 export interface WorkspaceAppRunContext {
@@ -64,6 +65,42 @@ export interface WorkspaceAppImportRemoteFileInput {
   title?: string;
   fileName?: string;
   mimeType?: string;
+}
+
+/** 将内存字节写入 `$AGNX_HOME/apps/data/<appId>/files/`（剪贴板粘贴图片等）。 */
+export interface WorkspaceAppImportBytesInput {
+  appId: string;
+  /** base64 编码的文件内容。 */
+  bytesBase64: string;
+  title?: string;
+  fileName?: string;
+  mimeType?: string;
+}
+
+/** 将本机已有文件拷入 `$AGNX_HOME/apps/data/<appId>/files/`（file:// 剪贴板图等）。 */
+export interface WorkspaceAppImportPathInput {
+  appId: string;
+  /** 本机绝对路径（不要 file:// 前缀）。 */
+  sourcePath: string;
+  title?: string;
+  fileName?: string;
+}
+
+/** 宿主剪贴板中的位图（Electron 主进程读取，绕开渲染进程 DataTransfer 丢图）。 */
+export interface WorkspaceAppClipboardImage {
+  bytesBase64: string;
+  mimeType: string;
+  fileName?: string;
+}
+
+/** 宿主级粘贴快照：text/html + 位图 + uri-list。 */
+export interface WorkspaceAppClipboardPastePayload {
+  textPlain: string;
+  textHtml: string;
+  uriList: string;
+  images: WorkspaceAppClipboardImage[];
+  /** 可选：availableFormats，便于诊断。 */
+  formats?: string[];
 }
 
 /** 选目录（桌面对话框；非桌面返回 null）。 */
@@ -739,6 +776,10 @@ export interface WorkspaceAppHostApi {
   files: {
     pickAndImport(input?: WorkspaceAppPickFilesInput): Promise<WorkspaceAppManagedFile[]>;
     importFromUrl(input: WorkspaceAppImportRemoteFileInput): Promise<WorkspaceAppManagedFile>;
+    /** 剪贴板 / 拖拽等内存字节落盘。 */
+    importBytes(input: WorkspaceAppImportBytesInput): Promise<WorkspaceAppManagedFile>;
+    /** 本机路径拷入 apps/data（剪贴板 file:// 图）。 */
+    importFromPath(input: WorkspaceAppImportPathInput): Promise<WorkspaceAppManagedFile>;
     resolveObjectUrl(uri: string): Promise<string>;
     /** 桌面选目录；取消或非桌面返回 null。 */
     pickDirectory(input?: WorkspaceAppPickDirectoryInput): Promise<string | null>;
@@ -752,6 +793,14 @@ export interface WorkspaceAppHostApi {
      * 仅桌面；entries.uri 必须是 apps/data 内本地路径。
      */
     exportZip(input: WorkspaceAppExportZipInput): Promise<WorkspaceAppExportZipResult | null>;
+  };
+
+  /**
+   * 宿主剪贴板（桌面主进程）。
+   * 渲染进程 paste 事件的 DataTransfer 常丢图；微应用应经此读取完整图文。
+   */
+  clipboard?: {
+    readPastePayload(): Promise<WorkspaceAppClipboardPastePayload>;
   };
 
   /**
@@ -854,6 +903,13 @@ export interface WorkspaceAppHostApi {
     browserId: string;
     opened: boolean;
   };
+
+  /**
+   * 可选特权：Android 设备发现 / 会话 / 命令 / 帧流（桌面 ADB）。
+   * 多消费方合同见 docs/Android主机服务合同_android-host-services-contract.md；
+   * 类型见 ./android-host-api。第三方默认最小权限；引擎/真相在 daemon。
+   */
+  android?: WorkspaceAppAndroidHostApi;
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;

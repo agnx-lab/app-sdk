@@ -1,3 +1,33 @@
+export type {
+  AndroidHostCapability,
+  AndroidHostCommand,
+  AndroidHostCommandResult,
+  AndroidHostDevice,
+  AndroidHostDeviceState,
+  AndroidHostErrorCode,
+  AndroidHostErrorShape,
+  AndroidHostFrame,
+  AndroidHostFrameStatus,
+  AndroidHostInteractiveElement,
+  AndroidHostLogcatLine,
+  AndroidHostOpenTabInput,
+  AndroidHostOpenTabResult,
+  AndroidHostSession,
+  AndroidHostSessionLogEntry,
+  AndroidHostSessionStatus,
+  AndroidHostStreamQuality,
+  AndroidHostStreamTransport,
+  AndroidHostSubscribeDevicesInput,
+  AndroidHostSubscribeFrameStreamInput,
+  AndroidHostUiBounds,
+  AndroidHostUiNode,
+  WorkspaceAppAndroidHostApi,
+} from "./android-host-api";
+export {
+  ANDROID_HOST_COMMAND_CAPABILITY,
+  androidHostCapabilityForCommand,
+} from "./android-host-api";
+
 // 场景：@getagnx/app-sdk 公共出口 — 通用 Mini-App 协议类型与 activate(host) 合同。
 export type {
   WorkspaceAppCommandContribution,
@@ -34,6 +64,10 @@ export type {
   WorkspaceAppRegisterAgentToolsInput,
   WorkspaceAppManagedFile,
   WorkspaceAppImportRemoteFileInput,
+  WorkspaceAppImportBytesInput,
+  WorkspaceAppImportPathInput,
+  WorkspaceAppClipboardImage,
+  WorkspaceAppClipboardPastePayload,
   WorkspaceAppModule,
   WorkspaceAppOpenDetailSheetInput,
   WorkspaceAppDetailSheetExtraRow,
