@@ -811,10 +811,12 @@ export interface WorkspaceAppHostApi {
     fetchJson(
       url: string,
       init?: {
-        method?: "GET" | "POST";
+        method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
         headers?: Record<string, string>;
         body?: string;
         timeoutMs?: number;
+        /** true 时返回带 status/headers/setCookie 的 meta 包装 */
+        returnMeta?: boolean;
       },
     ): Promise<unknown>;
     /**

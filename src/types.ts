@@ -212,6 +212,11 @@ export interface WorkspaceAppMiniAppContribution {
   getEntityTitle?: (entityId: string) ***REMOVED*** string | null;
   /** 标签标题订阅；与 getEntityTitle 配对供宿主 useSyncExternalStore。 */
   subscribeEntityTitle?: (entityId: string, listener: () ***REMOVED*** void) ***REMOVED*** () ***REMOVED*** void;
+  /**
+   * 面板内含跨域 iframe/webview 且可能吞掉宿主快捷键时设为 true。
+   * 宿主仅在此标记下 acquire 桌面 force-subframe 转发；同框 React 面板（如系统洞察）不要开。
+   */
+  iframeShortcutCapture?: boolean;
 }
 
 export interface WorkspaceAppItemMenuContribution {
