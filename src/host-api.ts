@@ -548,6 +548,8 @@ export interface WorkspaceAppProgressCreateInput {
   /** 有值时进度条为确定型；否则为不确定型。 */
   total?: number;
   appId?: string;
+  /** 为 true 时顶栏展示取消按钮；需配合 handle.cancel() 或宿主注册取消回调。 */
+  cancellable?: boolean;
 }
 
 export interface WorkspaceAppProgressReportInput {
@@ -565,6 +567,8 @@ export interface WorkspaceAppProgressHandle {
   readonly id: string;
   report(input?: WorkspaceAppProgressReportInput): void;
   end(input?: WorkspaceAppProgressEndInput): void;
+  /** 仅 `cancellable: true` 时有意义；触发注册的取消回调并标记为 cancelled。 */
+  cancel(): void;
 }
 
 export interface WorkspaceAppProgressApi {
