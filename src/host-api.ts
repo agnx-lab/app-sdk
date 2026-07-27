@@ -1145,6 +1145,33 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
+   * 统一事件观测面（任务 D）：只读环缓冲 + 矩阵索引。
+   * 不替代各域既有 onDid / subscribe API，用于诊断与 Host SDK 指南采样。
+   */
+  events: {
+    readRecent(input?: {
+      appId?: string | null;
+      domains?: ReadonlyArray<"lifecycle" | "tabs" | "sync" | "config" | "provider">;
+      limit?: number;
+    }): ReadonlyArray<{
+      id: string;
+      at: string;
+      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider";
+      type: string;
+      appId?: string | null;
+      summary: string;
+      detail?: string;
+    }>;
+    subscribe(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    matrix(): ReadonlyArray<{
+      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider";
+      sdkPath: string;
+      types: readonly string[];
+      note: string;
+    }>;
+  };
+
+  /**
    * 可选：解析 Mini-App 包内静态站入口（`dist/game` / `game`）。
    * Electron → `agnx-miniapp-static://`；Web/Native 直连 → daemon HTTP token 路径；不可用时返回 null。
    */
