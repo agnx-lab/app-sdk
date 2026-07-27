@@ -86,4 +86,4 @@ export default mod;
 - **不要**根节点实色 `theme.colors.background`（氛围不改写该 token，易出灰岛）。
 - 仅内容沉浸时调用 `host.ui.setAtmosphere` / `clearAtmosphere`；工具型 App 只消费、不推送。
 
-详见仓内 `docs/应用氛围色系统需求_app-atmosphere-system.md` 与 `agnx-app` skill「UI 主题与氛围」。
+详见仓内 [应用氛围宪法](../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
