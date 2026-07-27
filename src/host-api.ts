@@ -149,6 +149,43 @@ export interface WorkspaceAppStorageApi {
   writeJson(appId: string, key: string, value: unknown): Promise<void>;
 }
 
+export type WorkspaceAppConfigScope = "global" | "app";
+
+export interface WorkspaceAppConfigChangeEvent<T = unknown> {
+  scope: WorkspaceAppConfigScope;
+  appId?: string;
+  key: string;
+  value: T;
+  revision: string | number;
+  source: "local" | "remote" | "hydrate";
+}
+
+export interface WorkspaceAppConfigApi {
+  /** 读取配置 JSON；`app` scope 缺值时可回退 `global`，再回退 defaultValue。 */
+  get<T = unknown>(input: {
+    scope: WorkspaceAppConfigScope;
+    appId?: string;
+    key: string;
+    defaultValue?: T;
+  }): Promise<T>;
+  /** 写入配置 JSON；宿主负责写后发出 sync revision ping。 */
+  set<T = unknown>(input: {
+    scope: WorkspaceAppConfigScope;
+    appId?: string;
+    key: string;
+    value: T;
+  }): Promise<void>;
+  /** 订阅配置变化；返回取消订阅。 */
+  subscribe<T = unknown>(input: {
+    scope: WorkspaceAppConfigScope;
+    appId?: string;
+    key: string;
+    defaultValue?: T;
+    emitCurrent?: boolean;
+    listener: (event: WorkspaceAppConfigChangeEvent<T>) ***REMOVED*** void;
+  }): () ***REMOVED*** void;
+}
+
 /** 可选跨端实时同步（§10.7）：存储 ≠ 同步；未接入则零流量。 */
 export interface WorkspaceAppSyncEvent {
   appId: string;
@@ -1021,6 +1058,9 @@ export interface WorkspaceAppHostApi {
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;
+
+  /** 宿主配置层：global / app 两级长期偏好；区别于业务状态 storage。 */
+  config: WorkspaceAppConfigApi;
 
   /**
    * 可选跨端实时同步（§10.7）。
