@@ -913,6 +913,22 @@ export interface WorkspaceAppHostApi {
    */
   android?: WorkspaceAppAndroidHostApi;
 
+  /**
+   * 宿主壳就绪相位（扫盘 / first-party activate 完成）。
+   * 已就绪则回调尽快触发；返回取消订阅。
+   */
+  lifecycle: {
+    isHostReady(): boolean;
+    onHostReady(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+  };
+
+  /**
+   * 后台会话：申请钉住本 App 的 Mini-App Tab（LRU 不卸），避免续播被硬重载。
+   */
+  background: {
+    requestRetain(input: { appId: string; active: boolean; reason?: string }): void;
+  };
+
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
   storage: WorkspaceAppStorageApi;
 
