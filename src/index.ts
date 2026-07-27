@@ -109,6 +109,15 @@ export type {
   WorkspaceAppRunToolResult,
   WorkspaceAppConfirmRiskInput,
   WorkspaceAppConfirmRiskResult,
+  WorkspaceAppNotificationApi,
+  WorkspaceAppNotificationInput,
+  WorkspaceAppNotificationKind,
+  WorkspaceAppProgressApi,
+  WorkspaceAppProgressCreateInput,
+  WorkspaceAppProgressEndInput,
+  WorkspaceAppProgressEndKind,
+  WorkspaceAppProgressHandle,
+  WorkspaceAppProgressReportInput,
 } from "./host-api";
 export {
   projectActionBarOverflowFold,

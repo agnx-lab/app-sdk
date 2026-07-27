@@ -526,6 +526,51 @@ export interface WorkspaceAppAtmosphereSnapshot {
   global: WorkspaceAppAtmospherePreset | null;
 }
 
+export type WorkspaceAppNotificationKind = "info" | "success" | "warning" | "error";
+
+export interface WorkspaceAppNotificationInput {
+  title: string;
+  message?: string;
+  kind?: WorkspaceAppNotificationKind;
+  /** 默认约 2.2s；`null` 表示需手动关闭（宿主可能降级为较长 duration）。 */
+  durationMs?: number | null;
+}
+
+export interface WorkspaceAppNotificationApi {
+  show(input: WorkspaceAppNotificationInput): void;
+}
+
+export type WorkspaceAppProgressEndKind = "success" | "error" | "cancelled";
+
+export interface WorkspaceAppProgressCreateInput {
+  title: string;
+  message?: string;
+  /** 有值时进度条为确定型；否则为不确定型。 */
+  total?: number;
+  appId?: string;
+}
+
+export interface WorkspaceAppProgressReportInput {
+  message?: string;
+  value?: number;
+  total?: number;
+}
+
+export interface WorkspaceAppProgressEndInput {
+  message?: string;
+  kind?: WorkspaceAppProgressEndKind;
+}
+
+export interface WorkspaceAppProgressHandle {
+  readonly id: string;
+  report(input?: WorkspaceAppProgressReportInput): void;
+  end(input?: WorkspaceAppProgressEndInput): void;
+}
+
+export interface WorkspaceAppProgressApi {
+  create(input: WorkspaceAppProgressCreateInput): WorkspaceAppProgressHandle;
+}
+
 /** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
@@ -666,6 +711,14 @@ export interface WorkspaceAppUiApi {
    * 高敏操作（如 Frida/改签）必须先走此确认，禁止静默执行。
    */
   confirmRisk?(input: WorkspaceAppConfirmRiskInput): Promise<WorkspaceAppConfirmRiskResult>;
+  /**
+   * 轻量全局通知（toast）。Mini-App 禁止自造第二套全局提示层。
+   */
+  notification: WorkspaceAppNotificationApi;
+  /**
+   * 长任务进度（单任务壳层）。Mini-App 禁止自造全局进度条/阻塞层。
+   */
+  progress: WorkspaceAppProgressApi;
 }
 
 export interface WorkspaceAppActionTooltipProps {
