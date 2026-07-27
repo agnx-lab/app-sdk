@@ -124,3 +124,8 @@ export {
   type ProjectActionBarOverflowFoldInput,
   type ProjectActionBarOverflowFoldResult,
 } from "./project-action-bar-overflow";
+export {
+  migrateStoragePrefsToConfig,
+  type MigrateStoragePrefsToConfigInput,
+  type MigrateStoragePrefsToConfigResult,
+} from "./migrate-storage-prefs-to-config";
