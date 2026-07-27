@@ -724,6 +724,52 @@ export interface WorkspaceAppRegisterAgentToolsInput {
   availability?: WorkspaceAppAgentToolAvailability;
 }
 
+/** Tab 种类（与宿主工作区 target.kind 对齐；P1 先保证 mini-app 发射）。 */
+export type WorkspaceAppTabKind =
+  | "mini-app"
+  | "terminal"
+  | "browser"
+  | "diff"
+  | "preview"
+  | "settings"
+  | "files"
+  | string;
+
+export type WorkspaceAppTabLifecycleReason =
+  | "mount"
+  | "unmount"
+  | "user"
+  | "layout"
+  | "lru-unmount"
+  | "retarget"
+  | "deactivate";
+
+export interface WorkspaceAppTabRef {
+  tabId: string;
+  kind: WorkspaceAppTabKind;
+  appId?: string;
+  panelId?: string;
+  entityId?: string;
+}
+
+export interface WorkspaceAppTabLifecycleEvent extends WorkspaceAppTabRef {
+  reason?: WorkspaceAppTabLifecycleReason;
+}
+
+export interface WorkspaceAppTabFocusEvent extends WorkspaceAppTabRef {
+  /** 与 pane isInteractive 对齐 */
+  active: boolean;
+}
+
+export interface WorkspaceAppTabVisibleEvent extends WorkspaceAppTabRef {
+  visible: boolean;
+}
+
+export type WorkspaceAppTabEvent =
+  | WorkspaceAppTabLifecycleEvent
+  | WorkspaceAppTabFocusEvent
+  | WorkspaceAppTabVisibleEvent;
+
 export interface WorkspaceAppHostApi {
   /** 注册侧栏 / 命令面板「主视图」分段。 */
   registerPrimarySegment(contribution: WorkspaceAppPrimarySegmentContribution): void;
@@ -923,6 +969,22 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
+   * Mini-App 面板级 Tab 生命周期（挂载/卸载/焦点/可见）。
+   * 与布局槽位 open/close 可能不同步（LRU keep-alive）；payload.reason 区分。
+   */
+  tabs: {
+    onOpen(listener: (event: WorkspaceAppTabLifecycleEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    onClose(listener: (event: WorkspaceAppTabLifecycleEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    onFocus(listener: (event: WorkspaceAppTabFocusEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    onBlur(listener: (event: WorkspaceAppTabFocusEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    onVisibleChange(listener: (event: WorkspaceAppTabVisibleEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    subscribeKind(
+      kind: WorkspaceAppTabKind,
+      handler: (event: WorkspaceAppTabEvent) ***REMOVED*** void,
+    ): () ***REMOVED*** void;
+  };
+
+  /**
    * 后台会话：申请钉住本 App 的 Mini-App Tab（LRU 不卸），避免续播被硬重载。
    */
   background: {
@@ -970,6 +1032,8 @@ export interface WorkspaceAppHostApi {
 export interface WorkspaceAppModule {
   appId: string;
   activate(host: WorkspaceAppHostApi): void | Promise<void>;
+  /** 卸载/禁用/强制重激活前调用；用于释放 Audio、定时器、订阅。 */
+  deactivate?(host: WorkspaceAppHostApi): void | Promise<void>;
 }
 
 export type { WorkspaceAppListItem };
