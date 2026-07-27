@@ -770,6 +770,20 @@ export type WorkspaceAppTabEvent =
   | WorkspaceAppTabFocusEvent
   | WorkspaceAppTabVisibleEvent;
 
+/** 冷恢复相位偏好（宿主可扩展字段；App 按需读取）。 */
+export interface WorkspaceAppColdRestorePrefs {
+  reason: "host-ready" | "late-session" | "manual" | string;
+}
+
+/** 后台会话登记：允许冷启动无 UI 恢复。 */
+export interface WorkspaceAppBackgroundSessionInput {
+  appId: string;
+  /** 如 audio / long-task；宿主只作分类，不做行业语义。 */
+  kind: string;
+  /** 若提供，冷恢复相位调用；失败隔离。 */
+  restore?: () ***REMOVED*** void | Promise<void>;
+}
+
 export interface WorkspaceAppHostApi {
   /** 注册侧栏 / 命令面板「主视图」分段。 */
   registerPrimarySegment(contribution: WorkspaceAppPrimarySegmentContribution): void;
@@ -966,6 +980,15 @@ export interface WorkspaceAppHostApi {
   lifecycle: {
     isHostReady(): boolean;
     onHostReady(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    /**
+     * 冷恢复相位（HostReady 之后、或晚注册 session 时补发）。
+     * App 也可只靠 `background.registerSession({ restore })`，二者都会在同一相位触发。
+     */
+    onColdRestore(listener: (prefs: WorkspaceAppColdRestorePrefs) ***REMOVED*** void): () ***REMOVED*** void;
+    /** 窗口隐藏 / pagehide 等（非 App 卸载）。 */
+    onSuspend(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    /** 窗口回到前台。 */
+    onResume(listener: () ***REMOVED*** void): () ***REMOVED*** void;
   };
 
   /**
@@ -989,6 +1012,11 @@ export interface WorkspaceAppHostApi {
    */
   background: {
     requestRetain(input: { appId: string; active: boolean; reason?: string }): void;
+    /**
+     * 声明长生命周期会话（音频 / 长任务等）。
+     * 提供 `restore` 时，宿主在 cold restore 相位调用；返回取消注册。
+     */
+    registerSession(input: WorkspaceAppBackgroundSessionInput): () ***REMOVED*** void;
   };
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */

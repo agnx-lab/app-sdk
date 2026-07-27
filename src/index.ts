@@ -100,6 +100,8 @@ export type {
   WorkspaceAppAtmospherePreset,
   WorkspaceAppAtmosphereMode,
   WorkspaceAppAtmosphereSnapshot,
+  WorkspaceAppBackgroundSessionInput,
+  WorkspaceAppColdRestorePrefs,
   WorkspaceAppRunToolInput,
   WorkspaceAppRunToolResult,
   WorkspaceAppConfirmRiskInput,
