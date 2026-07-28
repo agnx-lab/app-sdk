@@ -180,6 +180,11 @@ export interface WorkspaceAppConfigApi {
    * 目录不存在时返回 `[]`；不读 legacy `apps/config/`。
    */
   listKeys(input: { scope: WorkspaceAppConfigScope; appId?: string }): Promise<readonly string[]>;
+  /**
+   * 删除某 key 对应的配置文件；文件不存在视为成功。
+   * 删除后会发出 sync revision ping（与 set 一致）。
+   */
+  delete(input: { scope: WorkspaceAppConfigScope; appId?: string; key: string }): Promise<void>;
   /** 订阅配置变化；返回取消订阅。 */
   subscribe<T = unknown>(input: {
     scope: WorkspaceAppConfigScope;
