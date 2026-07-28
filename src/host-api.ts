@@ -407,8 +407,11 @@ export interface WorkspaceAppActionBarProps {
    * 投影算法与 SDK `projectActionBarOverflowFold` 同源。
    */
   hideBar?: boolean;
-  /** rail 排布：`even` 用于大封面底栏均分 */
-  distribute?: "start" | "end" | "even";
+  /**
+   * 外露芯片不足宽时是否换行。默认 `false`（单行 nowrap，常见于封面底栏）。
+   * Notes 顶栏等场景可开：先换行，再由外层决定是否横滚。
+   */
+  wrap?: boolean;
   iconSize?: number;
   mutedColor?: string;
   accentColor?: string;
