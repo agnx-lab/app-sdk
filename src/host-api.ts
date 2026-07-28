@@ -684,6 +684,11 @@ export interface WorkspaceAppUiApi {
     defaultLayout?: WorkspaceAppActionBarLayout;
     order?: number;
   }): void;
+  /**
+   * 绑定实体菜单 shortcutSourceKey → run（编辑布局 Rebind 后按键派发）。
+   * 无默认组合键也可绑定；卸载时调用返回的 disposer。
+   */
+  bindEntityMenuShortcutRun(sourceKey: string, run: () ***REMOVED*** void): () ***REMOVED*** void;
   seedEntityMenuLayoutIfAbsent(input: {
     appId: string;
     menuId: string;
