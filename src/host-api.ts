@@ -175,6 +175,11 @@ export interface WorkspaceAppConfigApi {
     key: string;
     value: T;
   }): Promise<void>;
+  /**
+   * 列出某 scope 下已落盘的配置 key（文件名去掉 `.json`）。
+   * 目录不存在时返回 `[]`；不读 legacy `apps/config/`。
+   */
+  listKeys(input: { scope: WorkspaceAppConfigScope; appId?: string }): Promise<readonly string[]>;
   /** 订阅配置变化；返回取消订阅。 */
   subscribe<T = unknown>(input: {
     scope: WorkspaceAppConfigScope;
