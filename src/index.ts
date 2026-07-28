@@ -102,6 +102,8 @@ export type {
   WorkspaceAppTransientShortcutSession,
   WorkspaceAppUiApi,
   WorkspaceAppAtmosphereSeed,
+  WorkspaceAppContentBackdropSeed,
+  WorkspaceAppContentBackdropIntensity,
   WorkspaceAppAtmospherePreset,
   WorkspaceAppAtmosphereMode,
   WorkspaceAppAtmosphereSnapshot,

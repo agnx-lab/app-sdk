@@ -521,6 +521,34 @@ export interface WorkspaceAppAtmosphereSeed {
   sourceLabel?: string;
 }
 
+/**
+ * Mini-App → 宿主的中间区内容背景种子（媒体层，与氛围色场分轨）。
+ * 氛围仍只传色；封面等图像经本接口推送，由宿主在主区渲染。
+ */
+export type WorkspaceAppContentBackdropIntensity = "light" | "standard" | "vivid";
+
+export interface WorkspaceAppContentBackdropSeed {
+  sourceId: string;
+  /** 可展示的图片 URI（http / file / data 等；宿主不做取色）。 */
+  imageUri: string;
+  sourceLabel?: string;
+  /**
+   * 朦胧强度预设（兼容旧客户端）；若同时提供 blurRadius/imageOpacity 则以数值为准。
+   */
+  intensity?: WorkspaceAppContentBackdropIntensity;
+  /** 模糊半径（约 0–32）；缺省由 intensity 或宿主 standard 映射。 */
+  blurRadius?: number;
+  /** 封面图透明度 0–1；缺省由 intensity 或宿主 standard 映射。 */
+  imageOpacity?: number;
+  /** 暗色遮罩透明度 0–1；缺省由 intensity 或宿主 standard 映射。 */
+  overlayOpacity?: number;
+  /**
+   * 为 true 时宿主 Tab 条透出同一中间区封面层（一体沉浸）。
+   * 缺省 / false：Tab 条保持实底 chrome。
+   */
+  includeTabBar?: boolean;
+}
+
 export interface WorkspaceAppAtmospherePreset {
   id: string;
   name: string;
@@ -680,6 +708,13 @@ export interface WorkspaceAppUiApi {
   clearAtmosphere(sourceId: string): void;
   /** 只读快照：模式、有效色、pane 色、全局预设。 */
   getAtmosphereSnapshot(): WorkspaceAppAtmosphereSnapshot;
+  /**
+   * 向宿主推送中间区内容背景（封面等媒体）。与 `setAtmosphere` 分轨：
+   * 切走 Mini-App Tab 后仍可粘滞显示，直到同 sourceId `clearContentBackdrop`。
+   */
+  setContentBackdrop(seed: WorkspaceAppContentBackdropSeed): void;
+  /** 清除该 source 的内容背景；若其为当前粘滞源则卸下主区图像层。 */
+  clearContentBackdrop(sourceId: string): void;
   /** 写入「我的氛围」预设并可选切到该预设；返回预设 id。 */
   addAtmospherePreset(input: {
     name: string;
