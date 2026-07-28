@@ -1151,12 +1151,12 @@ export interface WorkspaceAppHostApi {
   events: {
     readRecent(input?: {
       appId?: string | null;
-      domains?: ReadonlyArray<"lifecycle" | "tabs" | "sync" | "config" | "provider">;
+      domains?: ReadonlyArray<"lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar">;
       limit?: number;
     }): ReadonlyArray<{
       id: string;
       at: string;
-      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider";
+      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar";
       type: string;
       appId?: string | null;
       summary: string;
@@ -1164,7 +1164,7 @@ export interface WorkspaceAppHostApi {
     }>;
     subscribe(listener: () ***REMOVED*** void): () ***REMOVED*** void;
     matrix(): ReadonlyArray<{
-      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider";
+      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar";
       sdkPath: string;
       types: readonly string[];
       note: string;

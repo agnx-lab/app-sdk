@@ -39,6 +39,7 @@ export type {
   WorkspaceAppListItem,
   WorkspaceAppListSortOption,
   WorkspaceAppMiniAppContribution,
+  WorkspaceAppIsolationProfile,
   WorkspaceAppOrganizeContribution,
   WorkspaceAppOrganizeContext,
   WorkspaceAppOrganizeGroup,

@@ -200,6 +200,20 @@ export interface WorkspaceAppShortcutContribution {
   }) ***REMOVED*** void | Promise<void>;
 }
 
+export interface WorkspaceAppIsolationProfile {
+  /**
+   * 轻量隔离模式（任务 E）：
+   * - none：同渲染进程面板（默认）
+   * - sidecar-tools：长任务 / 高风险经 host.tools 主进程白名单
+   * - iframe：面板内嵌跨域文档（可配合 iframeShortcutCapture）
+   */
+  mode?: "none" | "sidecar-tools" | "iframe";
+  /** 声明依赖的 tools/* 相对路径（诊断展示；不自动强制执行）。 */
+  sidecarTools?: readonly string[];
+  /** 给人看的隔离说明。 */
+  note?: string;
+}
+
 export interface WorkspaceAppMiniAppContribution {
   id: string;
   appId: WorkspaceAppId;
@@ -217,6 +231,8 @@ export interface WorkspaceAppMiniAppContribution {
    * 宿主仅在此标记下 acquire 桌面 force-subframe 转发；同框 React 面板（如系统洞察）不要开。
    */
   iframeShortcutCapture?: boolean;
+  /** 任务 E：轻量隔离声明（诊断 / 文档索引；不改变默认执行路径）。 */
+  isolation?: WorkspaceAppIsolationProfile;
 }
 
 export interface WorkspaceAppItemMenuContribution {
