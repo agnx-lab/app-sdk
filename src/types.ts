@@ -206,10 +206,13 @@ export interface WorkspaceAppIsolationProfile {
    * - none：同渲染进程面板（默认）
    * - sidecar-tools：长任务 / 高风险经 host.tools 主进程白名单
    * - iframe：面板内嵌跨域文档（可配合 iframeShortcutCapture）
+   * - worker：面板内 Web Worker 重计算（opt-in 经 host.worker.observe 上报）
    */
-  mode?: "none" | "sidecar-tools" | "iframe";
+  mode?: "none" | "sidecar-tools" | "iframe" | "worker";
   /** 声明依赖的 tools/* 相对路径（诊断展示；不自动强制执行）。 */
   sidecarTools?: readonly string[];
+  /** worker 模式时可选脚本标识（诊断展示；App 自行 spawn Worker）。 */
+  workerScripts?: readonly string[];
   /** 给人看的隔离说明。 */
   note?: string;
 }

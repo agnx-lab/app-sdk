@@ -1152,13 +1152,21 @@ export interface WorkspaceAppHostApi {
     readRecent(input?: {
       appId?: string | null;
       domains?: ReadonlyArray<
-        "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar" | "iframe"
+        "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar" | "iframe" | "worker"
       >;
       limit?: number;
     }): ReadonlyArray<{
       id: string;
       at: string;
-      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar" | "iframe";
+      domain:
+        | "lifecycle"
+        | "tabs"
+        | "sync"
+        | "config"
+        | "provider"
+        | "sidecar"
+        | "iframe"
+        | "worker";
       type: string;
       appId?: string | null;
       summary: string;
@@ -1166,11 +1174,31 @@ export interface WorkspaceAppHostApi {
     }>;
     subscribe(listener: () ***REMOVED*** void): () ***REMOVED*** void;
     matrix(): ReadonlyArray<{
-      domain: "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar" | "iframe";
+      domain:
+        | "lifecycle"
+        | "tabs"
+        | "sync"
+        | "config"
+        | "provider"
+        | "sidecar"
+        | "iframe"
+        | "worker";
       sdkPath: string;
       types: readonly string[];
       note: string;
     }>;
+  };
+
+  /**
+   * 任务 E3：Web Worker 观测（opt-in）。
+   * 宿主不代为 spawn Worker；App 在 spawn/terminate/error 时调用 observe 写入诊断环。
+   */
+  worker: {
+    observe(input: {
+      type: "spawn" | "terminate" | "error" | "message";
+      summary: string;
+      detail?: string;
+    }): void;
   };
 
   /**
