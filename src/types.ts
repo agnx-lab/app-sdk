@@ -200,6 +200,23 @@ export interface WorkspaceAppShortcutContribution {
   }) ***REMOVED*** void | Promise<void>;
 }
 
+/**
+ * Shortcuts 面板功能组（产品组 / 布局组）。
+ * sectionId/sectionTitle 仍由 registerShortcut 携带；本贡献用于分组元数据与「打开编辑布局」入口。
+ */
+export interface WorkspaceAppShortcutGroupContribution {
+  id: string;
+  appId: WorkspaceAppId;
+  /** 分组 stable key；与 shortcut.sectionId 对齐时可复用同一字符串。 */
+  groupKey: string;
+  title: string;
+  kind: "product" | "layout";
+  /** Shortcuts 面板标题右侧「编辑布局…」；曲目/侧栏菜单类 product 组可声明。 */
+  openLayoutEditor?: () ***REMOVED*** void;
+  /** 由编辑布局 inline Rebind 的 helpId；Shortcuts 列表剔除以免与独立热键重复。 */
+  layoutManagedShortcutSourceKeys?: readonly string[];
+}
+
 export interface WorkspaceAppIsolationProfile {
   /**
    * 轻量隔离模式（任务 E）：
@@ -255,6 +272,12 @@ export interface WorkspaceAppItemMenuContribution {
   resolveIcon?: (item: WorkspaceAppListItem) ***REMOVED*** WorkspaceAppIcon;
   /** 菜单右侧键帽（如 `["alt","p"]`）；宿主用 Shortcut 渲染。 */
   shortcutKeys?: readonly string[];
+  /**
+   * 快捷键动作源（与 registerShortcut 的 helpId 对齐）。
+   * 编辑布局 inline Rebind 与 shortcuts 面板共用；跨 surface 只存一份映射。
+   * 缺省时宿主可尝试用同 app 下 id 相同的 shortcut 贡献的 helpId。
+   */
+  shortcutSourceKey?: string;
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
 }
 

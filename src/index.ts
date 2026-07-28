@@ -45,6 +45,7 @@ export type {
   WorkspaceAppOrganizeGroup,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
+  WorkspaceAppShortcutGroupContribution,
   WorkspaceAppTabContextMenuContribution,
   WorkspaceAppTabContextMenuContext,
 } from "./types";

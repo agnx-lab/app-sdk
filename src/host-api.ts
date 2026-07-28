@@ -12,6 +12,7 @@ import type {
   WorkspaceAppOrganizeContribution,
   WorkspaceAppPrimarySegmentContribution,
   WorkspaceAppShortcutContribution,
+  WorkspaceAppShortcutGroupContribution,
   WorkspaceAppTabContextMenuContribution,
 } from "./types";
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
@@ -244,6 +245,11 @@ export interface WorkspaceAppActionLayoutItem {
   icon?: WorkspaceAppIcon;
   /** 是否允许在编辑布局里隐藏；默认 true */
   canHide?: boolean;
+  /**
+   * 快捷键动作源（与宿主 keyboard-shortcuts help.id 对齐）。
+   * 编辑布局 sheet 内可 inline Rebind；跨 surface 共用同一映射。
+   */
+  shortcutSourceKey?: string;
 }
 
 /** 编辑布局附加段（壳层 / 实体等多段合同）。 */
@@ -265,6 +271,7 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
    */
   layout: WorkspaceAppActionBarLayout;
   defaultLayout: WorkspaceAppActionBarLayout;
+  /** 各 item 可带 shortcutSourceKey；编辑布局内 inline Rebind，跨 surface 共用同一映射。 */
   items: WorkspaceAppActionLayoutItem[];
   /** 主段标题；多段时显示在主段列表上方 */
   sectionTitle?: string;
@@ -636,6 +643,19 @@ export interface WorkspaceAppUiApi {
     items: WorkspaceAppActionLayoutItem[];
     defaultLayout?: WorkspaceAppActionBarLayout;
   }): void;
+  /**
+   * 登记多表面实体菜单动作目录（activate/seed 时调用）。
+   * 宿主据此为对应 shortcutGroup 自动推导 layout-managed 键与 Shortcuts 面板「编辑布局」入口。
+   */
+  registerEntityMenuLayoutCatalog(input: {
+    appId: string;
+    menuId: string;
+    surfaceId: string;
+    title?: string;
+    items: WorkspaceAppActionLayoutItem[];
+    defaultLayout?: WorkspaceAppActionBarLayout;
+    order?: number;
+  }): void;
   seedEntityMenuLayoutIfAbsent(input: {
     appId: string;
     menuId: string;
@@ -908,6 +928,8 @@ export interface WorkspaceAppHostApi {
   registerTabContextMenu(contribution: WorkspaceAppTabContextMenuContribution): void;
   /** 注册快捷键（合并进宿主帮助面板；优先 `workspace.app.*` actionId）。 */
   registerShortcut(contribution: WorkspaceAppShortcutContribution): void;
+  /** 注册 Shortcuts 面板功能组元数据（产品组 / 布局组）。 */
+  registerShortcutGroup(contribution: WorkspaceAppShortcutGroupContribution): void;
   /**
    * 列表项打开 Tab 前的准备回调（按 appId）。
    * 例如 Music 在打开单例播放器 Tab 前先 `setNowPlaying(itemId)`。
