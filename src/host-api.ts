@@ -383,7 +383,16 @@ export interface WorkspaceAppActionContribution {
   active?: boolean;
   destructive?: boolean;
   disabled?: boolean;
+  /**
+   * 显式键帽。缺省时宿主可按 `shortcutSourceKey` / `shortcutEntityMenu` 从用户绑定与默认 help 解析。
+   * Mini-App 优先声明 sourceKey，避免手填与 Rebind 脱节。
+   */
   shortcutKeys?: readonly string[];
+  /**
+   * 快捷键动作源（与编辑布局 Rebind / help.id 对齐）。
+   * 宿主 ActionBar 用其自动填充 tip / 溢出键帽；无绑定时不显示键帽，槽位仍在编辑布局。
+   */
+  shortcutSourceKey?: string;
   /** tip 文案；缺省用 label（可含更完整说明，仍不含快捷键字符串） */
   tipLabel?: string;
 }
@@ -403,6 +412,11 @@ export interface WorkspaceAppActionBarProps {
   /** 已知动作全集；bar/overflow 按 layout.id 取用 */
   actions: readonly WorkspaceAppActionContribution[];
   /**
+   * entity-menu 快捷键作用域。未声明 `action.shortcutSourceKey` 时，
+   * 宿主推导 `entity-menu:${appId}:${menuId}:${action.id}`，与编辑布局槽位对齐。
+   */
+  shortcutEntityMenu?: { appId: string; menuId: string };
+  /**
    * true：不渲染外露 bar，并把原 bar 投影进溢出菜单第一段（移动端小封面等）。
    * 投影算法与 SDK `projectActionBarOverflowFold` 同源。
    */
@@ -412,6 +426,8 @@ export interface WorkspaceAppActionBarProps {
    * Notes 顶栏等场景可开：先换行，再由外层决定是否横滚。
    */
   wrap?: boolean;
+  /** bar 芯片主轴对齐；默认 `end` */
+  distribute?: "start" | "end" | "even";
   iconSize?: number;
   mutedColor?: string;
   accentColor?: string;
@@ -771,6 +787,7 @@ export interface WorkspaceAppUiApi {
   ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
   /**
    * 按 layout 投影外露 bar + 溢出三点；自动消化 showBarLabels / hideBar。
+   * 有 `shortcutSourceKey` 或 `shortcutEntityMenu` 时，宿主自动把用户绑定/默认键帽灌进 tip 与溢出菜单。
    * Mini-App 只交 contributions + rail 策略，禁止自绘「显示完整」分支。
    */
   ActionBar: (props: WorkspaceAppActionBarProps) ***REMOVED*** unknown;
