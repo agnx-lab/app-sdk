@@ -368,6 +368,11 @@ export type WorkspaceAppMenuItem =
       destructive?: boolean;
       /** 键帽序列，交宿主 `<Shortcut keys={…} />` 渲染（如 `["alt","p"]`） */
       shortcutKeys?: readonly string[];
+      /**
+       * 快捷键动作源。宿主 ActionOverflowMenu 可按此解析用户绑定/默认键帽；
+       * 与 ActionBar contribution.shortcutSourceKey 对齐。
+       */
+      shortcutSourceKey?: string;
       disabled?: boolean;
     };
 
