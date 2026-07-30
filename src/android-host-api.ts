@@ -104,7 +104,19 @@ export type AndroidHostCommand =
       grantAllPermissions?: boolean;
     }
   | { action: "push_file"; localPath: string; remotePath?: string }
+  | { action: "list_dir"; path: string; maxEntries?: number }
+  | { action: "mkdir"; path: string }
+  | { action: "delete_path"; path: string; recursive?: boolean }
+  | { action: "pull_file"; remotePath: string }
   | { action: "close" };
+
+export interface AndroidHostFsEntry {
+  name: string;
+  path: string;
+  isDir: boolean;
+  size?: number;
+  mtimeMs?: number;
+}
 
 export interface AndroidHostUiBounds {
   left: number;
@@ -169,6 +181,9 @@ export interface AndroidHostCommandResult {
   screenshotDataUrl?: string;
   installStatus?: "success" | "failed";
   remotePath?: string;
+  localPath?: string;
+  dirEntries?: AndroidHostFsEntry[];
+  truncated?: boolean;
   interactiveElements?: AndroidHostInteractiveElement[];
   uiXml?: string;
   uiHierarchy?: AndroidHostUiNode[];
@@ -343,6 +358,10 @@ export const ANDROID_HOST_COMMAND_CAPABILITY: Record<
   shell_exec: "android.shell",
   apk_install: "android.files",
   push_file: "android.files",
+  list_dir: "android.files",
+  mkdir: "android.files",
+  delete_path: "android.files",
+  pull_file: "android.files",
   close: "android.session",
 };
 
