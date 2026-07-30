@@ -279,7 +279,7 @@ export interface WorkspaceAppAndroidHostApi {
 
   /**
    * 设备音频转发开关（D5）。
-   * v1 stub：校验 `android.audio` 后返回 `unsupported`，真管线后置。
+   * v1：daemon 启停本机 scrcpy `--no-video` 仅音频子进程；需 PATH 或 `AGNX_SCRCPY_PATH`。
    */
   setAudioEnabled?(input: {
     sessionId: string;
