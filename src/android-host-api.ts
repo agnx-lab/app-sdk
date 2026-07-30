@@ -12,6 +12,7 @@ export type AndroidHostCapability =
   | "android.files"
   | "android.screenshot"
   | "android.stream"
+  | "android.audio"
   | "android.logcat"
   | "android.openTab";
 
