@@ -277,6 +277,15 @@ export interface WorkspaceAppAndroidHostApi {
 
   subscribeFrameStream(input: AndroidHostSubscribeFrameStreamInput): () ***REMOVED*** void;
 
+  /**
+   * 设备音频转发开关（D5）。
+   * v1 stub：校验 `android.audio` 后返回 `unsupported`，真管线后置。
+   */
+  setAudioEnabled?(input: {
+    sessionId: string;
+    enabled: boolean;
+  }): Promise<{ ok: boolean; error?: AndroidHostErrorShape }>;
+
   logcat: {
     start(sessionId: string): Promise<void>;
     stop(sessionId: string): Promise<void>;
