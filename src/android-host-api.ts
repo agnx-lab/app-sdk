@@ -260,6 +260,56 @@ export interface AndroidHostOpenTabResult {
   opened: boolean;
 }
 
+export interface AndroidHostOpenTabSession {
+  androidId: string;
+  sessionId: string;
+  deviceId?: string;
+  deviceLabel?: string;
+  tabId?: string;
+  title?: string;
+  focused: boolean;
+  visible: boolean;
+}
+
+export interface AndroidHostResolveSessionInput {
+  sessionId?: string;
+  androidId?: string;
+  tabId?: string;
+  /** 工作区安卓 Tab 人读名（customTitle / 型号 titleHint），支持模糊匹配。 */
+  tabTitle?: string;
+  deviceId?: string;
+  /**
+   * 无匹配的已打开会话时是否 createSession。
+   * 默认：仅当没有任何已打开投屏会话，或显式给了 deviceId 且该机无打开会话时为 true。
+   * 有多台已打开却未指明时不会静默新建（避免平行会话）。
+   */
+  createIfMissing?: boolean;
+}
+
+export type AndroidHostResolveSessionResult =
+  | {
+      ok: true;
+      sessionId: string;
+      androidId?: string;
+      tabId?: string;
+      title?: string;
+      source:
+        | "sessionId"
+        | "androidId"
+        | "tabId"
+        | "tabTitle"
+        | "deviceId"
+        | "focused"
+        | "unique"
+        | "created";
+    }
+  | {
+      ok: false;
+      error: string;
+      message: string;
+      candidates: AndroidHostOpenTabSession[];
+    };
+
 /**
  * 可选领域 Host：Android 设备发现 / 会话 / 命令 / 帧流。
  * 仅桌面 Electron 完整可用；非桌面为 undefined 或方法返回 unavailable。
@@ -287,6 +337,17 @@ export interface WorkspaceAppAndroidHostApi {
   closeSession(sessionId: string): Promise<void>;
   getSession(sessionId: string): Promise<AndroidHostSession | null>;
   getSessionLogs(sessionId: string): Promise<AndroidHostSessionLogEntry[]>;
+
+  /**
+   * 列出工作区已打开且会话 ready 的安卓投屏（含 Tab 标题）。
+   * Agent 应按 title / tabId 选机，而不是盲目 createSession。
+   */
+  listOpenTabSessions(): Promise<AndroidHostOpenTabSession[]>;
+
+  /**
+   * 解析要操控的 session：优先绑投屏 Tab 已有会话；必要时再 create。
+   */
+  resolveSession(input?: AndroidHostResolveSessionInput): Promise<AndroidHostResolveSessionResult>;
 
   runCommand(sessionId: string, command: AndroidHostCommand): Promise<AndroidHostCommandResult>;
 
