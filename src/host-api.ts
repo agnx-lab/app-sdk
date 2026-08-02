@@ -312,9 +312,17 @@ export interface WorkspaceAppDetailSheetExtraRow {
   valueContent?: unknown;
 }
 
+/** View details extras 构建上下文（当前 Tab 实体）。 */
+export interface WorkspaceAppDetailSheetExtrasContext {
+  entityId: string;
+  panelId?: string;
+}
+
 export interface WorkspaceAppRegisterDetailSheetExtrasInput {
   appId: string;
-  buildRows: () ***REMOVED*** ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
+  buildRows: (
+    context?: WorkspaceAppDetailSheetExtrasContext,
+  ) ***REMOVED*** ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
 }
 
 /** 瞬时快捷键（按顺序分配 Option/Alt 1–n），用于操作栏悬停提示。 */
