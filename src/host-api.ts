@@ -307,6 +307,7 @@ export interface WorkspaceAppOpenDetailSheetInput {
 export interface WorkspaceAppDetailSheetExtraRow {
   label: string;
   value: string;
+  copyText?: string;
   helpText?: string;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
   valueContent?: unknown;
@@ -316,19 +317,25 @@ export interface WorkspaceAppDetailSheetExtraRow {
 export interface WorkspaceAppDetailSheetExtrasContext {
   entityId: string;
   panelId?: string;
-  /** 公共详情壳（⌥D）打开时传入；View details 可不传。 */
+  /** 公共详情壳（⌘I）打开时传入；View details 可不传。 */
   tabId?: string;
 }
 
 /**
- * View details（⌘I）与公共详情（⌥D）可共用同一 builder。
- * 缺省 `view-details`，保持旧 Mini-App 行为。
+ * 详情 extras 挂载面。
+ * 缺省 `view-details`；`public` 进公共详情「元数据」；`config` 进「配置」；
+ * `both` = view-details + public；`config-both` = view-details + config。
  */
-export type WorkspaceAppDetailSheetExtrasSurface = "view-details" | "public" | "both";
+export type WorkspaceAppDetailSheetExtrasSurface =
+  | "view-details"
+  | "public"
+  | "config"
+  | "both"
+  | "config-both";
 
 export interface WorkspaceAppRegisterDetailSheetExtrasInput {
   appId: string;
-  /** 缺省只进 Cmd+I；`public` / `both` 进 ⌥D 元数据页。 */
+  /** 缺省只进旧独立详情 sheet；见 `WorkspaceAppDetailSheetExtrasSurface`。 */
   surface?: WorkspaceAppDetailSheetExtrasSurface;
   buildRows: (
     context?: WorkspaceAppDetailSheetExtrasContext,
@@ -796,10 +803,23 @@ export interface WorkspaceAppUiApi {
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
   /** 关闭 `openDetailSheet` 打开的详情；未打开时 no-op。 */
   closeDetailSheet(): void;
-  /** 当前是否有 Mini-App 详情 sheet 打开（供 ⌥D 等快捷键切换）。 */
+  /** 当前是否有 Mini-App 独立详情 sheet 打开（旧 `openDetailSheet`）。 */
   isDetailSheetOpen(): boolean;
   /**
-   * 向宿主 Tab「View details」（⌘I）和/或公共「详情」（⌥D）追加本 App 的配置行。
+   * 打开当前聚焦 Tab（或指定 tabId / 某 app 的活动 Tab）的公共详情壳。
+   * 正式快捷键为 ⌘I；Mini-App 不得再自造第二套曲目/实体详情浮层。
+   */
+  openTabPublicDetail(input?: {
+    tabId?: string;
+    appId?: string;
+    pane?: "metadata" | "config" | "tools";
+  }): void;
+  /** 关闭公共详情壳；未打开时 no-op。 */
+  closeTabPublicDetail(): void;
+  /** 当前是否有公共详情壳打开。 */
+  isTabPublicDetailOpen(): boolean;
+  /**
+   * 向宿主 Tab「View details」和/或公共详情「元数据/配置」追加本 App 的行。
    * `surface` 缺省为 `view-details`；`both` 可一次注册两处。
    * 返回注销函数；activate 卸载时应调用。
    */
