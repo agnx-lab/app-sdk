@@ -312,14 +312,24 @@ export interface WorkspaceAppDetailSheetExtraRow {
   valueContent?: unknown;
 }
 
-/** View details extras 构建上下文（当前 Tab 实体）。 */
+/** View details / 公共详情 extras 构建上下文（当前 Tab 实体）。 */
 export interface WorkspaceAppDetailSheetExtrasContext {
   entityId: string;
   panelId?: string;
+  /** 公共详情壳（⌥D）打开时传入；View details 可不传。 */
+  tabId?: string;
 }
+
+/**
+ * View details（⌘I）与公共详情（⌥D）可共用同一 builder。
+ * 缺省 `view-details`，保持旧 Mini-App 行为。
+ */
+export type WorkspaceAppDetailSheetExtrasSurface = "view-details" | "public" | "both";
 
 export interface WorkspaceAppRegisterDetailSheetExtrasInput {
   appId: string;
+  /** 缺省只进 Cmd+I；`public` / `both` 进 ⌥D 元数据页。 */
+  surface?: WorkspaceAppDetailSheetExtrasSurface;
   buildRows: (
     context?: WorkspaceAppDetailSheetExtrasContext,
   ) ***REMOVED*** ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
@@ -789,7 +799,8 @@ export interface WorkspaceAppUiApi {
   /** 当前是否有 Mini-App 详情 sheet 打开（供 ⌥D 等快捷键切换）。 */
   isDetailSheetOpen(): boolean;
   /**
-   * 向宿主 Tab「View details」追加本 App 的配置行（如行内编辑）。
+   * 向宿主 Tab「View details」（⌘I）和/或公共「详情」（⌥D）追加本 App 的配置行。
+   * `surface` 缺省为 `view-details`；`both` 可一次注册两处。
    * 返回注销函数；activate 卸载时应调用。
    */
   registerDetailSheetExtras(input: WorkspaceAppRegisterDetailSheetExtrasInput): () ***REMOVED*** void;

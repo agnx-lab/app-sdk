@@ -87,6 +87,7 @@ export type {
   WorkspaceAppOpenDetailSheetInput,
   WorkspaceAppDetailSheetExtraRow,
   WorkspaceAppDetailSheetExtrasContext,
+  WorkspaceAppDetailSheetExtrasSurface,
   WorkspaceAppRegisterDetailSheetExtrasInput,
   WorkspaceAppActionContribution,
   WorkspaceAppActionBarButtonProps,
