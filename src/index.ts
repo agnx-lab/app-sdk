@@ -8,6 +8,7 @@ export type {
   AndroidHostErrorShape,
   AndroidHostFrame,
   AndroidHostFrameStatus,
+  AndroidHostFsEntry,
   AndroidHostInteractiveElement,
   AndroidHostLogcatLine,
   AndroidHostOpenTabInput,
