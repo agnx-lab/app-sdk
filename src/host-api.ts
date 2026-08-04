@@ -620,6 +620,14 @@ export interface WorkspaceAppAtmospherePreset {
   secondary?: string;
   tertiary?: string;
   luminance?: "dark" | "light" | "unknown";
+  /**
+   * 可选双套（钉选沉浸等）。有则无粘滞回落时按 Theme 亮度取套；
+   * 缺省为单套预设（仅 primary 等字段）。
+   */
+  bands?: {
+    light: WorkspaceAppAtmosphereColorBand;
+    dark: WorkspaceAppAtmosphereColorBand;
+  };
   builtin?: boolean;
   createdAt?: number;
 }
