@@ -560,6 +560,13 @@ export interface WorkspaceAppActionOverflowMenuProps {
   renderHoverSidePanel?: (id: string) ***REMOVED*** unknown;
 }
 
+/** 单套氛围色（双套里的 light 或 dark）。 */
+export interface WorkspaceAppAtmosphereColorBand {
+  primary: string;
+  secondary?: string;
+  tertiary?: string;
+}
+
 /** Mini-App → 宿主的氛围色种子（只传色，不传媒体）。 */
 export interface WorkspaceAppAtmosphereSeed {
   primary: string;
@@ -568,6 +575,14 @@ export interface WorkspaceAppAtmosphereSeed {
   luminance?: "dark" | "light" | "unknown";
   sourceId: string;
   sourceLabel?: string;
+  /**
+   * 可选沉浸双套。有则宿主按当前 Theme 亮度选用并在切 Theme 时换套；
+   * `primary` 等字段仍须填当前套（兼容旧宿主 / 首帧）。
+   */
+  bands?: {
+    light: WorkspaceAppAtmosphereColorBand;
+    dark: WorkspaceAppAtmosphereColorBand;
+  };
 }
 
 /**
@@ -756,6 +771,8 @@ export interface WorkspaceAppUiApi {
   /**
    * 向宿主推送整应用氛围种子（只传颜色，不传封面/视频）。
    * 渲染是否生效由宿主仲裁（跟随 App + 当前 focused pane）。
+   * 沉浸型 App 应经 `bands` 推送 light/dark 双套（并填当前套到 primary）；
+   * 宿主按 Theme 选用，切 Theme 换套；不会用 luminance 反推 Theme。
    */
   setAtmosphere(seed: WorkspaceAppAtmosphereSeed): void;
   /** 清除该 source 的氛围种子；若其为当前有效源则回落全局。 */
