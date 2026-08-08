@@ -311,6 +311,9 @@ export interface WorkspaceAppDetailSheetExtraRow {
   helpText?: string;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
   valueContent?: unknown;
+  /** 可选分组（公共详情「配置」sheet 渲染分组头；旧 App 不传则扁平）。 */
+  groupId?: string;
+  groupTitle?: string;
 }
 
 /** View details / 公共详情 extras 构建上下文（当前 Tab 实体）。 */
