@@ -303,12 +303,29 @@ export interface WorkspaceAppOpenDetailSheetInput {
   rows: WorkspaceAppDetailRow[];
 }
 
+/**
+ * 详情配置标准分段控件（由宿主渲染 onCard 密度）。
+ * Mini-App 只传 options/value/回调，禁止引用 App 内部 SegmentedControl。
+ */
+export interface WorkspaceAppDetailSheetSegmentedControl {
+  type: "segmented";
+  options: ReadonlyArray<{ value: string; label: string }>;
+  value: string;
+  onValueChange: (value: string) ***REMOVED*** void;
+  testID?: string;
+}
+
 /** Mini-App 向宿主 View details 追加的行（可含自定义值区 ReactNode）。 */
 export interface WorkspaceAppDetailSheetExtraRow {
   label: string;
   value: string;
   copyText?: string;
   helpText?: string;
+  /**
+   * 宿主标准控件；与 valueContent 同时存在时优先 control。
+   * 微应用勿再私画迷你分段。
+   */
+  control?: WorkspaceAppDetailSheetSegmentedControl;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
   valueContent?: unknown;
   /** 可选分组（公共详情「配置」sheet 渲染分组头；旧 App 不传则扁平）。 */
@@ -970,6 +987,12 @@ export interface WorkspaceAppAgentToolDefinition {
   description: string;
   /** JSON Schema object（可选；仅描述，daemon 作提示） */
   inputSchema?: Record<string, unknown>;
+  /**
+   * 可选分组（公共详情「工具」/ Agent Context 列表）。
+   * 与详情配置 extras 同口径：有 groupId 才出分区卡；不传则扁平。
+   */
+  groupId?: string;
+  groupTitle?: string;
   execute: (input: unknown, ctx: WorkspaceAppAgentToolContext) ***REMOVED*** Promise<unknown> | unknown;
 }
 

@@ -87,6 +87,7 @@ export type {
   WorkspaceAppTabVisibleEvent,
   WorkspaceAppOpenDetailSheetInput,
   WorkspaceAppDetailSheetExtraRow,
+  WorkspaceAppDetailSheetSegmentedControl,
   WorkspaceAppDetailSheetExtrasContext,
   WorkspaceAppDetailSheetExtrasSurface,
   WorkspaceAppRegisterDetailSheetExtrasInput,
