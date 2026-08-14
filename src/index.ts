@@ -140,3 +140,12 @@ export {
   type MigrateStoragePrefsToConfigInput,
   type MigrateStoragePrefsToConfigResult,
 } from "./migrate-storage-prefs-to-config";
+export type {
+  WorkspaceSubTabChipPresentation,
+  WorkspaceSubTabDescriptor,
+  WorkspaceSubTabStripHandlers,
+  WorkspaceSubTabStripSyncInput,
+  WorkspaceSubTabStripSyncPayload,
+  WorkspaceTabMarkerColor,
+} from "./workspace-tab-chip";
+export { buildWorkspaceSubTabOwnerId } from "./workspace-tab-chip";

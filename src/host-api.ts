@@ -16,6 +16,7 @@ import type {
   WorkspaceAppTabContextMenuContribution,
 } from "./types";
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
+import type { WorkspaceSubTabStripSyncPayload } from "./workspace-tab-chip";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
 export interface WorkspaceAppRunContext {
@@ -902,6 +903,11 @@ export interface WorkspaceAppUiApi {
    * 长任务进度（单任务壳层）。Mini-App 禁止自造全局进度条/阻塞层。
    */
   progress: WorkspaceAppProgressApi;
+  /**
+   * 同步窗内二级 Tab 条到宿主公共 UI（与 Browser Page 条同源）。
+   * 返回注销函数；面板卸载或 tabs 清空时应调用。
+   */
+  syncSubTabStrip(input: WorkspaceSubTabStripSyncPayload): () ***REMOVED*** void;
 }
 
 export interface WorkspaceAppActionTooltipProps {
