@@ -1,4 +1,4 @@
-// 场景：宿主注入给外置 Mini-App 的运行时 API（通用；与具体行业 App 无关）。
+// 场景：宿主注入给外置 Sub App 的运行时 API（通用；与具体行业 App 无关）。
 //
 // 第三方 / AI skill 只需依赖本包：`npm i @getagnx/app-sdk`，实现 `activate(host)`，
 // 把产物放到 `$AGNX_HOME/apps/<appId>/`。不要 import `@getagnx/app` 内部路径。
@@ -283,7 +283,7 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
   secondarySection?: WorkspaceAppActionLayoutSecondarySection;
   /**
    * 编辑布局底部「详情」——打开宿主 view-detail 风格信息 sheet。
-   * Mini-App 只提供回调；弹层由宿主渲染。
+   * Sub App 只提供回调；弹层由宿主渲染。
    */
   detailAction?: {
     label?: string;
@@ -306,7 +306,7 @@ export interface WorkspaceAppOpenDetailSheetInput {
 
 /**
  * 详情配置标准分段控件（由宿主渲染 onCard 密度）。
- * Mini-App 只传 options/value/回调，禁止引用 App 内部 SegmentedControl。
+ * Sub App 只传 options/value/回调，禁止引用 App 内部 SegmentedControl。
  */
 export interface WorkspaceAppDetailSheetSegmentedControl {
   type: "segmented";
@@ -316,7 +316,7 @@ export interface WorkspaceAppDetailSheetSegmentedControl {
   testID?: string;
 }
 
-/** Mini-App 向宿主 View details 追加的行（可含自定义值区 ReactNode）。 */
+/** Sub App 向宿主 View details 追加的行（可含自定义值区 ReactNode）。 */
 export interface WorkspaceAppDetailSheetExtraRow {
   label: string;
   value: string;
@@ -324,7 +324,7 @@ export interface WorkspaceAppDetailSheetExtraRow {
   helpText?: string;
   /**
    * 宿主标准控件；与 valueContent 同时存在时优先 control。
-   * 微应用勿再私画迷你分段。
+   * 子应用勿再私画迷你分段。
    */
   control?: WorkspaceAppDetailSheetSegmentedControl;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
@@ -403,7 +403,7 @@ export type WorkspaceAppMenuItem =
       type: "item";
       id: string;
       label: string;
-      /** 传 Lucide 组件；宿主渲染为 leading，禁止 Mini-App 自造菜单行 */
+      /** 传 Lucide 组件；宿主渲染为 leading，禁止 Sub App 自造菜单行 */
       icon?: WorkspaceAppIcon;
       /**
        * 与栏上同一数据源的强调态（如已置顶）：宿主用 accent 着色/填充 leading，
@@ -423,7 +423,7 @@ export type WorkspaceAppMenuItem =
     };
 
 /**
- * Mini-App 动作贡献：只声明语义，外露 bar / 溢出投影由宿主 ActionBar 消化 layout。
+ * Sub App 动作贡献：只声明语义，外露 bar / 溢出投影由宿主 ActionBar 消化 layout。
  * 业务禁止再手写 `if (showBarLabels)`。
  */
 export interface WorkspaceAppActionContribution {
@@ -436,7 +436,7 @@ export interface WorkspaceAppActionContribution {
   disabled?: boolean;
   /**
    * 显式键帽。缺省时宿主可按 `shortcutSourceKey` / `shortcutEntityMenu` 从用户绑定与默认 help 解析。
-   * Mini-App 优先声明 sourceKey，避免手填与 Rebind 脱节。
+   * Sub App 优先声明 sourceKey，避免手填与 Rebind 脱节。
    */
   shortcutKeys?: readonly string[];
   /**
@@ -456,7 +456,7 @@ export type WorkspaceAppActionBarOverflowProps = Omit<
 
 /**
  * 列表行 / 底栏动作整机：bar 外露 + 三点 +（可选）surface 右键/长按 + showBarLabels。
- * Mini-App 应优先用 ActionBar，禁止再手拼 ActionBarButton + ActionOverflowMenu 第二套。
+ * Sub App 应优先用 ActionBar，禁止再手拼 ActionBarButton + ActionOverflowMenu 第二套。
  */
 export interface WorkspaceAppActionBarProps {
   layout: WorkspaceAppActionBarLayout;
@@ -548,7 +548,7 @@ export interface WorkspaceAppActionOverflowMenuProps {
   /**
    * 可选列表行/卡片主体。宿主启用桌面右键 + 移动端长按，
    * 菜单项与三点 **同一份 items**（宿主 ContextMenu 同源）。
-   * Mini-App 禁止再自造第二套右键/长按菜单。
+   * Sub App 禁止再自造第二套右键/长按菜单。
    */
   surface?: unknown;
   /**
@@ -588,7 +588,7 @@ export interface WorkspaceAppAtmosphereColorBand {
   tertiary?: string;
 }
 
-/** Mini-App → 宿主的氛围色种子（只传色，不传媒体）。 */
+/** Sub App → 宿主的氛围色种子（只传色，不传媒体）。 */
 export interface WorkspaceAppAtmosphereSeed {
   primary: string;
   secondary?: string;
@@ -607,7 +607,7 @@ export interface WorkspaceAppAtmosphereSeed {
 }
 
 /**
- * Mini-App → 宿主的中间区内容背景种子（媒体层，与氛围色场分轨）。
+ * Sub App → 宿主的中间区内容背景种子（媒体层，与氛围色场分轨）。
  * 氛围仍只传色；封面等图像经本接口推送，由宿主在主区渲染。
  */
 export type WorkspaceAppContentBackdropIntensity = "light" | "standard" | "vivid";
@@ -713,11 +713,11 @@ export interface WorkspaceAppProgressApi {
   create(input: WorkspaceAppProgressCreateInput): WorkspaceAppProgressHandle;
 }
 
-/** 宿主 UI 能力（复用壳层成熟组件，避免 Mini-App 自造弹层）。 */
+/** 宿主 UI 能力（复用壳层成熟组件，避免 Sub App 自造弹层）。 */
 export interface WorkspaceAppUiApi {
   /**
    * 打开宿主「编辑布局」sheet（与消息 footer / 工作区工具栏 / 安卓 Tab 同源）。
-   * Mini-App 不得自造第二套布局编辑器。
+   * Sub App 不得自造第二套布局编辑器。
    */
   customizeActionLayout(input: WorkspaceAppCustomizeActionLayoutInput): void;
   /**
@@ -810,7 +810,7 @@ export interface WorkspaceAppUiApi {
   getAtmosphereSnapshot(): WorkspaceAppAtmosphereSnapshot;
   /**
    * 向宿主推送中间区内容背景（封面等媒体）。与 `setAtmosphere` 分轨：
-   * 切走 Mini-App Tab 后仍可粘滞显示，直到同 sourceId `clearContentBackdrop`。
+   * 切走 Sub App Tab 后仍可粘滞显示，直到同 sourceId `clearContentBackdrop`。
    */
   setContentBackdrop(seed: WorkspaceAppContentBackdropSeed): void;
   /** 清除该 source 的内容背景；若其为当前粘滞源则卸下主区图像层。 */
@@ -834,7 +834,7 @@ export interface WorkspaceAppUiApi {
     options?: WorkspaceAppTransientShortcutRegisterOptions,
   ): WorkspaceAppTransientShortcutSession;
   /**
-   * 打开 Mini-App「Agent Context」对齐看板（本 App 可调工具 + 上下文路径）。
+   * 打开 Sub App「Agent Context」对齐看板（本 App 可调工具 + 上下文路径）。
    * 与 Agent Tab 的 Agent Context 入口对齐；勿自造第二套浮层。
    */
   openAppAgentContext(input: { appId: string }): void;
@@ -844,16 +844,16 @@ export interface WorkspaceAppUiApi {
   isAppAgentContextOpen(): boolean;
   /**
    * 打开宿主详情 sheet（与侧栏/命令面板 View details 同类信息弹层）。
-   * Mini-App 不得自造第二套详情浮层。
+   * Sub App 不得自造第二套详情浮层。
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
   /** 关闭 `openDetailSheet` 打开的详情；未打开时 no-op。 */
   closeDetailSheet(): void;
-  /** 当前是否有 Mini-App 独立详情 sheet 打开（旧 `openDetailSheet`）。 */
+  /** 当前是否有 Sub App 独立详情 sheet 打开（旧 `openDetailSheet`）。 */
   isDetailSheetOpen(): boolean;
   /**
    * 打开当前聚焦 Tab（或指定 tabId / 某 app 的活动 Tab）的公共详情壳。
-   * 正式快捷键为 ⌘I；Mini-App 不得再自造第二套曲目/实体详情浮层。
+   * 正式快捷键为 ⌘I；Sub App 不得再自造第二套曲目/实体详情浮层。
    */
   openTabPublicDetail(input?: {
     tabId?: string;
@@ -872,13 +872,13 @@ export interface WorkspaceAppUiApi {
   registerDetailSheetExtras(input: WorkspaceAppRegisterDetailSheetExtrasInput): () ***REMOVED*** void;
   /**
    * 与 WorkspacePaneToolbar「…」overflow **同一套** DropdownMenu 装配。
-   * Mini-App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
+   * Sub App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
    */
   ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
   /**
    * 按 layout 投影外露 bar + 溢出三点；自动消化 showBarLabels / hideBar。
    * 有 `shortcutSourceKey` 或 `shortcutEntityMenu` 时，宿主自动把用户绑定/默认键帽灌进 tip 与溢出菜单。
-   * Mini-App 只交 contributions + rail 策略，禁止自绘「显示完整」分支。
+   * Sub App 只交 contributions + rail 策略，禁止自绘「显示完整」分支。
    */
   ActionBar: (props: WorkspaceAppActionBarProps) ***REMOVED*** unknown;
   /**
@@ -887,7 +887,7 @@ export interface WorkspaceAppUiApi {
   ActionBarButton: (props: WorkspaceAppActionBarButtonProps) ***REMOVED*** unknown;
   /**
    * 宿主悬停 tip（Tooltip + ShortcutTooltipContent 键帽）。
-   * Mini-App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。
+   * Sub App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。
    */
   ActionTooltip: (props: WorkspaceAppActionTooltipProps) ***REMOVED*** unknown;
   /**
@@ -896,11 +896,11 @@ export interface WorkspaceAppUiApi {
    */
   confirmRisk?(input: WorkspaceAppConfirmRiskInput): Promise<WorkspaceAppConfirmRiskResult>;
   /**
-   * 轻量全局通知（toast）。Mini-App 禁止自造第二套全局提示层。
+   * 轻量全局通知（toast）。Sub App 禁止自造第二套全局提示层。
    */
   notification: WorkspaceAppNotificationApi;
   /**
-   * 长任务进度（单任务壳层）。Mini-App 禁止自造全局进度条/阻塞层。
+   * 长任务进度（单任务壳层）。Sub App 禁止自造全局进度条/阻塞层。
    */
   progress: WorkspaceAppProgressApi;
   /**
@@ -920,9 +920,9 @@ export interface WorkspaceAppActionTooltipProps {
   children: unknown;
 }
 
-/** 桌面主进程在微应用 tools/ 白名单内执行 sidecar 工具。 */
+/** 桌面主进程在子应用 tools/ 白名单内执行 sidecar 工具。 */
 export interface WorkspaceAppRunToolInput {
-  /** 当前微应用 id；工具必须位于该 App 的本地目录 tools/ 下。 */
+  /** 当前子应用 id；工具必须位于该 App 的本地目录 tools/ 下。 */
   appId: string;
   /** 相对路径，仅允许 `tools/*.py|sh|mjs|js`。 */
   tool: string;
@@ -978,7 +978,7 @@ export interface WorkspaceAppConfirmRiskResult {
  * ```
  */
 
-/** Agent 可调用的 Mini-App 工具可见性闸门（P6）。 */
+/** Agent 可调用的 Sub App 工具可见性闸门（P6）。 */
 export type WorkspaceAppAgentToolAvailability = "always" | "tab-open" | "tab-visible";
 
 export interface WorkspaceAppAgentToolContext {
@@ -1081,11 +1081,11 @@ export interface WorkspaceAppHostApi {
   registerOrganize(contribution: WorkspaceAppOrganizeContribution): void;
   /** 注册命令面板可搜索命令。 */
   registerCommand(contribution: WorkspaceAppCommandContribution): void;
-  /** 注册 Mini-App Tab 面板（自定义 React 组件）。 */
+  /** 注册 Sub App Tab 面板（自定义 React 组件）。 */
   registerMiniApp(contribution: WorkspaceAppMiniAppContribution): void;
   /** 注册列表项菜单（侧栏 / 命令面板宿主壳注入）。 */
   registerItemMenu(contribution: WorkspaceAppItemMenuContribution): void;
-  /** Mini-App Tab 右键菜单项（按 appId 合并到宿主菜单）。 */
+  /** Sub App Tab 右键菜单项（按 appId 合并到宿主菜单）。 */
   registerTabContextMenu(contribution: WorkspaceAppTabContextMenuContribution): void;
   /** 注册快捷键（合并进宿主帮助面板；优先 `workspace.app.*` actionId）。 */
   registerShortcut(contribution: WorkspaceAppShortcutContribution): void;
@@ -1103,8 +1103,18 @@ export interface WorkspaceAppHostApi {
    */
   registerAgentTools(input: WorkspaceAppRegisterAgentToolsInput): () ***REMOVED*** void;
 
-  /** 在当前工作区打开 Mini-App Tab。 */
+  /** @deprecated 请改用 {@link WorkspaceHostApi.openSubAppTab}；保留以兼容既有 Sub App。 */
   openMiniAppTab(input: {
+    appId: string;
+    panelId: string;
+    entityId?: string;
+    serverId?: string;
+    workspaceId?: string;
+    currentPathname?: string | null;
+  }): boolean;
+
+  /** 在当前工作区打开 Sub App Tab（推荐 API）。 */
+  openSubAppTab(input: {
     appId: string;
     panelId: string;
     entityId?: string;
@@ -1144,14 +1154,14 @@ export interface WorkspaceAppHostApi {
 
   /**
    * 宿主剪贴板（桌面主进程）。
-   * 渲染进程 paste 事件的 DataTransfer 常丢图；微应用应经此读取完整图文。
+   * 渲染进程 paste 事件的 DataTransfer 常丢图；子应用应经此读取完整图文。
    */
   clipboard?: {
     readPastePayload(): Promise<WorkspaceAppClipboardPastePayload>;
   };
 
   /**
-   * 宿主代发 HTTP JSON（Electron 主进程 net.fetch），供 Mini-App 访问远端聚合源 / 本机 sidecar。
+   * 宿主代发 HTTP JSON（Electron 主进程 net.fetch），供 Sub App 访问远端聚合源 / 本机 sidecar。
    * 另可选：媒体 Range 代理（流式播放，非整文件下载）。
    */
   http: {
@@ -1178,7 +1188,7 @@ export interface WorkspaceAppHostApi {
 
   /**
    * 可选：隐藏浏览器会话截流（屏外加载第三方页，拦截 audio/*）。
-   * 仅桌面 Electron；爬取/站点脚本仍在 Mini-App，宿主只提供通用会话能力。
+   * 仅桌面 Electron；爬取/站点脚本仍在 Sub App，宿主只提供通用会话能力。
    */
   browserSession?: {
     captureMedia(input: {
@@ -1240,7 +1250,7 @@ export interface WorkspaceAppHostApi {
 
   /**
    * 可选：打开工作区 Browser Tab（kind:"browser"）。
-   * 系统 Browser 微应用命令入口；第三方默认不应依赖。
+   * 系统 Browser 子应用命令入口；第三方默认不应依赖。
    */
   openBrowserTab?(input?: {
     initialUrl?: string;
@@ -1279,7 +1289,7 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
-   * Mini-App 面板级 Tab 生命周期（挂载/卸载/焦点/可见）。
+   * Sub App 面板级 Tab 生命周期（挂载/卸载/焦点/可见）。
    * 与布局槽位 open/close 可能不同步（LRU keep-alive）；payload.reason 区分。
    */
   tabs: {
@@ -1295,7 +1305,7 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
-   * 后台会话：申请钉住本 App 的 Mini-App Tab（LRU 不卸），避免续播被硬重载。
+   * 后台会话：申请钉住本 App 的 Sub App Tab（LRU 不卸），避免续播被硬重载。
    */
   background: {
     requestRetain(input: { appId: string; active: boolean; reason?: string }): void;
@@ -1320,13 +1330,13 @@ export interface WorkspaceAppHostApi {
 
   /**
    * 宿主 UI 表面（编辑布局等）。
-   * 复用壳层组件；Mini-App 不要自造平行实现。
+   * 复用壳层组件；Sub App 不要自造平行实现。
    */
   ui: WorkspaceAppUiApi;
 
   /**
    * 可选：桌面 sidecar 工具运行器（主进程 spawn，仅 tools/ 白名单）。
-   * 非 Electron / 不可用时为 undefined；Mini-App 须自行降级提示。
+   * 非 Electron / 不可用时为 undefined；Sub App 须自行降级提示。
    */
   tools?: {
     run(input: WorkspaceAppRunToolInput): Promise<WorkspaceAppRunToolResult>;
@@ -1395,7 +1405,7 @@ export interface WorkspaceAppHostApi {
   };
 
   /**
-   * 可选：解析 Mini-App 包内静态站入口（`dist/game` / `game`）。
+   * 可选：解析 Sub App 包内静态站入口（`dist/game` / `game`）。
    * Electron → `agnx-miniapp-static://`；Web/Native 直连 → daemon HTTP token 路径；不可用时返回 null。
    */
   miniAppStatic?: {

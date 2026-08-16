@@ -1,6 +1,6 @@
 # `@getagnx/app-sdk`
 
-Agnx **工作区 Mini-App** 的通用协议面。第三方 / AI skill **只应依赖本包**，不得 import `@getagnx/app` 或 desktop 内部路径。
+Agnx **工作区 Sub App** 的通用协议面。第三方 / AI skill **只应依赖本包**，不得 import `@getagnx/app` 或 desktop 内部路径。
 
 ## 安装（目标发布形态）
 
@@ -60,7 +60,7 @@ export default mod;
 3. **不要**为 Agent 对话再包一层 sync（已有 daemon WS）。
 4. 未 `subscribe` 的 App：零开销。
 
-样例见 `packages/mini-apps/agnx.notes` / `com.example.music` 的 store 写后 publish。
+样例见 `packages/sub-apps/agnx.notes` / `com.example.music` 的 store 写后 publish。
 
 **禁止**在本包增加行业语义（如 `pickMusic`）。过滤扩展名等由 App 自己传入 `files.pickAndImport`。
 
@@ -72,14 +72,14 @@ export default mod;
 
 ## 与 skill
 
-`agnx-app` skill（智能体代写微应用）：
+`agnx-app` skill（智能体代写子应用）：
 
 - 本机：`~/.agents/skills/agnx-app/SKILL.md`
 - 仓库：`skills/agnx-app/SKILL.md`
 
 流程：`npm i @getagnx/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
 
-## UI / 氛围（Mini-App 默认）
+## UI / 氛围（Sub App 默认）
 
 - 面板大面：`backgroundColor: "transparent"`，透出宿主氛围渐变。
 - 控件：`theme.colors.input` / `surface1` 或 `rgba(0,0,0,0.22)`；边框/字色用 `theme.colors.*`。

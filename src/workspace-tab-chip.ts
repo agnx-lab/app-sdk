@@ -1,4 +1,4 @@
-// 场景：@getagnx/app-sdk — 窗内二级 Tab 条合同（宿主 WorkspaceTabChip 渲染，Mini-App 只同步数据）。
+// 场景：@getagnx/app-sdk — 窗内二级 Tab 条合同（宿主 WorkspaceTabChip 渲染，Sub App 只同步数据）。
 import type { WorkspaceAppIcon } from "./types";
 
 /** 与宿主 Tab 标记色菜单同色阶。 */

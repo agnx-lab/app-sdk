@@ -1,4 +1,4 @@
-// 场景：工作区 Mini-App 贡献点类型 — 阶段 B 注册中心合同（见架构活页）。
+// 场景：工作区 Sub App 贡献点类型 — 阶段 B 注册中心合同（见架构活页）。
 
 /** 内置 first-party 与外部包共用的 App 标识。 */
 export const BUILTIN_WORKSPACE_APP_ID = "agnx.builtin" as const;
@@ -189,7 +189,7 @@ export interface WorkspaceAppShortcutContribution {
   nonMacCombo: string;
   helpKeys: readonly string[];
   /**
-   * 仅当 Mini-App 瞬时快捷键面激活时匹配（如音乐播放器可见）。
+   * 仅当 Sub App 瞬时快捷键面激活时匹配（如音乐播放器可见）。
    * 用于 ⌥N 等与「跳 Tab」同 chord 的表面专属键，并可进入设置页 Rebind。
    */
   requireTransientSurfaceActive?: boolean;
@@ -281,7 +281,7 @@ export interface WorkspaceAppItemMenuContribution {
   run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
 }
 
-/** Mini-App Tab 右键/菜单条贡献（宿主按 appId 合并，禁止 if appId 硬编码业务项）。 */
+/** Sub App Tab 右键/菜单条贡献（宿主按 appId 合并，禁止 if appId 硬编码业务项）。 */
 export interface WorkspaceAppTabContextMenuContext {
   appId: WorkspaceAppId;
   panelId: string;
