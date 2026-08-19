@@ -253,6 +253,13 @@ export interface WorkspaceAppMiniAppContribution {
   iframeShortcutCapture?: boolean;
   /** 任务 E：轻量隔离声明（诊断 / 文档索引；不改变默认执行路径）。 */
   isolation?: WorkspaceAppIsolationProfile;
+  /**
+   * 面板组件已注册但首屏数据/水合未完成时为 false。
+   * 宿主延续 pane 级 BrandLogo 遮罩，避免与 Tab 过渡 loading 二次闪屏。
+   */
+  isPanelBootReady?: () ***REMOVED*** boolean;
+  /** 与 isPanelBootReady 配对，供宿主 useSyncExternalStore。 */
+  subscribePanelBootReady?: (listener: () ***REMOVED*** void) ***REMOVED*** () ***REMOVED*** void;
 }
 
 export interface WorkspaceAppItemMenuContribution {
