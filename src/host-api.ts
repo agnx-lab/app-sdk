@@ -908,6 +908,31 @@ export interface WorkspaceAppUiApi {
    * 返回注销函数；面板卸载或 tabs 清空时应调用。
    */
   syncSubTabStrip(input: WorkspaceSubTabStripSyncPayload): () ***REMOVED*** void;
+  /**
+   * 品牌 Logo 横向扫光（仅图标）。与宿主 pane boot / 启动页 **同源** `BrandLogoLoader`。
+   * 适用：面板内部小块 loading；**Pane 首屏**请用 `registerMiniApp.isPanelBootReady`。
+   */
+  BrandLogoLoader: (props: WorkspaceAppBrandLogoLoaderProps) ***REMOVED*** unknown;
+  /**
+   * 品牌 Logo 扫光 + 可选标题/说明，默认 flex 居中铺满父容器。
+   * 适用：左右布局内容区切换、列表首包等 **面板内区块** loading。
+   */
+  BrandLogoLoaderPanel: (props: WorkspaceAppBrandLogoLoaderPanelProps) ***REMOVED*** unknown;
+}
+
+/** 子应用内联品牌 Logo 扫光（无文案）。 */
+export interface WorkspaceAppBrandLogoLoaderProps {
+  /** 默认 96；侧栏级可用 48，面板级推荐 64。 */
+  size?: number;
+  testID?: string;
+}
+
+/** 子应用内容区整块品牌 loading（与宿主 `BrandLogoLoaderPanel` 同源）。 */
+export interface WorkspaceAppBrandLogoLoaderPanelProps {
+  size?: number;
+  title?: string;
+  description?: string;
+  testID?: string;
 }
 
 export interface WorkspaceAppActionTooltipProps {

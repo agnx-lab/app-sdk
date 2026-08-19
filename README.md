@@ -122,7 +122,22 @@ host.registerMiniApp({
 
 - 子应用 **面板内部**行内/按钮 loading：继续用 compact spinner（DESIGN 允许）。
 - **不要**在面板里再画一层全屏 Logo 扫光（会与宿主 pane overlay 叠双段动画）。
-- 若未来需要在面板**内部区块**也用同款扫光：等 `host.ui` 或共享 UI 包 export；**禁止** copy 宿主 CSS。
+- 若未来需要在面板**内部区块**也用同款扫光：使用 **`host.ui.BrandLogoLoader` / `host.ui.BrandLogoLoaderPanel`**（与宿主同源组件）；**禁止** copy 宿主 CSS。
+
+### `host.ui` 品牌扫光（面板内内容区）
+
+```tsx
+import type { ComponentType } from "react";
+import type { WorkspaceAppBrandLogoLoaderPanelProps } from "@getagnx/app-sdk";
+
+const Panel = host.ui.BrandLogoLoaderPanel as ComponentType<WorkspaceAppBrandLogoLoaderPanelProps>;
+
+// 左右布局：点导航后右侧内容区 loading
+return loading ? <Panel title="加载中…" /> : <ContentView />;
+```
+
+- **Pane / Tab 首屏**仍用 `isPanelBootReady`，不要在面板根再叠全屏 Logo。
+- 行内/按钮 loading 仍用 compact spinner。
 
 ### 相关文档
 

@@ -115,6 +115,8 @@ export type {
   WorkspaceAppAtmosphereMode,
   WorkspaceAppAtmosphereSnapshot,
   WorkspaceAppBackgroundSessionInput,
+  WorkspaceAppBrandLogoLoaderPanelProps,
+  WorkspaceAppBrandLogoLoaderProps,
   WorkspaceAppColdRestorePrefs,
   WorkspaceAppRunToolInput,
   WorkspaceAppRunToolResult,
