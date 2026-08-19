@@ -87,3 +87,44 @@ export default mod;
 - 仅内容沉浸时调用 `host.ui.setAtmosphere` / `clearAtmosphere`；工具型 App 只消费、不推送。
 
 详见仓内 [应用氛围宪法](../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
+
+## Pane 级品牌扫光 · 子应用 boot 合同
+
+**子应用不 import 扫光组件。** `@getagnx/app-sdk` **未**导出 `BrandLogoLoader` / `BrandLogoLoaderPanel`，`host.ui` 也无对应 API。Pane / Tab 首屏 boot 由**宿主**在中间区统一盖 `workspace-pane-boot-overlay`（横向 Logo 扫光）。
+
+### 子应用应做什么
+
+在 `registerMiniApp` 上挂 **boot 就绪信号**（与 `component` 配对）：
+
+| 字段                                                 | 用途                                              |
+| ---------------------------------------------------- | ------------------------------------------------- |
+| `isPanelBootReady?: () ***REMOVED*** boolean`                   | 同步读：面板已 mount 且首屏数据/水合完成 → `true` |
+| `subscribePanelBootReady?: (listener) ***REMOVED*** () ***REMOVED*** void` | 就绪态变化时通知宿主（供 `useSyncExternalStore`） |
+
+未注册时宿主视为「无额外 boot 等待」；有异步首屏（IDB/宿主 storage 水合、大列表首包等）的 App **应**注册，避免 F5 后内容已可点但扫光不拆，或子应用自绘第二套 loading。
+
+### 最小例子（参考 `com.example.music`）
+
+```ts
+host.registerMiniApp({
+  id: "demo.main",
+  appId,
+  title: "Demo",
+  component: DemoPanel,
+  isPanelBootReady: () ***REMOVED*** demoStore.getState().hydrated,
+  subscribePanelBootReady: (onStoreChange) ***REMOVED***
+    demoStore.subscribe(
+      (s) ***REMOVED*** s.hydrated,
+      () ***REMOVED*** onStoreChange(),
+    ),
+});
+```
+
+- 子应用 **面板内部**行内/按钮 loading：继续用 compact spinner（DESIGN 允许）。
+- **不要**在面板里再画一层全屏 Logo 扫光（会与宿主 pane overlay 叠双段动画）。
+- 若未来需要在面板**内部区块**也用同款扫光：等 `host.ui` 或共享 UI 包 export；**禁止** copy 宿主 CSS。
+
+### 相关文档
+
+- [品牌加载全仓升级台账](../docs/foundation/品牌加载全仓升级台账_brand-loading-rollout-progress.md) §6
+- [子应用加载模式与刷新语义](../docs/sub-app/子应用加载模式与刷新语义需求_sub-app-load-mode-refresh-semantics-requirements.md) §4.4（F5 + React Compiler 踩坑）
