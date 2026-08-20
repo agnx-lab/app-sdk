@@ -1002,12 +1002,41 @@ export interface WorkspaceAppTextFieldProps {
 export type WorkspaceAppChipVariant = "secondary" | "outline";
 
 /**
+ * Chip 底色语义（公共参数，禁止 Sub App 手写 rgba）。
+ * - `overlay`：surface2 详情卡上的半透明灰底；描边仅 hover/按下显色。
+ * - `accent`：主行动绿底（如「保存」），与 overlay 同尺寸/圆角。
+ */
+export type WorkspaceAppChipTone = "overlay" | "accent";
+
+/** overlay 档灰底与 hover 描边 — 宿主 `host.ui.Chip` 唯一权威。 */
+export interface WorkspaceAppChipOverlayTokens {
+  readonly background: {
+    readonly light: { readonly default: string; readonly pressed: string };
+    readonly dark: { readonly default: string; readonly pressed: string };
+  };
+  readonly hoverBorder: { readonly light: string; readonly dark: string };
+}
+
+export const WORKSPACE_APP_CHIP_OVERLAY_TOKENS: WorkspaceAppChipOverlayTokens = {
+  background: {
+    light: { default: "rgba(0,0,0,0.06)", pressed: "rgba(0,0,0,0.12)" },
+    dark: { default: "rgba(255,255,255,0.16)", pressed: "rgba(255,255,255,0.26)" },
+  },
+  hoverBorder: {
+    light: "rgba(0,0,0,0.28)",
+    dark: "rgba(255,255,255,0.48)",
+  },
+};
+
+/**
  * 内容宽芯片（L0）。用于次级动作；`alignSelf: flex-start`，禁止被父级 stretch 满宽。
  */
 export interface WorkspaceAppChipProps {
   children?: unknown;
   label?: string;
   variant?: WorkspaceAppChipVariant;
+  /** 底色语义；默认 overlay（详情卡灰底芯片）。 */
+  tone?: WorkspaceAppChipTone;
   disabled?: boolean;
   /** true 时降低透明度并禁用点击（忙态） */
   busy?: boolean;
