@@ -87,6 +87,24 @@ export default mod;
 - **不要**根节点实色 `theme.colors.background`（氛围不改写该 token，易出灰岛）。
 - 仅内容沉浸时调用 `host.ui.setAtmosphere` / `clearAtmosphere`；工具型 App 只消费、不推送。
 
+### 表单原子（`host.ui` L0）
+
+通用按钮 / 输入 / 芯片走宿主注入（**不要** import `@getagnx/app` 内部路径）：
+
+| 符号                | 用途                                   |
+| ------------------- | -------------------------------------- |
+| `host.ui.Button`    | `variant` + `size`；新风格只扩 variant |
+| `host.ui.TextField` | 单行真输入框                           |
+| `host.ui.Chip`      | 内容宽次级芯片                         |
+
+```ts
+createElement(host.ui.Button, { variant: "default", size: "sm", onPress, children: "保存" });
+createElement(host.ui.TextField, { value, onChangeText, placeholder });
+createElement(host.ui.Chip, { label: "选择目录", onPress });
+```
+
+实现目录（宿主）：`packages/app/src/workspace-apps/ui/primitives/`。以后新控件往该目录加，再挂到 `host.ui`。
+
 详见仓内 [应用氛围宪法](../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
 
 ## Pane 级品牌扫光 · 子应用 boot 合同

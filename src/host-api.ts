@@ -918,6 +918,18 @@ export interface WorkspaceAppUiApi {
    * 适用：左右布局内容区切换、列表首包等 **面板内区块** loading。
    */
   BrandLogoLoaderPanel: (props: WorkspaceAppBrandLogoLoaderPanelProps) ***REMOVED*** unknown;
+  /**
+   * 通用表单原子（L0）：按钮。与宿主 `components/ui/button` 同源；新风格只扩 variant，禁止按 App 分叉。
+   */
+  Button: (props: WorkspaceAppButtonProps) ***REMOVED*** unknown;
+  /**
+   * 通用表单原子（L0）：单行文本输入。主题 token 凹槽/描边/焦点 accent；禁止 Sub App 手写第二套输入框皮。
+   */
+  TextField: (props: WorkspaceAppTextFieldProps) ***REMOVED*** unknown;
+  /**
+   * 通用表单原子（L0）：内容宽次级芯片（选择目录 / 恢复等）。禁止 stretch 成满宽灰砖。
+   */
+  Chip: (props: WorkspaceAppChipProps) ***REMOVED*** unknown;
 }
 
 /** 子应用内联品牌 Logo 扫光（无文案）。 */
@@ -932,6 +944,71 @@ export interface WorkspaceAppBrandLogoLoaderPanelProps {
   size?: number;
   title?: string;
   description?: string;
+  testID?: string;
+}
+
+/** `host.ui.Button` 视觉档；以后新风格只往这里加，禁止 `XxxAppButton`。 */
+export type WorkspaceAppButtonVariant =
+  | "default"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "destructive";
+
+export type WorkspaceAppButtonSize = "xs" | "sm" | "md" | "lg";
+
+/**
+ * 通用按钮原子（L0）。实现挂在宿主 `host.ui.Button`，薄封装现有 Button。
+ * Sub App：`createElement(host.ui.Button, { … })`；禁止 import `@getagnx/app` 内部路径。
+ */
+export interface WorkspaceAppButtonProps {
+  children?: unknown;
+  variant?: WorkspaceAppButtonVariant;
+  size?: WorkspaceAppButtonSize;
+  disabled?: boolean;
+  loading?: boolean;
+  onPress?: () ***REMOVED*** void;
+  accessibilityLabel?: string;
+  testID?: string;
+}
+
+/**
+ * 通用单行文本输入（L0）。真输入框 affordance：inset 底 + 描边 + 焦点 accent。
+ */
+export interface WorkspaceAppTextFieldProps {
+  value: string;
+  onChangeText: (text: string) ***REMOVED*** void;
+  placeholder?: string;
+  /** 失焦时回调（可用于提交草稿） */
+  onBlur?: () ***REMOVED*** void;
+  /** 键盘提交（Enter） */
+  onSubmitEditing?: () ***REMOVED*** void;
+  editable?: boolean;
+  disabled?: boolean;
+  /** 展示错误文案时描边可走 warning；文案由调用方另渲或传 error */
+  error?: string | null;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  autoCorrect?: boolean;
+  secureTextEntry?: boolean;
+  accessibilityLabel?: string;
+  testID?: string;
+}
+
+/** `host.ui.Chip` 档：次级抬层 / 描边。 */
+export type WorkspaceAppChipVariant = "secondary" | "outline";
+
+/**
+ * 内容宽芯片（L0）。用于次级动作；`alignSelf: flex-start`，禁止被父级 stretch 满宽。
+ */
+export interface WorkspaceAppChipProps {
+  children?: unknown;
+  label?: string;
+  variant?: WorkspaceAppChipVariant;
+  disabled?: boolean;
+  /** true 时降低透明度并禁用点击（忙态） */
+  busy?: boolean;
+  onPress?: () ***REMOVED*** void;
+  accessibilityLabel?: string;
   testID?: string;
 }
 
