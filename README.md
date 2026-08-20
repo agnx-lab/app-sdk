@@ -96,11 +96,18 @@ export default mod;
 | `host.ui.Button`    | `variant` + `size`；新风格只扩 variant |
 | `host.ui.TextField` | 单行真输入框                           |
 | `host.ui.Chip`      | 内容宽次级芯片                         |
+| `host.ui.Select`    | field 风下拉（触发器对齐 TextField）   |
 
 ```ts
 createElement(host.ui.Button, { variant: "default", size: "sm", onPress, children: "保存" });
 createElement(host.ui.TextField, { value, onChangeText, placeholder });
 createElement(host.ui.Chip, { label: "选择目录", onPress });
+createElement(host.ui.Select, {
+  value,
+  options: [{ id: "a", label: "选项 A" }],
+  onSelect: setValue,
+  placeholder: "请选择",
+});
 ```
 
 实现目录（宿主）：`packages/app/src/workspace-apps/ui/primitives/`。以后新控件往该目录加，再挂到 `host.ui`。

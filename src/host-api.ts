@@ -930,6 +930,10 @@ export interface WorkspaceAppUiApi {
    * 通用表单原子（L0）：内容宽次级芯片（选择目录 / 恢复等）。禁止 stretch 成满宽灰砖。
    */
   Chip: (props: WorkspaceAppChipProps) ***REMOVED*** unknown;
+  /**
+   * 通用表单原子（L0）：下拉选择。`appearance: "field"` 触发器与 TextField 同 token；面板走宿主 DropdownMenu。
+   */
+  Select: (props: WorkspaceAppSelectProps) ***REMOVED*** unknown;
 }
 
 /** 子应用内联品牌 Logo 扫光（无文案）。 */
@@ -1008,6 +1012,28 @@ export interface WorkspaceAppChipProps {
   /** true 时降低透明度并禁用点击（忙态） */
   busy?: boolean;
   onPress?: () ***REMOVED*** void;
+  accessibilityLabel?: string;
+  testID?: string;
+}
+
+export type WorkspaceAppSelectAppearance = "field" | "toolbar";
+
+export interface WorkspaceAppSelectOption {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
+
+/**
+ * 通用下拉（L0）。首刀 `appearance: "field"`（配置页字段框）；`toolbar` 预留 Agent 条密度。
+ */
+export interface WorkspaceAppSelectProps {
+  value: string;
+  options: readonly WorkspaceAppSelectOption[];
+  onSelect: (id: string) ***REMOVED*** void;
+  placeholder?: string;
+  disabled?: boolean;
+  appearance?: WorkspaceAppSelectAppearance;
   accessibilityLabel?: string;
   testID?: string;
 }
