@@ -74,11 +74,11 @@ export default mod;
 
 命令面板「子应用」列表的 leading 图标 **只读 `manifest.json` 的 `icon` 字段**（相对 App 根目录的静态文件路径，如 `"./assets/icon.svg"`）。宿主扫描时解析为绝对路径，**不靠** `activate` / `registerCommand` / `registerMiniApp` 运行时贡献点。
 
-| 表面                 | 图标来源                                   |
-| -------------------- | ------------------------------------------ |
-| 命令面板「子应用」行 | **`manifest.icon`**（扫描报告 `iconPath`） |
-| Tab / 切换器         | `registerMiniApp.icon`（运行时组件）       |
-| 侧栏主视图分段       | `registerPrimarySegment.icon`              |
+| 表面                 | 图标来源                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 命令面板「子应用」行 | **`manifest.icon`**（扫描 `iconPath`）→ 无则 `registerCommand.icon` → `registerMiniApp.icon` → `AppWindow` |
+| Tab / 切换器         | `registerMiniApp.icon`（运行时组件）                                                                       |
+| 侧栏主视图分段       | `registerPrimarySegment.icon`                                                                              |
 
 **Sub App 作者义务：**
 
