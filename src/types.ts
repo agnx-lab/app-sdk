@@ -153,8 +153,7 @@ export interface WorkspaceAppCommandContribution {
   /** 对应 keyboard-shortcuts help.id，用于命令面板展示快捷键。 */
   shortcutHelpId?: string;
   /**
-   * 命令图标。侧栏顶部按钮 / 命令面板可共用；推荐 Lucide 组件或图片型组件。
-   * 宿主不得为具体业务 App 硬编码图标。
+   * 命令图标。侧栏顶部按钮等运行时可共用；**命令面板「子应用」列表行优先读 manifest.icon 静态路径**。
    */
   icon?: WorkspaceAppIcon;
   /**
@@ -238,7 +237,7 @@ export interface WorkspaceAppMiniAppContribution {
   id: string;
   appId: WorkspaceAppId;
   title: string;
-  /** Tab / 切换器 leading 图标；推荐 Lucide 组件。 */
+  /** Tab / 切换器 leading 图标；推荐 WorkspaceAppIcon 组件（与 manifest.icon 静态标可并存）。 */
   icon?: WorkspaceAppIcon;
   /** 阶段 C 再挂载真实组件；阶段 B 仅登记槽位。 */
   component?: unknown;

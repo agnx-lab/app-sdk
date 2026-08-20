@@ -70,6 +70,24 @@ export default mod;
 
 打包分享：桌面托盘「打包为 .agnxapp」→ `$AGNX_HOME/app-packages/`。
 
+## App 图标合同（manifest 静态配置）
+
+命令面板「子应用」列表的 leading 图标 **只读 `manifest.json` 的 `icon` 字段**（相对 App 根目录的静态文件路径，如 `"./assets/icon.svg"`）。宿主扫描时解析为绝对路径，**不靠** `activate` / `registerCommand` / `registerMiniApp` 运行时贡献点。
+
+| 表面                 | 图标来源                                   |
+| -------------------- | ------------------------------------------ |
+| 命令面板「子应用」行 | **`manifest.icon`**（扫描报告 `iconPath`） |
+| Tab / 切换器         | `registerMiniApp.icon`（运行时组件）       |
+| 侧栏主视图分段       | `registerPrimarySegment.icon`              |
+
+**Sub App 作者义务：**
+
+1. 在 `manifest.json` 写 `"icon": "./相对路径/brand.svg"`（或 png/webp），文件随 App 目录一起分发。
+2. Tab/侧栏若需动态组件标，可另在 `registerMiniApp` / `registerCommand` 传 `WorkspaceAppIcon`；与 manifest 静态标互不替代。
+3. 改图标后保存 manifest + 替换文件 → 命令面板「子应用 → 重新扫描」即可，**无需改宿主代码**。
+
+详见 `skills/agnx-app/SKILL.md` §App 图标与 Logo。
+
 ## 与 skill
 
 `agnx-app` skill（智能体代写子应用）：
