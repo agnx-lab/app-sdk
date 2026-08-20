@@ -74,8 +74,9 @@ export default mod;
 
 `agnx-app` skill（智能体代写子应用）：
 
-- 本机：`~/.agents/skills/agnx-app/SKILL.md`
-- 仓库：`skills/agnx-app/SKILL.md`
+- **唯一权威（本仓库）：** `skills/agnx-app/SKILL.md`
+- **禁止**复制到 `~/.agents/skills/` 或 `~/.claude/skills/`（会泄漏到其他非 Agnx 项目）
+- **本机 Cursor 仅在本仓库生效：** `mkdir -p .cursor/skills && ln -sf ../../skills/agnx-app .cursor/skills/agnx-app`（`.cursor/` 已 gitignore，各开发者本地执行一次）
 
 流程：`npm i @getagnx/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
 
