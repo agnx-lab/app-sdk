@@ -1004,7 +1004,7 @@ export type WorkspaceAppChipVariant = "secondary" | "outline";
 /**
  * Chip 底色语义（公共参数，禁止 Sub App 手写 rgba）。
  * - `overlay`：surface2 详情卡上的半透明灰底；描边仅 hover/按下显色。
- * - `accent`：主行动绿底（如「保存」），与 overlay 同尺寸/圆角。
+ * - `accent`：主行动绿底（如「保存」）；灰底不变，hover/按下同样显描边。
  */
 export type WorkspaceAppChipTone = "overlay" | "accent";
 
