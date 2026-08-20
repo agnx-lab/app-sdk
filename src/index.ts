@@ -125,7 +125,6 @@ export type {
   WorkspaceAppChipVariant,
   WorkspaceAppChipTone,
   WorkspaceAppChipOverlayTokens,
-  WORKSPACE_APP_CHIP_OVERLAY_TOKENS,
   WorkspaceAppSelectProps,
   WorkspaceAppSelectOption,
   WorkspaceAppSelectAppearance,
@@ -144,6 +143,7 @@ export type {
   WorkspaceAppProgressHandle,
   WorkspaceAppProgressReportInput,
 } from "./host-api";
+export { WORKSPACE_APP_CHIP_OVERLAY_TOKENS } from "./host-api";
 export {
   projectActionBarOverflowFold,
   type ProjectActionBarOverflowFoldInput,
