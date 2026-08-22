@@ -266,6 +266,8 @@ export interface WorkspaceAppActionLayoutSecondarySection {
 
 export interface WorkspaceAppCustomizeActionLayoutInput {
   title?: string;
+  /** catalog shortcutSourceKey 派生与快照登记；缺省 host:anonymous */
+  layoutKey?: string;
   /**
    * 主段布局（多段时通常为「壳层」；单段时即唯一段）。
    * 与 secondarySection 同时传入时，弹层按「主段 → 分割线 → 附加段」渲染。
