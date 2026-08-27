@@ -309,6 +309,10 @@ export interface WorkspaceAppOpenDetailSheetInput {
 /**
  * 详情配置标准分段控件（由宿主渲染 onCard 密度）。
  * Sub App 只传 options/value/回调，禁止引用 App 内部 SegmentedControl。
+ *
+ * 交互合同：`onValueChange` 须同步写完 backing store；宿主用 live map 保高亮，
+ * **不会**在点击后 bump extrasRevision 整表重建（避免快照盖回旧值）。
+ * 与 store 强绑定、或需自定义外观时优先 `valueContent` 直绑。
  */
 export interface WorkspaceAppDetailSheetSegmentedControl {
   type: "segmented";
@@ -325,8 +329,8 @@ export interface WorkspaceAppDetailSheetExtraRow {
   copyText?: string;
   helpText?: string;
   /**
-   * 宿主标准控件；与 valueContent 同时存在时优先 control。
-   * 子应用勿再私画迷你分段。
+   * 宿主标准分段；与 valueContent 同时存在时优先 control。
+   * 需要滑条/复杂控件/强 store 订阅时用 valueContent，勿再为分段私画第二套。
    */
   control?: WorkspaceAppDetailSheetSegmentedControl;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
