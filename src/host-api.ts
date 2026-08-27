@@ -1501,6 +1501,11 @@ export interface WorkspaceAppHostApi {
     run(input: WorkspaceAppRunToolInput): Promise<WorkspaceAppRunToolResult>;
   };
 
+  /** Daemon 连接元数据（跨端 playback leader 等）。 */
+  connection?: {
+    getClientId(): Promise<string>;
+  };
+
   /** 平台门控摘要（避免 App 依赖宿主 constants）。 */
   platform: {
     isWeb: boolean;
