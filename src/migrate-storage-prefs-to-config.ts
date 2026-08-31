@@ -10,9 +10,9 @@ export interface MigrateStoragePrefsToConfigInput {
   storageKey: string;
   configKey: string;
   /** 默认整份 storage 文档写入 config；可裁剪 prefs 子集。 */
-  extract?: (storageDoc: unknown) ***REMOVED*** unknown;
+  extract?: (storageDoc: unknown) => unknown;
   /** 已有有效 config 时跳过；默认：非 null/undefined 即视为已迁移。 */
-  alreadyMigrated?: (configVal: unknown) ***REMOVED*** boolean;
+  alreadyMigrated?: (configVal: unknown) => boolean;
 }
 
 /**

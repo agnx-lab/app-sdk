@@ -194,8 +194,8 @@ export interface WorkspaceAppConfigApi {
     key: string;
     defaultValue?: T;
     emitCurrent?: boolean;
-    listener: (event: WorkspaceAppConfigChangeEvent<T>) ***REMOVED*** void;
-  }): () ***REMOVED*** void;
+    listener: (event: WorkspaceAppConfigChangeEvent<T>) => void;
+  }): () => void;
 }
 
 /** 可选跨端实时同步（§10.7）：存储 ≠ 同步；未接入则零流量。 */
@@ -219,8 +219,8 @@ export interface WorkspaceAppSyncApi {
   subscribe(input: {
     appId: string;
     channel?: string;
-    onEvent: (event: WorkspaceAppSyncEvent) ***REMOVED*** void;
-  }): () ***REMOVED*** void;
+    onEvent: (event: WorkspaceAppSyncEvent) => void;
+  }): () => void;
 }
 
 /**
@@ -261,7 +261,7 @@ export interface WorkspaceAppActionLayoutSecondarySection {
   layout: WorkspaceAppActionBarLayout;
   defaultLayout: WorkspaceAppActionBarLayout;
   items: WorkspaceAppActionLayoutItem[];
-  onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
+  onSave: (layout: WorkspaceAppActionBarLayout) => void;
 }
 
 export interface WorkspaceAppCustomizeActionLayoutInput {
@@ -279,8 +279,8 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
   /** 主段标题；多段时显示在主段列表上方 */
   sectionTitle?: string;
   enableVisibilityToggle?: boolean;
-  onSave: (layout: WorkspaceAppActionBarLayout) ***REMOVED*** void;
-  onClose?: () ***REMOVED*** void;
+  onSave: (layout: WorkspaceAppActionBarLayout) => void;
+  onClose?: () => void;
   /** 附加段（实体菜单等）；与主段各自独立 bar/overflow/hidden，不可跨段拖拽 */
   secondarySection?: WorkspaceAppActionLayoutSecondarySection;
   /**
@@ -289,7 +289,7 @@ export interface WorkspaceAppCustomizeActionLayoutInput {
    */
   detailAction?: {
     label?: string;
-    onPress: () ***REMOVED*** void;
+    onPress: () => void;
   };
 }
 
@@ -318,7 +318,7 @@ export interface WorkspaceAppDetailSheetSegmentedControl {
   type: "segmented";
   options: ReadonlyArray<{ value: string; label: string }>;
   value: string;
-  onValueChange: (value: string) ***REMOVED*** void;
+  onValueChange: (value: string) => void;
   testID?: string;
 }
 
@@ -366,22 +366,22 @@ export interface WorkspaceAppRegisterDetailSheetExtrasInput {
   surface?: WorkspaceAppDetailSheetExtrasSurface;
   buildRows: (
     context?: WorkspaceAppDetailSheetExtrasContext,
-  ) ***REMOVED*** ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
+  ) => ReadonlyArray<WorkspaceAppDetailSheetExtraRow>;
 }
 
 /** 瞬时快捷键（按顺序分配 Option/Alt 1–n），用于操作栏悬停提示。 */
 export interface WorkspaceAppTransientShortcutInput {
   id: string;
   label: string;
-  run: () ***REMOVED*** void;
+  run: () => void;
 }
 
 export interface WorkspaceAppTransientShortcutSession {
   /** 含快捷键提示的悬停 / title 文案，如「置顶 (⌥1)」；会反映 Rebind */
-  getTitle: (id: string) ***REMOVED*** string;
+  getTitle: (id: string) => string;
   /** 当前生效的键帽序列（含改绑），供 tip 渲染 */
-  getShortcutKeys: (id: string) ***REMOVED*** readonly string[] | undefined;
-  dispose: () ***REMOVED*** void;
+  getShortcutKeys: (id: string) => readonly string[] | undefined;
+  dispose: () => void;
 }
 
 export interface WorkspaceAppTransientShortcutRegisterOptions {
@@ -389,7 +389,7 @@ export interface WorkspaceAppTransientShortcutRegisterOptions {
    * 仅当返回 true 时消费 ⌥/Alt+1–9。
    * 用于「当前焦点 Tab 独占」：未激活时不得抢其它 Tab（如 Android）的同名快捷键。
    */
-  isActive?: () ***REMOVED*** boolean;
+  isActive?: () => boolean;
   /**
    * 写入全局 Shortcuts 帮助面板，并注册可 Rebind 的 `registerShortcut` 绑定。
    * 需同时传 `appId`。
@@ -436,7 +436,7 @@ export interface WorkspaceAppActionContribution {
   id: string;
   label: string;
   icon?: WorkspaceAppIcon;
-  onPress: () ***REMOVED*** void;
+  onPress: () => void;
   active?: boolean;
   destructive?: boolean;
   disabled?: boolean;
@@ -503,7 +503,7 @@ export interface WorkspaceAppActionBarProps {
   overflowMenu?: WorkspaceAppActionBarOverflowProps;
   /**
    * 可选外露 bar 命中区样式（业务 token/hover；宿主不内置封面 scrim）。
-   * 可为静态 style，或 `({ hovered, pressed }) ***REMOVED*** style`。
+   * 可为静态 style，或 `({ hovered, pressed }) => style`。
    */
   barButtonStyle?: unknown;
   testID?: string;
@@ -519,14 +519,14 @@ export interface WorkspaceAppActionBarButtonProps {
   active?: boolean;
   destructive?: boolean;
   disabled?: boolean;
-  onPress: () ***REMOVED*** void;
+  onPress: () => void;
   iconSize?: number;
   mutedColor?: string;
   accentColor?: string;
   icon?: WorkspaceAppIcon;
   /**
    * 可选命中区样式（业务 token/hover；宿主不内置封面 scrim）。
-   * 可为静态 style，或 `({ hovered, pressed }) ***REMOVED*** style`。
+   * 可为静态 style，或 `({ hovered, pressed }) => style`。
    */
   hitStyle?: unknown;
   testID?: string;
@@ -535,11 +535,11 @@ export interface WorkspaceAppActionBarButtonProps {
 
 export interface WorkspaceAppActionOverflowMenuProps {
   items: readonly WorkspaceAppMenuItem[];
-  onSelect: (id: string) ***REMOVED*** void;
+  onSelect: (id: string) => void;
   /** 底部追加「编辑布局」，与 WorkspacePaneToolbar overflow 同源 */
   showEditLayout?: boolean;
   editLayoutLabel?: string;
-  onEditLayout?: () ***REMOVED*** void;
+  onEditLayout?: () => void;
   moreLabel?: string;
   side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
@@ -547,7 +547,7 @@ export interface WorkspaceAppActionOverflowMenuProps {
   triggerColor?: string;
   /**
    * 可选触发器样式（由业务传入 token/hover，宿主不内置封面强化）。
-   * 可为静态 style，或 `({ hovered, pressed, open }) ***REMOVED*** style`。
+   * 可为静态 style，或 `({ hovered, pressed, open }) => style`。
    */
   triggerStyle?: unknown;
   testID?: string;
@@ -579,12 +579,12 @@ export interface WorkspaceAppActionOverflowMenuProps {
    * 通用：悬停某菜单项时回调；移出项或旁路飞出层时传 null。
    * 与 `renderHoverSidePanel` 配套。
    */
-  onItemHoverChange?: (id: string | null) ***REMOVED*** void;
+  onItemHoverChange?: (id: string | null) => void;
   /**
    * 通用：按悬停项 id 渲染卡片外侧飞出层（进度条 / 数值器 / 输入框等由调用方决定）。
    * 挂在对应行右侧，位置由行结构定死；不参与布局测量；同属下拉表面。
    */
-  renderHoverSidePanel?: (id: string) ***REMOVED*** unknown;
+  renderHoverSidePanel?: (id: string) => unknown;
 }
 
 /** 单套氛围色（双套里的 light 或 dark）。 */
@@ -736,8 +736,8 @@ export interface WorkspaceAppUiApi {
   /** 订阅侧栏实体菜单布局变更。 */
   subscribeItemMenuLayout(
     input: { appId: string; segmentId: string },
-    onStoreChange: () ***REMOVED*** void,
-  ): () ***REMOVED*** void;
+    onStoreChange: () => void,
+  ): () => void;
   /**
    * 仅当侧栏表面尚无持久化布局时写入默认。
    * 已有用户布局时 no-op。
@@ -760,8 +760,8 @@ export interface WorkspaceAppUiApi {
   }): WorkspaceAppActionBarLayout;
   subscribeEntityMenuLayout(
     input: { appId: string; menuId: string; surfaceId: string },
-    onStoreChange: () ***REMOVED*** void,
-  ): () ***REMOVED*** void;
+    onStoreChange: () => void,
+  ): () => void;
   customizeEntityMenuLayout(input: {
     appId: string;
     menuId: string;
@@ -787,7 +787,7 @@ export interface WorkspaceAppUiApi {
    * 绑定实体菜单 shortcutSourceKey → run（编辑布局 Rebind 后按键派发）。
    * 无默认组合键也可绑定；卸载时调用返回的 disposer。
    */
-  bindEntityMenuShortcutRun(sourceKey: string, run: () ***REMOVED*** void): () ***REMOVED*** void;
+  bindEntityMenuShortcutRun(sourceKey: string, run: () => void): () => void;
   seedEntityMenuLayoutIfAbsent(input: {
     appId: string;
     menuId: string;
@@ -875,27 +875,27 @@ export interface WorkspaceAppUiApi {
    * `surface` 缺省为 `view-details`；`both` 可一次注册两处。
    * 返回注销函数；activate 卸载时应调用。
    */
-  registerDetailSheetExtras(input: WorkspaceAppRegisterDetailSheetExtrasInput): () ***REMOVED*** void;
+  registerDetailSheetExtras(input: WorkspaceAppRegisterDetailSheetExtrasInput): () => void;
   /**
    * 与 WorkspacePaneToolbar「…」overflow **同一套** DropdownMenu 装配。
    * Sub App 在 JSX 内渲染此组件，只换 items 数据；禁止自造菜单或平行 openMenu。
    */
-  ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) ***REMOVED*** unknown;
+  ActionOverflowMenu: (props: WorkspaceAppActionOverflowMenuProps) => unknown;
   /**
    * 按 layout 投影外露 bar + 溢出三点；自动消化 showBarLabels / hideBar。
    * 有 `shortcutSourceKey` 或 `shortcutEntityMenu` 时，宿主自动把用户绑定/默认键帽灌进 tip 与溢出菜单。
    * Sub App 只交 contributions + rail 策略，禁止自绘「显示完整」分支。
    */
-  ActionBar: (props: WorkspaceAppActionBarProps) ***REMOVED*** unknown;
+  ActionBar: (props: WorkspaceAppActionBarProps) => unknown;
   /**
    * 单个 bar 按钮（图标或图标+文案）；一般由 ActionBar 内部使用，也可单独复用。
    */
-  ActionBarButton: (props: WorkspaceAppActionBarButtonProps) ***REMOVED*** unknown;
+  ActionBarButton: (props: WorkspaceAppActionBarButtonProps) => unknown;
   /**
    * 宿主悬停 tip（Tooltip + ShortcutTooltipContent 键帽）。
    * Sub App 禁止自造 tip；label 不含快捷键文案，快捷键只走 shortcutKeys。
    */
-  ActionTooltip: (props: WorkspaceAppActionTooltipProps) ***REMOVED*** unknown;
+  ActionTooltip: (props: WorkspaceAppActionTooltipProps) => unknown;
   /**
    * 桌面原生确认框（可选 checkbox）。非桌面时返回 { confirmed: false }。
    * 高敏操作（如 Frida/改签）必须先走此确认，禁止静默执行。
@@ -913,33 +913,33 @@ export interface WorkspaceAppUiApi {
    * 同步窗内二级 Tab 条到宿主公共 UI（与 Browser Page 条同源）。
    * 返回注销函数；面板卸载或 tabs 清空时应调用。
    */
-  syncSubTabStrip(input: WorkspaceSubTabStripSyncPayload): () ***REMOVED*** void;
+  syncSubTabStrip(input: WorkspaceSubTabStripSyncPayload): () => void;
   /**
    * 品牌 Logo 横向扫光（仅图标）。与宿主 pane boot / 启动页 **同源** `BrandLogoLoader`。
    * 适用：面板内部小块 loading；**Pane 首屏**请用 `registerMiniApp.isPanelBootReady`。
    */
-  BrandLogoLoader: (props: WorkspaceAppBrandLogoLoaderProps) ***REMOVED*** unknown;
+  BrandLogoLoader: (props: WorkspaceAppBrandLogoLoaderProps) => unknown;
   /**
    * 品牌 Logo 扫光 + 可选标题/说明，默认 flex 居中铺满父容器。
    * 适用：左右布局内容区切换、列表首包等 **面板内区块** loading。
    */
-  BrandLogoLoaderPanel: (props: WorkspaceAppBrandLogoLoaderPanelProps) ***REMOVED*** unknown;
+  BrandLogoLoaderPanel: (props: WorkspaceAppBrandLogoLoaderPanelProps) => unknown;
   /**
    * 通用表单原子（L0）：按钮。与宿主 `components/ui/button` 同源；新风格只扩 variant，禁止按 App 分叉。
    */
-  Button: (props: WorkspaceAppButtonProps) ***REMOVED*** unknown;
+  Button: (props: WorkspaceAppButtonProps) => unknown;
   /**
    * 通用表单原子（L0）：单行文本输入。主题 token 凹槽/描边/焦点 accent；禁止 Sub App 手写第二套输入框皮。
    */
-  TextField: (props: WorkspaceAppTextFieldProps) ***REMOVED*** unknown;
+  TextField: (props: WorkspaceAppTextFieldProps) => unknown;
   /**
    * 通用表单原子（L0）：内容宽次级芯片（选择目录 / 恢复等）。禁止 stretch 成满宽灰砖。
    */
-  Chip: (props: WorkspaceAppChipProps) ***REMOVED*** unknown;
+  Chip: (props: WorkspaceAppChipProps) => unknown;
   /**
    * 通用表单原子（L0）：下拉选择。`appearance: "field"` 触发器与 TextField 同 token；面板走宿主 DropdownMenu。
    */
-  Select: (props: WorkspaceAppSelectProps) ***REMOVED*** unknown;
+  Select: (props: WorkspaceAppSelectProps) => unknown;
 }
 
 /** 子应用内联品牌 Logo 扫光（无文案）。 */
@@ -977,7 +977,7 @@ export interface WorkspaceAppButtonProps {
   size?: WorkspaceAppButtonSize;
   disabled?: boolean;
   loading?: boolean;
-  onPress?: () ***REMOVED*** void;
+  onPress?: () => void;
   accessibilityLabel?: string;
   testID?: string;
 }
@@ -987,12 +987,12 @@ export interface WorkspaceAppButtonProps {
  */
 export interface WorkspaceAppTextFieldProps {
   value: string;
-  onChangeText: (text: string) ***REMOVED*** void;
+  onChangeText: (text: string) => void;
   placeholder?: string;
   /** 失焦时回调（可用于提交草稿） */
-  onBlur?: () ***REMOVED*** void;
+  onBlur?: () => void;
   /** 键盘提交（Enter） */
-  onSubmitEditing?: () ***REMOVED*** void;
+  onSubmitEditing?: () => void;
   editable?: boolean;
   disabled?: boolean;
   /** 展示错误文案时描边可走 warning；文案由调用方另渲或传 error */
@@ -1046,7 +1046,7 @@ export interface WorkspaceAppChipProps {
   disabled?: boolean;
   /** true 时降低透明度并禁用点击（忙态） */
   busy?: boolean;
-  onPress?: () ***REMOVED*** void;
+  onPress?: () => void;
   accessibilityLabel?: string;
   testID?: string;
 }
@@ -1065,7 +1065,7 @@ export interface WorkspaceAppSelectOption {
 export interface WorkspaceAppSelectProps {
   value: string;
   options: readonly WorkspaceAppSelectOption[];
-  onSelect: (id: string) ***REMOVED*** void;
+  onSelect: (id: string) => void;
   placeholder?: string;
   disabled?: boolean;
   appearance?: WorkspaceAppSelectAppearance;
@@ -1162,7 +1162,7 @@ export interface WorkspaceAppAgentToolDefinition {
    */
   groupId?: string;
   groupTitle?: string;
-  execute: (input: unknown, ctx: WorkspaceAppAgentToolContext) ***REMOVED*** Promise<unknown> | unknown;
+  execute: (input: unknown, ctx: WorkspaceAppAgentToolContext) => Promise<unknown> | unknown;
 }
 
 export interface WorkspaceAppRegisterAgentToolsInput {
@@ -1229,7 +1229,7 @@ export interface WorkspaceAppBackgroundSessionInput {
   /** 如 audio / long-task；宿主只作分类，不做行业语义。 */
   kind: string;
   /** 若提供，冷恢复相位调用；失败隔离。 */
-  restore?: () ***REMOVED*** void | Promise<void>;
+  restore?: () => void | Promise<void>;
 }
 
 export interface WorkspaceAppHostApi {
@@ -1258,13 +1258,13 @@ export interface WorkspaceAppHostApi {
    * 列表项打开 Tab 前的准备回调（按 appId）。
    * 例如 Music 在打开单例播放器 Tab 前先 `setNowPlaying(itemId)`。
    */
-  registerListItemOpenPreparer(appId: string, preparer: (itemId: string) ***REMOVED*** void): () ***REMOVED*** void;
+  registerListItemOpenPreparer(appId: string, preparer: (itemId: string) => void): () => void;
 
   /**
    * 注册 Agent 可调用工具（L2）。与 registerCommand 平行，不自动从命令导出。
    * 返回 unregister；App deactivate 时应调用。
    */
-  registerAgentTools(input: WorkspaceAppRegisterAgentToolsInput): () ***REMOVED*** void;
+  registerAgentTools(input: WorkspaceAppRegisterAgentToolsInput): () => void;
 
   /** @deprecated 请改用 {@link WorkspaceHostApi.openSubAppTab}；保留以兼容既有 Sub App。 */
   openMiniAppTab(input: {
@@ -1439,16 +1439,16 @@ export interface WorkspaceAppHostApi {
    */
   lifecycle: {
     isHostReady(): boolean;
-    onHostReady(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    onHostReady(listener: () => void): () => void;
     /**
      * 冷恢复相位（HostReady 之后、或晚注册 session 时补发）。
      * App 也可只靠 `background.registerSession({ restore })`，二者都会在同一相位触发。
      */
-    onColdRestore(listener: (prefs: WorkspaceAppColdRestorePrefs) ***REMOVED*** void): () ***REMOVED*** void;
+    onColdRestore(listener: (prefs: WorkspaceAppColdRestorePrefs) => void): () => void;
     /** 窗口隐藏 / pagehide 等（非 App 卸载）。 */
-    onSuspend(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    onSuspend(listener: () => void): () => void;
     /** 窗口回到前台。 */
-    onResume(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    onResume(listener: () => void): () => void;
   };
 
   /**
@@ -1456,15 +1456,15 @@ export interface WorkspaceAppHostApi {
    * 与布局槽位 open/close 可能不同步（LRU keep-alive）；payload.reason 区分。
    */
   tabs: {
-    onOpen(listener: (event: WorkspaceAppTabLifecycleEvent) ***REMOVED*** void): () ***REMOVED*** void;
-    onClose(listener: (event: WorkspaceAppTabLifecycleEvent) ***REMOVED*** void): () ***REMOVED*** void;
-    onFocus(listener: (event: WorkspaceAppTabFocusEvent) ***REMOVED*** void): () ***REMOVED*** void;
-    onBlur(listener: (event: WorkspaceAppTabFocusEvent) ***REMOVED*** void): () ***REMOVED*** void;
-    onVisibleChange(listener: (event: WorkspaceAppTabVisibleEvent) ***REMOVED*** void): () ***REMOVED*** void;
+    onOpen(listener: (event: WorkspaceAppTabLifecycleEvent) => void): () => void;
+    onClose(listener: (event: WorkspaceAppTabLifecycleEvent) => void): () => void;
+    onFocus(listener: (event: WorkspaceAppTabFocusEvent) => void): () => void;
+    onBlur(listener: (event: WorkspaceAppTabFocusEvent) => void): () => void;
+    onVisibleChange(listener: (event: WorkspaceAppTabVisibleEvent) => void): () => void;
     subscribeKind(
       kind: WorkspaceAppTabKind,
-      handler: (event: WorkspaceAppTabEvent) ***REMOVED*** void,
-    ): () ***REMOVED*** void;
+      handler: (event: WorkspaceAppTabEvent) => void,
+    ): () => void;
   };
 
   /**
@@ -1476,7 +1476,7 @@ export interface WorkspaceAppHostApi {
      * 声明长生命周期会话（音频 / 长任务等）。
      * 提供 `restore` 时，宿主在 cold restore 相位调用；返回取消注册。
      */
-    registerSession(input: WorkspaceAppBackgroundSessionInput): () ***REMOVED*** void;
+    registerSession(input: WorkspaceAppBackgroundSessionInput): () => void;
   };
 
   /** 运行时数据根（默认 `$AGNX_HOME/apps/data/<appId>`）。 */
@@ -1543,7 +1543,7 @@ export interface WorkspaceAppHostApi {
       summary: string;
       detail?: string;
     }>;
-    subscribe(listener: () ***REMOVED*** void): () ***REMOVED*** void;
+    subscribe(listener: () => void): () => void;
     matrix(): ReadonlyArray<{
       domain:
         | "lifecycle"

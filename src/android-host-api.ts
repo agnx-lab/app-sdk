@@ -232,8 +232,8 @@ export interface AndroidHostFrameStatus {
 }
 
 export interface AndroidHostSubscribeDevicesInput {
-  onDevices: (devices: readonly AndroidHostDevice[]) ***REMOVED*** void;
-  onError?: (error: AndroidHostErrorShape) ***REMOVED*** void;
+  onDevices: (devices: readonly AndroidHostDevice[]) => void;
+  onError?: (error: AndroidHostErrorShape) => void;
 }
 
 export interface AndroidHostSubscribeFrameStreamInput {
@@ -243,9 +243,9 @@ export interface AndroidHostSubscribeFrameStreamInput {
   fps?: number;
   /** 非当前焦点时应降帧；由调用方声明，Host 可再限速。 */
   active?: boolean;
-  onFrame: (frame: AndroidHostFrame) ***REMOVED*** void;
-  onStatus?: (status: AndroidHostFrameStatus) ***REMOVED*** void;
-  onError?: (error: AndroidHostErrorShape) ***REMOVED*** void;
+  onFrame: (frame: AndroidHostFrame) => void;
+  onStatus?: (status: AndroidHostFrameStatus) => void;
+  onError?: (error: AndroidHostErrorShape) => void;
 }
 
 export interface AndroidHostOpenTabInput {
@@ -318,7 +318,7 @@ export type AndroidHostResolveSessionResult =
  */
 export interface WorkspaceAppAndroidHostApi {
   listDevices(): Promise<AndroidHostDevice[]>;
-  subscribeDevices(input: AndroidHostSubscribeDevicesInput): () ***REMOVED*** void;
+  subscribeDevices(input: AndroidHostSubscribeDevicesInput): () => void;
 
   connectDevice(input: { endpoint: string }): Promise<{ ok: boolean; message?: string }>;
   pairDevice(input: {
@@ -351,7 +351,7 @@ export interface WorkspaceAppAndroidHostApi {
 
   runCommand(sessionId: string, command: AndroidHostCommand): Promise<AndroidHostCommandResult>;
 
-  subscribeFrameStream(input: AndroidHostSubscribeFrameStreamInput): () ***REMOVED*** void;
+  subscribeFrameStream(input: AndroidHostSubscribeFrameStreamInput): () => void;
 
   /**
    * 设备音频转发开关（D5）。
@@ -375,9 +375,9 @@ export interface WorkspaceAppAndroidHostApi {
     subscribe?(input: {
       sessionId: string;
       intervalMs?: number;
-      onLines: (lines: readonly AndroidHostLogcatLine[]) ***REMOVED*** void;
-      onError?: (error: AndroidHostErrorShape) ***REMOVED*** void;
-    }): () ***REMOVED*** void;
+      onLines: (lines: readonly AndroidHostLogcatLine[]) => void;
+      onError?: (error: AndroidHostErrorShape) => void;
+    }): () => void;
   };
 
   /** 将本地/托管文件 stage 到 daemon 可安装路径。 */

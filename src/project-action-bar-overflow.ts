@@ -29,6 +29,6 @@ export function projectActionBarOverflowFold(
   const foldedSet = new Set(foldedBarIds);
   return {
     foldedBarIds,
-    menuOverflowIds: overflowIds.filter((id) ***REMOVED*** !foldedSet.has(id)),
+    menuOverflowIds: overflowIds.filter((id) => !foldedSet.has(id)),
   };
 }

@@ -29,7 +29,7 @@ export function activate(host: WorkspaceAppHostApi): void {
     id: "demo.open",
     appId,
     title: "打开 Demo",
-    run: () ***REMOVED*** {
+    run: () => {
       host.openMiniAppTab({ appId, panelId: "demo.main" });
     },
   });
@@ -142,8 +142,8 @@ createElement(host.ui.Select, {
 
 | 字段                                                 | 用途                                              |
 | ---------------------------------------------------- | ------------------------------------------------- |
-| `isPanelBootReady?: () ***REMOVED*** boolean`                   | 同步读：面板已 mount 且首屏数据/水合完成 → `true` |
-| `subscribePanelBootReady?: (listener) ***REMOVED*** () ***REMOVED*** void` | 就绪态变化时通知宿主（供 `useSyncExternalStore`） |
+| `isPanelBootReady?: () => boolean`                   | 同步读：面板已 mount 且首屏数据/水合完成 → `true` |
+| `subscribePanelBootReady?: (listener) => () => void` | 就绪态变化时通知宿主（供 `useSyncExternalStore`） |
 
 未注册时宿主视为「无额外 boot 等待」；有异步首屏（IDB/宿主 storage 水合、大列表首包等）的 App **应**注册，避免 F5 后内容已可点但扫光不拆，或子应用自绘第二套 loading。
 
@@ -155,11 +155,11 @@ host.registerMiniApp({
   appId,
   title: "Demo",
   component: DemoPanel,
-  isPanelBootReady: () ***REMOVED*** demoStore.getState().hydrated,
-  subscribePanelBootReady: (onStoreChange) ***REMOVED***
+  isPanelBootReady: () => demoStore.getState().hydrated,
+  subscribePanelBootReady: (onStoreChange) =>
     demoStore.subscribe(
-      (s) ***REMOVED*** s.hydrated,
-      () ***REMOVED*** onStoreChange(),
+      (s) => s.hydrated,
+      () => onStoreChange(),
     ),
 });
 ```

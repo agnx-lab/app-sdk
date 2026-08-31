@@ -28,11 +28,11 @@ export interface WorkspaceSubTabStripSyncInput {
 }
 
 export interface WorkspaceSubTabStripHandlers {
-  onSelect?: (tabId: string) ***REMOVED*** void;
-  onClose?: (tabId: string) ***REMOVED*** void;
-  onCloseOthers?: (keepTabId: string) ***REMOVED*** void;
-  onMarkerColorChange?: (tabId: string, color: WorkspaceTabMarkerColor | null) ***REMOVED*** void;
-  onNewTab?: () ***REMOVED*** void;
+  onSelect?: (tabId: string) => void;
+  onClose?: (tabId: string) => void;
+  onCloseOthers?: (keepTabId: string) => void;
+  onMarkerColorChange?: (tabId: string, color: WorkspaceTabMarkerColor | null) => void;
+  onNewTab?: () => void;
 }
 
 export type WorkspaceSubTabStripSyncPayload = WorkspaceSubTabStripSyncInput &

@@ -40,7 +40,7 @@ export interface WorkspaceAppListItem {
  */
 export type WorkspaceAppIcon =
   | string
-  | ((props: { size?: number | string; color?: string; absoluteStrokeWidth?: boolean }) ***REMOVED*** unknown);
+  | ((props: { size?: number | string; color?: string; absoluteStrokeWidth?: boolean }) => unknown);
 
 export interface WorkspaceAppPrimarySegmentContribution {
   id: string;
@@ -78,8 +78,8 @@ export interface WorkspaceAppPrimarySegmentContribution {
 export interface WorkspaceAppItemProviderContribution {
   id: string;
   appId: WorkspaceAppId;
-  subscribe: (listener: (items: WorkspaceAppListItem[]) ***REMOVED*** void) ***REMOVED*** () ***REMOVED*** void;
-  search?: (query: string) ***REMOVED*** WorkspaceAppListItem[] | Promise<WorkspaceAppListItem[]>;
+  subscribe: (listener: (items: WorkspaceAppListItem[]) => void) => () => void;
+  search?: (query: string) => WorkspaceAppListItem[] | Promise<WorkspaceAppListItem[]>;
 }
 
 /** 命令面板 / 侧栏列表分组与排序（与内置四分段 organize 同形）。 */
@@ -109,7 +109,7 @@ export interface WorkspaceAppOrganizeContribution {
   id: string;
   appId: WorkspaceAppId;
   label: string;
-  organize: (input: WorkspaceAppOrganizeContext) ***REMOVED*** WorkspaceAppOrganizeGroup[];
+  organize: (input: WorkspaceAppOrganizeContext) => WorkspaceAppOrganizeGroup[];
   /**
    * 侧栏 / 命令面板分组标题右侧排序 cycle。
    * 有值时宿主展示并可驱动通用列表排序；无值则该分段不显示贡献型排序 chrome。
@@ -130,7 +130,7 @@ export interface WorkspaceAppOrganizeContribution {
   sortItems?: (
     items: readonly WorkspaceAppListItem[],
     sortOptionId: string,
-  ) ***REMOVED*** WorkspaceAppListItem[];
+  ) => WorkspaceAppListItem[];
 }
 
 export interface WorkspaceAppCommandSidebarAction {
@@ -171,7 +171,7 @@ export interface WorkspaceAppCommandContribution {
     serverId?: string;
     workspaceId?: string;
     currentPathname?: string | null;
-  }) ***REMOVED*** void | Promise<void>;
+  }) => void | Promise<void>;
 }
 
 /** 外置 App 优先使用 `workspace.app.*`；sectionId/sectionTitle 由 App 自带，宿主不预留 per-App 帮助分组。 */
@@ -196,7 +196,7 @@ export interface WorkspaceAppShortcutContribution {
     serverId?: string;
     workspaceId?: string;
     currentPathname?: string | null;
-  }) ***REMOVED*** void | Promise<void>;
+  }) => void | Promise<void>;
 }
 
 /**
@@ -211,7 +211,7 @@ export interface WorkspaceAppShortcutGroupContribution {
   title: string;
   kind: "product" | "layout";
   /** Shortcuts 面板标题右侧「编辑布局…」；曲目/侧栏菜单类 product 组可声明。 */
-  openLayoutEditor?: () ***REMOVED*** void;
+  openLayoutEditor?: () => void;
   /** 由编辑布局 inline Rebind 的 helpId；Shortcuts 列表剔除以免与独立热键重复。 */
   layoutManagedShortcutSourceKeys?: readonly string[];
 }
@@ -242,9 +242,9 @@ export interface WorkspaceAppMiniAppContribution {
   /** 阶段 C 再挂载真实组件；阶段 B 仅登记槽位。 */
   component?: unknown;
   /** 标签标题：同步读当前 entity（可接 store.getState）。 */
-  getEntityTitle?: (entityId: string) ***REMOVED*** string | null;
+  getEntityTitle?: (entityId: string) => string | null;
   /** 标签标题订阅；与 getEntityTitle 配对供宿主 useSyncExternalStore。 */
-  subscribeEntityTitle?: (entityId: string, listener: () ***REMOVED*** void) ***REMOVED*** () ***REMOVED*** void;
+  subscribeEntityTitle?: (entityId: string, listener: () => void) => () => void;
   /**
    * 面板内含跨域 iframe/webview 且可能吞掉宿主快捷键时设为 true。
    * 宿主仅在此标记下 acquire 桌面 force-subframe 转发；同框 React 面板（如系统洞察）不要开。
@@ -256,9 +256,9 @@ export interface WorkspaceAppMiniAppContribution {
    * 面板组件已注册但首屏数据/水合未完成时为 false。
    * 宿主延续 pane 级 BrandLogo 遮罩，避免与 Tab 过渡 loading 二次闪屏。
    */
-  isPanelBootReady?: () ***REMOVED*** boolean;
+  isPanelBootReady?: () => boolean;
   /** 与 isPanelBootReady 配对，供宿主 useSyncExternalStore。 */
-  subscribePanelBootReady?: (listener: () ***REMOVED*** void) ***REMOVED*** () ***REMOVED*** void;
+  subscribePanelBootReady?: (listener: () => void) => () => void;
 }
 
 export interface WorkspaceAppItemMenuContribution {
@@ -273,9 +273,9 @@ export interface WorkspaceAppItemMenuContribution {
    */
   icon: WorkspaceAppIcon;
   /** 按条目动态文案（如置顶 / 取消置顶）。 */
-  resolveLabel?: (item: WorkspaceAppListItem) ***REMOVED*** string;
+  resolveLabel?: (item: WorkspaceAppListItem) => string;
   /** 按条目动态图标（如置顶 Pin / 取消置顶 PinOff）。 */
-  resolveIcon?: (item: WorkspaceAppListItem) ***REMOVED*** WorkspaceAppIcon;
+  resolveIcon?: (item: WorkspaceAppListItem) => WorkspaceAppIcon;
   /** 菜单右侧键帽（如 `["alt","p"]`）；宿主用 Shortcut 渲染。 */
   shortcutKeys?: readonly string[];
   /**
@@ -284,7 +284,7 @@ export interface WorkspaceAppItemMenuContribution {
    * 缺省时宿主可尝试用同 app 下 id 相同的 shortcut 贡献的 helpId。
    */
   shortcutSourceKey?: string;
-  run: (item: WorkspaceAppListItem) ***REMOVED*** void | Promise<void>;
+  run: (item: WorkspaceAppListItem) => void | Promise<void>;
 }
 
 /** Sub App Tab 右键/菜单条贡献（宿主按 appId 合并，禁止 if appId 硬编码业务项）。 */
@@ -308,10 +308,10 @@ export interface WorkspaceAppTabContextMenuContribution {
   /** 越小越靠前；缺省 100。 */
   order?: number;
   /** 动态文案。 */
-  resolveLabel?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** string;
+  resolveLabel?: (context: WorkspaceAppTabContextMenuContext) => string;
   /** 是否显示；缺省 true。在打开菜单时求值。 */
-  isVisible?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** boolean;
+  isVisible?: (context: WorkspaceAppTabContextMenuContext) => boolean;
   /** 是否禁用；缺省 false。 */
-  isDisabled?: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** boolean;
-  run: (context: WorkspaceAppTabContextMenuContext) ***REMOVED*** void | Promise<void>;
+  isDisabled?: (context: WorkspaceAppTabContextMenuContext) => boolean;
+  run: (context: WorkspaceAppTabContextMenuContext) => void | Promise<void>;
 }
