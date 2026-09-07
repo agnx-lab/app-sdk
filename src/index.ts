@@ -33,6 +33,8 @@ export {
 } from "./android-host-api";
 
 export type {
+  WorkspaceAppGuestElectronModuleMountInput,
+  WorkspaceAppGuestElectronModuleReadyDetail,
   WorkspaceAppGuestAuth,
   WorkspaceAppGuestDiagnostic,
   WorkspaceAppGuestErrorDetail,
@@ -43,6 +45,8 @@ export type {
   WorkspaceAppGuestPreferStrategy,
   WorkspaceAppGuestReadyDetail,
   WorkspaceAppGuestResolvedStrategy,
+  WorkspaceAppRuntimeManifestLite,
+  WorkspaceAppRuntimeSidecarManifestLite,
 } from "./guest-host-api";
 
 // 场景：@getagnx/app-sdk 公共出口 — 通用 Sub App 协议类型与 activate(host) 合同。

@@ -1,5 +1,5 @@
-// 场景：Guest Surface Host API 类型 — Sub App 嵌入上游 Web UI 的合同面。
-export type WorkspaceAppGuestKind = "none" | "web" | "native-bridge";
+// 场景：Guest Surface Host API 类型 — Sub App 嵌入上游 Web UI / electron-module 的合同面。
+export type WorkspaceAppGuestKind = "none" | "web" | "native-bridge" | "electron-module";
 
 export type WorkspaceAppGuestAuth = "none" | "url-token-then-cookie" | "bearer" | "custom";
 
@@ -7,19 +7,36 @@ export type WorkspaceAppGuestPreferStrategy =
   | "auto"
   | "direct-iframe"
   | "proxied-iframe"
-  | "guest-webview";
+  | "guest-webview"
+  | "electron-module";
 
 export type WorkspaceAppGuestResolvedStrategy =
   | "direct-iframe"
   | "proxied-iframe"
   | "guest-webview"
+  | "electron-module"
   | "native-bridge"
   | "unsupported";
+
+export interface WorkspaceAppRuntimeSidecarManifestLite {
+  id: string;
+  ensureTool: string;
+  stateFile: string;
+  kind?: "python-gateway" | "node-host" | "rust-binary" | "generic";
+  healthKind?: "http" | "framed-ipc" | "process";
+}
+
+export interface WorkspaceAppRuntimeManifestLite {
+  sidecars?: ReadonlyArray<WorkspaceAppRuntimeSidecarManifestLite>;
+}
 
 export interface WorkspaceAppGuestManifestLite {
   kind?: WorkspaceAppGuestKind;
   auth?: WorkspaceAppGuestAuth;
-  capabilities?: ReadonlyArray<"websocket" | "sse" | "cookies">;
+  /** L8 传输能力（websocket/sse/cookies）或 G6 Host Capability 名（fs/dialog/…）。 */
+  capabilities?: ReadonlyArray<string>;
+  module?: string;
+  rendererEntry?: string;
   preferStrategy?: WorkspaceAppGuestPreferStrategy;
 }
 
@@ -35,9 +52,28 @@ export interface WorkspaceAppGuestMountInput {
   onError?: (error: WorkspaceAppGuestErrorDetail) => void;
 }
 
+export interface WorkspaceAppGuestElectronModuleMountInput {
+  /** 专用空 host 元素（须带 data-agnx-guest-module-host）。 */
+  container: HTMLElement;
+  /** 覆盖 manifest.guest.rendererEntry；ensure 成功时以 ensure 输出为准。 */
+  rendererEntry?: string;
+  /** 覆盖 runtime.sidecars[0].ensureTool；未配置时跳过 ensure，直接绿屏占位。 */
+  ensureTool?: string;
+  ensureArgs?: readonly string[];
+  timeoutMs?: number;
+  onReady?: (detail: WorkspaceAppGuestElectronModuleReadyDetail) => void;
+  onError?: (error: WorkspaceAppGuestErrorDetail) => void;
+}
+
 export interface WorkspaceAppGuestReadyDetail {
   strategy: WorkspaceAppGuestResolvedStrategy;
   origin: string;
+  reused?: boolean;
+}
+
+export interface WorkspaceAppGuestElectronModuleReadyDetail {
+  strategy: "electron-module";
+  rendererEntry: string;
   reused?: boolean;
 }
 
@@ -57,5 +93,6 @@ export interface WorkspaceAppGuestDiagnostic {
 
 export interface WorkspaceAppGuestHostApi {
   mount(input: WorkspaceAppGuestMountInput): () => void;
+  mountElectronModule(input: WorkspaceAppGuestElectronModuleMountInput): () => void;
   getDiagnostics(): WorkspaceAppGuestDiagnostic | null;
 }
