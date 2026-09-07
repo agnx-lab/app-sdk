@@ -24,7 +24,7 @@ export interface WorkspaceAppGuestManifestLite {
 }
 
 export interface WorkspaceAppGuestMountInput {
-  /** Web 容器元素（宿主 guest runtime 负责挂载 iframe/webview）。 */
+  /** 专用空 host 元素（须带 data-agnx-guest-surface-host）；React 面板内 overlay 等须与其 sibling，勿共用 ref。 */
   container: HTMLElement;
   /** 覆盖 manifest.sidecar.ensureTool；默认读扫描报告。 */
   ensureTool?: string;
