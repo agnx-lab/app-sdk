@@ -16,6 +16,7 @@ import type {
   WorkspaceAppTabContextMenuContribution,
 } from "./types";
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
+import type { WorkspaceAppGuestHostApi } from "./guest-host-api";
 import type { WorkspaceSubTabStripSyncPayload } from "./workspace-tab-chip";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
@@ -1496,6 +1497,12 @@ export interface WorkspaceAppHostApi {
    * 复用壳层组件；Sub App 不要自造平行实现。
    */
   ui: WorkspaceAppUiApi;
+
+  /**
+   * 可选：Guest Surface — 上游 Web UI 嵌入 Tab（L8）。
+   * 仅 Web/Electron 渲染面；由 manifest.guest 驱动策略，禁止 Sub App 手写 iframe src。
+   */
+  guest?: WorkspaceAppGuestHostApi;
 
   /**
    * 可选：桌面 sidecar 工具运行器（主进程 spawn，仅 tools/ 白名单）。
