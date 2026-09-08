@@ -1,4 +1,5 @@
 // 场景：Guest Surface Host API 类型 — Sub App 嵌入上游 Web UI / electron-module 的合同面。
+import type { WorkspaceAppGuestCapabilityHostApi } from "./guest-capability-host-api";
 export type WorkspaceAppGuestKind = "none" | "web" | "native-bridge" | "electron-module";
 
 export type WorkspaceAppGuestAuth = "none" | "url-token-then-cookie" | "bearer" | "custom";
@@ -95,4 +96,6 @@ export interface WorkspaceAppGuestHostApi {
   mount(input: WorkspaceAppGuestMountInput): () => void;
   mountElectronModule(input: WorkspaceAppGuestElectronModuleMountInput): () => void;
   getDiagnostics(): WorkspaceAppGuestDiagnostic | null;
+  /** G6 Host Capability RPC（electron-module 嵌入面）。 */
+  capability?: WorkspaceAppGuestCapabilityHostApi;
 }

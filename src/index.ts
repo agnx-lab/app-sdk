@@ -33,6 +33,13 @@ export {
 } from "./android-host-api";
 
 export type {
+  GuestHostCapabilityInvokeInput,
+  GuestHostCapabilityInvokeResult,
+  GuestHostCapabilityName,
+  WorkspaceAppGuestCapabilityHostApi,
+} from "./guest-capability-host-api";
+
+export type {
   WorkspaceAppGuestElectronModuleMountInput,
   WorkspaceAppGuestElectronModuleReadyDetail,
   WorkspaceAppGuestAuth,
