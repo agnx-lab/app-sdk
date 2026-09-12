@@ -75,6 +75,8 @@ export interface WorkspaceAppGuestReadyDetail {
 export interface WorkspaceAppGuestElectronModuleReadyDetail {
   strategy: "electron-module";
   rendererEntry: string;
+  /** ensure 输出的上游 preload 绝对路径（GenOffice agnx-embed 等）。 */
+  preloadPath?: string;
   reused?: boolean;
 }
 
