@@ -1234,6 +1234,11 @@ export interface WorkspaceAppBackgroundSessionInput {
 }
 
 export interface WorkspaceAppHostApi {
+  /**
+   * 本次 activate 的扫描 appId（P4 迁移期可能与 manifest 短名或 legacy bundled id 一致）。
+   * Sub App 注册贡献与 storage 路径应优先读此字段，而非写死 manifest 常量。
+   */
+  readonly appId?: string;
   /** 注册侧栏 / 命令面板「主视图」分段。 */
   registerPrimarySegment(contribution: WorkspaceAppPrimarySegmentContribution): void;
   /** 注册主视图下列表数据源。 */
