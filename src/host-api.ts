@@ -813,6 +813,11 @@ export interface WorkspaceAppUiApi {
   setAtmosphere(seed: WorkspaceAppAtmosphereSeed): void;
   /** 清除该 source 的氛围种子；若其为当前有效源则回落全局。 */
   clearAtmosphere(sourceId: string): void;
+  /**
+   * 清空详情 sheet 分段 live 高亮缓存。
+   * prefs/水合刚写完 backing store 后应调用，避免急开配置时种子了水合前的旧值。
+   */
+  clearDetailSheetSegmentedLiveValues(): void;
   /** 只读快照：模式、有效色、pane 色、全局预设。 */
   getAtmosphereSnapshot(): WorkspaceAppAtmosphereSnapshot;
   /**
