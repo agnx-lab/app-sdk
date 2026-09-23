@@ -1540,7 +1540,15 @@ export interface WorkspaceAppHostApi {
     readRecent(input?: {
       appId?: string | null;
       domains?: ReadonlyArray<
-        "lifecycle" | "tabs" | "sync" | "config" | "provider" | "sidecar" | "iframe" | "worker"
+        | "lifecycle"
+        | "tabs"
+        | "sync"
+        | "config"
+        | "provider"
+        | "sidecar"
+        | "iframe"
+        | "guest"
+        | "worker"
       >;
       limit?: number;
     }): ReadonlyArray<{
@@ -1554,6 +1562,7 @@ export interface WorkspaceAppHostApi {
         | "provider"
         | "sidecar"
         | "iframe"
+        | "guest"
         | "worker";
       type: string;
       appId?: string | null;
@@ -1570,6 +1579,7 @@ export interface WorkspaceAppHostApi {
         | "provider"
         | "sidecar"
         | "iframe"
+        | "guest"
         | "worker";
       sdkPath: string;
       types: readonly string[];

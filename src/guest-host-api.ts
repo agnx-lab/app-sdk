@@ -56,7 +56,14 @@ export interface WorkspaceAppGuestMountInput {
    * 超时仍回调 onReady，但诊断 surfaceState=load-slow；失败码走 onError。
    */
   surfaceReadyTimeoutMs?: number;
-  /** 挂载相位（ensure / proxy / surface-load）；Panel 应用此文案，禁止提前撤遮罩。 */
+  /**
+   * 挂载期是否由宿主注入品牌 Logo 扫光遮罩（默认 true）。
+   * 全 Guest 子应用统一过渡；Panel 勿再叠纯文字「正在启动…」。
+   */
+  bootOverlay?: boolean;
+  /** 遮罩主文案；默认「正在启动 {manifest.name}…」。 */
+  bootTitle?: string;
+  /** 挂载相位（ensure / proxy / surface-load）；Panel 可跟相位改辅文案。 */
   onPhase?: (phase: string) => void;
   /**
    * 表面已可交互（iframe load / webview dom-ready，或超时软放行）。
