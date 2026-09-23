@@ -52,6 +52,7 @@ export type {
   WorkspaceAppGuestPreferStrategy,
   WorkspaceAppGuestReadyDetail,
   WorkspaceAppGuestResolvedStrategy,
+  WorkspaceAppGuestSurfaceState,
   WorkspaceAppRuntimeManifestLite,
   WorkspaceAppRuntimeSidecarManifestLite,
 } from "./guest-host-api";

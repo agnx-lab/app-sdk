@@ -41,6 +41,8 @@ export interface WorkspaceAppGuestManifestLite {
   preferStrategy?: WorkspaceAppGuestPreferStrategy;
 }
 
+export type WorkspaceAppGuestSurfaceState = "idle" | "mounting" | "ready" | "error" | "load-slow";
+
 export interface WorkspaceAppGuestMountInput {
   /** 专用空 host 元素（须带 data-agnx-guest-surface-host）；React 面板内 overlay 等须与其 sibling，勿共用 ref。 */
   container: HTMLElement;
@@ -49,6 +51,17 @@ export interface WorkspaceAppGuestMountInput {
   /** 传给 ensure 脚本的额外参数（如 --port）。 */
   ensureArgs?: readonly string[];
   timeoutMs?: number;
+  /**
+   * iframe/webview 首屏 load 等待上限（默认 20s）。
+   * 超时仍回调 onReady，但诊断 surfaceState=load-slow；失败码走 onError。
+   */
+  surfaceReadyTimeoutMs?: number;
+  /** 挂载相位（ensure / proxy / surface-load）；Panel 应用此文案，禁止提前撤遮罩。 */
+  onPhase?: (phase: string) => void;
+  /**
+   * 表面已可交互（iframe load / webview dom-ready，或超时软放行）。
+   * 勿在 ensure 完成瞬间撤遮罩，否则易见空白或上游「连接中」。
+   */
   onReady?: (detail: WorkspaceAppGuestReadyDetail) => void;
   onError?: (error: WorkspaceAppGuestErrorDetail) => void;
 }
@@ -92,6 +105,17 @@ export interface WorkspaceAppGuestDiagnostic {
   origin: string | null;
   auth: WorkspaceAppGuestAuth;
   lastError: WorkspaceAppGuestErrorDetail | null;
+  /** 当前相位（如 mount.ensure / mount.surface-load）。 */
+  phase: string | null;
+  /** 最近相位轨迹（有界，供 AI 复制）。 */
+  phaseTrail: readonly string[];
+  ensureTool: string | null;
+  /** proxied-iframe 会话 id；direct/webview 为 null。 */
+  proxySid: string | null;
+  /** 单次 mount 相关 id，对齐 Host 观测 detail。 */
+  correlationId: string | null;
+  surfaceState: WorkspaceAppGuestSurfaceState;
+  updatedAt: string;
 }
 
 export interface WorkspaceAppGuestHostApi {
