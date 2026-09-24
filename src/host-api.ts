@@ -363,7 +363,7 @@ export type WorkspaceAppDetailSheetExtrasSurface =
 
 export interface WorkspaceAppRegisterDetailSheetExtrasInput {
   appId: string;
-  /** 缺省只进旧独立详情 sheet；见 `WorkspaceAppDetailSheetExtrasSurface`。 */
+  /** 缺省只进 view-details 兼容面；见 `WorkspaceAppDetailSheetExtrasSurface`。应用总览请走公共详情。 */
   surface?: WorkspaceAppDetailSheetExtrasSurface;
   buildRows: (
     context?: WorkspaceAppDetailSheetExtrasContext,
@@ -855,13 +855,13 @@ export interface WorkspaceAppUiApi {
   /** 当前是否有 App Agent Context 看板打开。 */
   isAppAgentContextOpen(): boolean;
   /**
-   * 打开宿主详情 sheet（与侧栏/命令面板 View details 同类信息弹层）。
-   * Sub App 不得自造第二套详情浮层。
+   * 打开宿主**自定义行**详情 sheet（如 Relay 站点/密钥实体）。
+   * App / Tab 总览请用 `openTabPublicDetail`（元数据 | 配置 | 工具）；禁止再用本 API 冒充应用详情。
    */
   openDetailSheet(input: WorkspaceAppOpenDetailSheetInput): void;
-  /** 关闭 `openDetailSheet` 打开的详情；未打开时 no-op。 */
+  /** 关闭 `openDetailSheet` 打开的自定义行详情；未打开时 no-op。 */
   closeDetailSheet(): void;
-  /** 当前是否有 Sub App 独立详情 sheet 打开（旧 `openDetailSheet`）。 */
+  /** 当前是否有 `openDetailSheet` 自定义行详情打开。 */
   isDetailSheetOpen(): boolean;
   /**
    * 打开当前聚焦 Tab（或指定 tabId / 某 app 的活动 Tab）的公共详情壳。
