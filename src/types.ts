@@ -246,8 +246,9 @@ export interface WorkspaceAppMiniAppContribution {
   /** 标签标题订阅；与 getEntityTitle 配对供宿主 useSyncExternalStore。 */
   subscribeEntityTitle?: (entityId: string, listener: () => void) => () => void;
   /**
-   * 面板内含跨域 iframe/webview 且可能吞掉宿主快捷键时设为 true。
-   * 宿主仅在此标记下 acquire 桌面 force-subframe 转发；同框 React 面板（如系统洞察）不要开。
+   * 桌面 force-subframe 快捷键转发：可选强制开/关。
+   * 默认由宿主按扫盘 `manifest.guest` 解析策略推导（guest-webview / proxied-iframe / direct-iframe 自动开）；
+   * `true` 强制开，`false` 强制关。同框 React 面板（无 Guest）勿开。
    */
   iframeShortcutCapture?: boolean;
   /** 任务 E：轻量隔离声明（诊断 / 文档索引；不改变默认执行路径）。 */
