@@ -1390,7 +1390,7 @@ export interface WorkspaceAppHostApi {
 
   /**
    * 可选特权：工作区 Browser View（桌面 WebContentsView 宿主）。
-   * 仅系统 first-party（如 com.agnx.browser）应调用；≠ browserSession 屏外媒体捕获。
+   * 仅系统 first-party（如短 id `browser`）应调用；≠ browserSession 屏外媒体捕获。
    * 非 Electron 时方法可能缺失或返回 unavailable。
    */
   browserView?: {
