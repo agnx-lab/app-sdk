@@ -149,7 +149,8 @@ export interface WorkspaceAppStorageApi {
    * `key` 仅允许 `[A-Za-z0-9._-]+`。
    */
   readJson(appId: string, key: string): Promise<unknown | null>;
-  writeJson(appId: string, key: string, value: unknown): Promise<void>;
+  /** 返回 true 表示字节已落盘；false 表示内容与现有文件相同而跳过。 */
+  writeJson(appId: string, key: string, value: unknown): Promise<boolean>;
 }
 
 export type WorkspaceAppConfigScope = "global" | "app";
