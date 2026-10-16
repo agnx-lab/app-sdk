@@ -337,6 +337,12 @@ export interface WorkspaceAppDetailSheetExtraRow {
   control?: WorkspaceAppDetailSheetSegmentedControl;
   /** 有则宿主渲染此节点代替纯文本 value（行内即时保存，无整页保存按钮）。 */
   valueContent?: unknown;
+  /**
+   * 有则宿主渲染详情内快捷键 Rebind chip（优先于 valueContent）。
+   * 与 registerShortcut.helpId / shortcutSourceKey 对齐；Settings 侧由
+   * ShortcutGroupContribution.detailManagedShortcutSourceKeys 剔除。
+   */
+  shortcutHelpId?: string;
   /** 可选分组（公共详情「配置」sheet 渲染分组头；旧 App 不传则扁平）。 */
   groupId?: string;
   groupTitle?: string;

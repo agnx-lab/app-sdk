@@ -214,6 +214,11 @@ export interface WorkspaceAppShortcutGroupContribution {
   openLayoutEditor?: () => void;
   /** 由编辑布局 inline Rebind 的 helpId；Shortcuts 列表剔除以免与独立热键重复。 */
   layoutManagedShortcutSourceKeys?: readonly string[];
+  /**
+   * 由 Tab 公共详情「配置 → 快捷键」分组 Rebind 的 helpId（product 热键）。
+   * Settings → Shortcuts 同步剔除；曲目/侧栏菜单类仍走 layoutManaged + 编辑布局。
+   */
+  detailManagedShortcutSourceKeys?: readonly string[];
 }
 
 export interface WorkspaceAppIsolationProfile {
