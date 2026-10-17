@@ -57,6 +57,17 @@ export type {
   WorkspaceAppRuntimeSidecarManifestLite,
 } from "./guest-host-api";
 
+export type {
+  WorkspaceAppModelAccessMode,
+  WorkspaceAppModelApi,
+  WorkspaceAppModelCredentialSummary,
+  WorkspaceAppModelHandle,
+  WorkspaceAppModelInjectionBlockReason,
+  WorkspaceAppModelInjectionCapability,
+  WorkspaceAppModelPlatform,
+  WorkspaceAppModelResolvedEndpoint,
+} from "./model-host-api";
+
 // 场景：@getagnx/app-sdk 公共出口 — 通用 Sub App 协议类型与 activate(host) 合同。
 export type {
   WorkspaceAppCommandContribution,

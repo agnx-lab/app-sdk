@@ -17,6 +17,7 @@ import type {
 } from "./types";
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
 import type { WorkspaceAppGuestHostApi } from "./guest-host-api";
+import type { WorkspaceAppModelApi } from "./model-host-api";
 import type { WorkspaceSubTabStripSyncPayload } from "./workspace-tab-chip";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
@@ -1306,6 +1307,14 @@ export interface WorkspaceAppHostApi {
 
   /** 切换侧栏主视图到某分段 id（如 `"music"`）。 */
   requestPrimaryView(segmentId: string): void;
+
+  /**
+   * 模型源能力（L3）。
+   *
+   * 可选：旧宿主可能不提供，调用方需降级（自行读取用户配置或提示不可用）。
+   * 契约见 `docs/runtime/model-source/模型源能力契约_host-model-contract.md`。
+   */
+  readonly model?: WorkspaceAppModelApi;
 
   /**
    * 通用文件 Host Service。
