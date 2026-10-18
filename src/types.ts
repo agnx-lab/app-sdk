@@ -283,6 +283,17 @@ export interface WorkspaceAppMiniAppContribution {
    */
   entityLabel?: string;
   entityIcon?: WorkspaceAppIcon;
+  /**
+   * 本面板是「点开这个子应用」的落地页（对外主入口）。
+   *
+   * 一个子应用可以有多个面板，但**只有一个**是主面板：侧栏点击、命令面板回车
+   * 打开的都是它。其余面板是从属页，只能由主面板按自己的业务规则调
+   * `openSubAppTab` 打开——它们不该、也不能抢走子应用的入口。
+   *
+   * 不声明任何面板时，宿主取先注册的那个；但**不要依赖注册顺序**，
+   * 有多面板的子应用必须显式标出来。
+   */
+  primaryPanel?: boolean;
 }
 
 export interface WorkspaceAppItemMenuContribution {
