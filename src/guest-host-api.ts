@@ -47,14 +47,19 @@ export interface WorkspaceAppGuestMountInput {
   /** 专用空 host 元素（须带 data-agnx-guest-surface-host）；React 面板内 overlay 等须与其 sibling，勿共用 ref。 */
   container: HTMLElement;
   /**
-   * 宿主指定的目标地址（绝对 URL），优先于 ensure 输出的 origin。
+   * 加载方式之一：直接加载这个网址（绝对 URL，**不跑 ensure、不拉任何后台**）。
    *
-   * 用于「Tab 承载子应用首页之外的站点」：子应用的 ensure 工具只会产出它自己的
-   * origin，光靠 ensure 无法把面板指向别的站点。给了本字段就跳过 ensure 的
-   * origin，但仍会先跑 ensure（sidecar 可能仍需拉起）。只取 origin，路径忽略。
+   * 面板自己决定本 Tab 要不要后台：
+   * - 要走本子应用的后台 → 传 `ensureTool`，宿主跑它拿 origin；
+   * - 不需要后台、就是一张现成网页 → 传 `targetUrl`，宿主原样加载。
+   *
+   * 两个都传时 `targetUrl` 优先（后台可能仍需拉起时自行为之）。只取 origin，路径忽略。
    */
   targetUrl?: string;
-  /** 覆盖 manifest.sidecar.ensureTool；默认读扫描报告。 */
+  /**
+   * 加载方式之一：跑这个 ensure 工具拉起后台，用它的 origin 加载（缺省读扫描报告里的
+   * manifest.sidecar.ensureTool）。与 `targetUrl` 二选一。
+   */
   ensureTool?: string;
   /** 传给 ensure 脚本的额外参数（如 --port）。 */
   ensureArgs?: readonly string[];
@@ -133,34 +138,10 @@ export interface WorkspaceAppGuestDiagnostic {
   updatedAt: string;
 }
 
-/** `openTabOrFocus` 入参：把嵌页里点开的链接交给宿主按域名复用 Tab。 */
-export interface WorkspaceAppGuestOpenTabInput {
-  /** 要打开的目标地址（绝对 URL）。 */
-  url: string;
-  /** Tab 显示名（如站点名「四库全书」）；缺省回退站点标题 / 域名。 */
-  title?: string;
-  /**
-   * 是否按 origin 复用同一个 Tab（默认 true）。
-   * false 时每次都新建 Tab，但仍按 origin 命名。
-   */
-  reusesOrigin?: boolean;
-}
-
 export interface WorkspaceAppGuestHostApi {
   mount(input: WorkspaceAppGuestMountInput): () => void;
   mountElectronModule(input: WorkspaceAppGuestElectronModuleMountInput): () => void;
   getDiagnostics(): WorkspaceAppGuestDiagnostic | null;
   /** G6 Host Capability RPC（electron-module 嵌入面）。 */
   capability?: WorkspaceAppGuestCapabilityHostApi;
-  /**
-   * 打开或聚焦一个「承载某个站点」的子应用 Tab。
-   *
-   * 语义：**同 origin 复用，不同 origin 新建**，站外域名交给系统浏览器。
-   * - 复用：已存在承载该 origin 的 Tab 时，把它的地址改成新 url 并聚焦，不新增 Tab。
-   * - 新建：否则新开一个 Tab，标题用 `title`（缺省站点标题 → 域名）。
-   * - 站外：非 http(s) 或非当前站点域名族时返回 false，由调用方交给宿主外部打开。
-   *
-   * @returns true 表示宿主已接管（复用或新建）；false 表示未接管，调用方须自行兜底。
-   */
-  openTabOrFocus?(input: WorkspaceAppGuestOpenTabInput): boolean;
 }

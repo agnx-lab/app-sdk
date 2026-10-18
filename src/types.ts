@@ -269,20 +269,20 @@ export interface WorkspaceAppMiniAppContribution {
   /** 与 isPanelBootReady 配对，供宿主 useSyncExternalStore。 */
   subscribePanelBootReady?: (listener: () => void) => () => void;
   /**
-   * 直连站点面板：本面板只承载一个外部站点，**不需要**本子应用的 sidecar。
+   * 打开本面板（且没指定实体）时用哪个实体 id。
    *
-   * 同一个子应用因此可以有几种完全不同类型的 Tab：例如「殆知阁」走自己的后台，
-   * 「四库全书」直接打开 sikuquanshu.daizhige.org、不启动任何后台。
-   * 宿主据此跳过 ensure 阶段，标题 / 图标 / 加载文案都用本面板自己的。
+   * 同一个子应用可以有几种完全不同的 Tab，每个 Tab 各有名字 / 图标 / 内容：
+   * 承载条目的面板靠 `getEntityTitle` 起名，装固定页面的面板靠下面的 `entityLabel`。
+   * 子应用要开自己另一个面板的 Tab，就自己调 `host.openSubAppTab({ appId, panelId, entityId })`，
+   * 宿主只负责「开某面板的某个实体」，不认识背后是什么。
    */
-  directSite?: {
-    /** 面板固定承载的站点首页；Tab 自身带 guestUrl 时以 Tab 为准。 */
-    origin: string;
-    /** Tab 栏与加载遮罩上的名字（缺省用 title）。 */
-    label?: string;
-    /** 站点图标地址（favicon）；缺省回落面板 icon。 */
-    iconUrl?: string;
-  };
+  defaultEntityId?: string;
+  /**
+   * 该实体缺名时的兜底名字与图标（有 `getEntityTitle` / Tab 自带标题时以那些为准）。
+   * 图标缺省回落 manifest.icon → 通用图标。
+   */
+  entityLabel?: string;
+  entityIcon?: WorkspaceAppIcon;
 }
 
 export interface WorkspaceAppItemMenuContribution {
