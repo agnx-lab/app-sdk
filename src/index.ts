@@ -49,6 +49,7 @@ export type {
   WorkspaceAppGuestKind,
   WorkspaceAppGuestManifestLite,
   WorkspaceAppGuestMountInput,
+  WorkspaceAppGuestOpenTabInput,
   WorkspaceAppGuestPreferStrategy,
   WorkspaceAppGuestReadyDetail,
   WorkspaceAppGuestResolvedStrategy,

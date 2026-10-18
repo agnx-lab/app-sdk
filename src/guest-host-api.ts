@@ -125,10 +125,34 @@ export interface WorkspaceAppGuestDiagnostic {
   updatedAt: string;
 }
 
+/** `openTabOrFocus` 入参：把嵌页里点开的链接交给宿主按域名复用 Tab。 */
+export interface WorkspaceAppGuestOpenTabInput {
+  /** 要打开的目标地址（绝对 URL）。 */
+  url: string;
+  /** Tab 显示名（如站点名「四库全书」）；缺省回退站点标题 / 域名。 */
+  title?: string;
+  /**
+   * 是否按 origin 复用同一个 Tab（默认 true）。
+   * false 时每次都新建 Tab，但仍按 origin 命名。
+   */
+  reusesOrigin?: boolean;
+}
+
 export interface WorkspaceAppGuestHostApi {
   mount(input: WorkspaceAppGuestMountInput): () => void;
   mountElectronModule(input: WorkspaceAppGuestElectronModuleMountInput): () => void;
   getDiagnostics(): WorkspaceAppGuestDiagnostic | null;
   /** G6 Host Capability RPC（electron-module 嵌入面）。 */
   capability?: WorkspaceAppGuestCapabilityHostApi;
+  /**
+   * 打开或聚焦一个「承载某个站点」的子应用 Tab。
+   *
+   * 语义：**同 origin 复用，不同 origin 新建**，站外域名交给系统浏览器。
+   * - 复用：已存在承载该 origin 的 Tab 时，把它的地址改成新 url 并聚焦，不新增 Tab。
+   * - 新建：否则新开一个 Tab，标题用 `title`（缺省站点标题 → 域名）。
+   * - 站外：非 http(s) 或非当前站点域名族时返回 false，由调用方交给宿主外部打开。
+   *
+   * @returns true 表示宿主已接管（复用或新建）；false 表示未接管，调用方须自行兜底。
+   */
+  openTabOrFocus?(input: WorkspaceAppGuestOpenTabInput): boolean;
 }
