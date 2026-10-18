@@ -24,7 +24,10 @@ export interface WorkspaceAppListItem {
   active?: boolean;
   /**
    * 侧栏 / 列表行左侧图片（封面等 http(s) 或本机路径）。
-   * 有则宿主优先绘制图片，失败再退回分段默认图标。
+   *
+   * 注意这是**列表行内容图**（如音乐封面），不是 App 图标 —— App 图标只认
+   * `.agnx/manifest.json` 的 `icon`，不从这里取。
+   * 有则宿主绘制图片，拿不到则退回该分段的默认图标。
    */
   imageUrl?: string;
   open?: {
