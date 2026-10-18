@@ -268,6 +268,21 @@ export interface WorkspaceAppMiniAppContribution {
   isPanelBootReady?: () => boolean;
   /** 与 isPanelBootReady 配对，供宿主 useSyncExternalStore。 */
   subscribePanelBootReady?: (listener: () => void) => () => void;
+  /**
+   * 直连站点面板：本面板只承载一个外部站点，**不需要**本子应用的 sidecar。
+   *
+   * 同一个子应用因此可以有几种完全不同类型的 Tab：例如「殆知阁」走自己的后台，
+   * 「四库全书」直接打开 sikuquanshu.daizhige.org、不启动任何后台。
+   * 宿主据此跳过 ensure 阶段，标题 / 图标 / 加载文案都用本面板自己的。
+   */
+  directSite?: {
+    /** 面板固定承载的站点首页；Tab 自身带 guestUrl 时以 Tab 为准。 */
+    origin: string;
+    /** Tab 栏与加载遮罩上的名字（缺省用 title）。 */
+    label?: string;
+    /** 站点图标地址（favicon）；缺省回落面板 icon。 */
+    iconUrl?: string;
+  };
 }
 
 export interface WorkspaceAppItemMenuContribution {
