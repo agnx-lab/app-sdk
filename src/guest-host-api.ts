@@ -46,6 +46,14 @@ export type WorkspaceAppGuestSurfaceState = "idle" | "mounting" | "ready" | "err
 export interface WorkspaceAppGuestMountInput {
   /** 专用空 host 元素（须带 data-agnx-guest-surface-host）；React 面板内 overlay 等须与其 sibling，勿共用 ref。 */
   container: HTMLElement;
+  /**
+   * 宿主指定的目标地址（绝对 URL），优先于 ensure 输出的 origin。
+   *
+   * 用于「Tab 承载子应用首页之外的站点」：子应用的 ensure 工具只会产出它自己的
+   * origin，光靠 ensure 无法把面板指向别的站点。给了本字段就跳过 ensure 的
+   * origin，但仍会先跑 ensure（sidecar 可能仍需拉起）。只取 origin，路径忽略。
+   */
+  targetUrl?: string;
   /** 覆盖 manifest.sidecar.ensureTool；默认读扫描报告。 */
   ensureTool?: string;
   /** 传给 ensure 脚本的额外参数（如 --port）。 */
