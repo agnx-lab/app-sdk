@@ -68,6 +68,13 @@ export type {
   WorkspaceAppModelResolvedEndpoint,
 } from "./model-host-api";
 
+export { SYSTEM_PERMISSION_IDS } from "./system-permission-host-api";
+export type {
+  SystemPermissionId,
+  SystemPermissionStatus,
+  WorkspaceAppPermissionApi,
+} from "./system-permission-host-api";
+
 // 场景：@getagnx/app-sdk 公共出口 — 通用 Sub App 协议类型与 activate(host) 合同。
 export type {
   WorkspaceAppCommandContribution,

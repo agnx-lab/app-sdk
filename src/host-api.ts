@@ -18,6 +18,7 @@ import type {
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
 import type { WorkspaceAppGuestHostApi } from "./guest-host-api";
 import type { WorkspaceAppModelApi } from "./model-host-api";
+import type { WorkspaceAppPermissionApi } from "./system-permission-host-api";
 import type { WorkspaceSubTabStripSyncPayload } from "./workspace-tab-chip";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
@@ -1622,6 +1623,16 @@ export interface WorkspaceAppHostApi {
   miniAppStatic?: {
     getEntryUrl(appId: string, entryPath?: string): Promise<string | null>;
   };
+
+  /**
+   * 可选：系统级权限（屏幕录制 / 辅助功能 / 摄像头 / 麦克风 / 完全磁盘访问）。
+   *
+   * 最短路径授权：`request()` 由宿主弹框 + 深链 macOS 面板 + 轮询检测，检测到即返回 granted，
+   * 子应用不需要再让用户回来点「我已开启」。
+   * 未升级宿主时此属性为 undefined，子应用必须走 fallback。
+   * 只有 manifest `permissions.system` 里声明过的能力才会返回非 `unsupported`。
+   */
+  permissions?: WorkspaceAppPermissionApi;
 }
 
 /** 磁盘 / workspace 包入口须导出的模块形状。 */
