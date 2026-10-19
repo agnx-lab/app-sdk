@@ -26,7 +26,7 @@ export interface WorkspaceAppListItem {
    * 侧栏 / 列表行左侧图片（封面等 http(s) 或本机路径）。
    *
    * 注意这是**列表行内容图**（如音乐封面），不是 App 图标 —— App 图标只认
-   * `.agnx/manifest.json` 的 `icon`，不从这里取。
+   * `.agnx/manifest.json` 的 `icon` / `iconDark`，不从这里取。
    * 有则宿主绘制图片，拿不到则退回该分段的默认图标。
    */
   imageUrl?: string;
@@ -156,7 +156,8 @@ export interface WorkspaceAppCommandContribution {
   /** 对应 keyboard-shortcuts help.id，用于命令面板展示快捷键。 */
   shortcutHelpId?: string;
   /**
-   * 命令图标。侧栏顶部按钮等运行时可共用；**命令面板「子应用」列表行优先读 manifest.icon 静态路径**。
+   * 命令图标。侧栏顶部按钮等运行时可共用；**命令面板「子应用」列表行优先读 manifest.icon 静态路径
+   * （深色主题且声明了 manifest.iconDark 时读那一版）**。
    */
   icon?: WorkspaceAppIcon;
   /**

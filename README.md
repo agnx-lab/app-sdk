@@ -72,7 +72,7 @@ export default mod;
 
 ## App 图标合同（manifest 静态配置）
 
-命令面板「子应用」列表的 leading 图标 **只读 `manifest.json` 的 `icon` 字段**（相对 App 根目录的静态文件路径，如 `"./assets/icon.svg"`）。宿主扫描时解析为绝对路径，**不靠** `activate` / `registerCommand` / `registerMiniApp` 运行时贡献点。
+命令面板「子应用」列表的 leading 图标 **只读 `manifest.json` 的 `icon` / `iconDark` 字段**（相对 App 根目录的静态文件路径，如 `"./assets/icon.svg"`）。宿主扫描时解析为绝对路径，**不靠** `activate` / `registerCommand` / `registerMiniApp` 运行时贡献点。
 
 | 表面                 | 图标来源                                                                                                   |
 | -------------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -85,6 +85,24 @@ export default mod;
 1. 在 `manifest.json` 写 `"icon": "./相对路径/brand.svg"`（或 png/webp），文件随 App 目录一起分发。
 2. Tab/侧栏若需动态组件标，可另在 `registerMiniApp` / `registerCommand` 传 `WorkspaceAppIcon`；与 manifest 静态标互不替代。
 3. 改图标后保存 manifest + 替换文件 → 命令面板「子应用 → 重新扫描」即可，**无需改宿主代码**。
+
+### 明暗两版图标（`iconDark`，可选）
+
+品牌图标是纯黑 / 纯白单色时（如 DeepSeek），在浅色主题下看得见、深色主题下就糊成一片。这类 App 可以再声明一版深色图标：
+
+```json
+{
+  "icon": "./apps/web/public/favicon.svg",
+  "iconDark": "./apps/web/public/favicon-dark.svg"
+}
+```
+
+- **`icon`** = 基础版（浅色主题首选）；**`iconDark`** = 深色主题版。
+- 宿主按**解析后的实际主题**选版：深色主题（`dark` / `darkZinc` / `darkMidnight` / `darkClaude` / `darkGhostty`）且声明了 `iconDark` → 用深色版；其余一律用 `icon`。
+- **`iconDark` 完全是可选的**：不写就是「只有一版图标」，深色主题沿用 `icon`，与改造前行为完全一致。
+- 两版走同一套门闩（相对仓根、文件存在、≤64KB、非脚手架占位图），`npm run sub-apps:assert-icon` 会一起校验；两版指向同一个文件会被判为无效。
+- **不要指望 SVG 里写 `@media (prefers-color-scheme: dark)` 自适应**：宿主拿到的是 `blob:` URL，主题切换不会让图片重新求值媒体查询。必须用 `iconDark` 显式给两版。
+- 打包分享时两版文件都要随 App 目录一起分发。
 
 详见 `skills/agnx-app/SKILL.md` §App 图标与 Logo。
 
