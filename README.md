@@ -130,7 +130,7 @@ createElement(host.ui.Select, {
 
 实现目录（宿主）：`packages/app/src/workspace-apps/ui/primitives/`。以后新控件往该目录加，再挂到 `host.ui`。
 
-详见仓内 [应用氛围宪法](../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
+详见仓内 [应用氛围宪法](../../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
 
 ## Pane 级品牌扫光 · 子应用 boot 合同
 
@@ -185,5 +185,5 @@ return loading ? <Panel title="加载中…" /> : <ContentView />;
 
 ### 相关文档
 
-- [品牌加载全仓升级台账](../docs/foundation/品牌加载全仓升级台账_brand-loading-rollout-progress.md) §6
-- [子应用加载模式与刷新语义](../docs/sub-app/子应用加载模式与刷新语义需求_sub-app-load-mode-refresh-semantics-requirements.md) §4.4（F5 + React Compiler 踩坑）
+- [品牌加载全仓升级台账](../../docs/foundation/品牌加载全仓升级台账_brand-loading-rollout-progress.md) §6
+- [子应用加载模式与刷新语义](../../docs/sub-app/子应用加载模式与刷新语义需求_sub-app-load-mode-refresh-semantics-requirements.md) §4.4（F5 + React Compiler 踩坑）
