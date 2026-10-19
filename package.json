@@ -25,6 +25,11 @@
       "react-native": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./sidecar": {
+      "types": "./src/sidecar.ts",
+      "import": "./src/sidecar.ts",
+      "default": "./src/sidecar.ts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
