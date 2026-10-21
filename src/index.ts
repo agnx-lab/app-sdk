@@ -75,6 +75,19 @@ export type {
   WorkspaceAppPermissionApi,
 } from "./system-permission-host-api";
 
+// 门禁组件的 props（宿主通过 host.ui.PermissionGate 注入实现）。
+export type { WorkspaceAppPermissionGateProps } from "./host-api";
+
+// 权限门禁通用抽象：把「声明 → 查 → 申请 → 自动放行 → 重启提示」这套流程固化，
+// 避免每个电脑操作类子应用各写一遍导致文案/边界漂移。
+export { createPermissionGate, PermissionGate, resolvePermissionGateView } from "./permission-gate";
+export type {
+  PermissionGateOptions,
+  PermissionGateRow,
+  PermissionGateSnapshot,
+  PermissionGateState,
+} from "./permission-gate";
+
 // 场景：@getagnx/app-sdk 公共出口 — 通用 Sub App 协议类型与 activate(host) 合同。
 export type {
   WorkspaceAppCommandContribution,

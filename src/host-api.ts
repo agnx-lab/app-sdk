@@ -18,7 +18,7 @@ import type {
 import type { WorkspaceAppAndroidHostApi } from "./android-host-api";
 import type { WorkspaceAppGuestHostApi } from "./guest-host-api";
 import type { WorkspaceAppModelApi } from "./model-host-api";
-import type { WorkspaceAppPermissionApi } from "./system-permission-host-api";
+import type { SystemPermissionId, WorkspaceAppPermissionApi } from "./system-permission-host-api";
 import type { WorkspaceSubTabStripSyncPayload } from "./workspace-tab-chip";
 
 /** 命令 / 快捷键 `run` 时宿主传入的上下文（可能缺字段）。 */
@@ -955,6 +955,16 @@ export interface WorkspaceAppUiApi {
    * 通用表单原子（L0）：下拉选择。`appearance: "field"` 触发器与 TextField 同 token；面板走宿主 DropdownMenu。
    */
   Select: (props: WorkspaceAppSelectProps) => unknown;
+  /**
+   * 系统权限门禁：缺权限时盖住子元素并给「去开启」，用户勾选后自动放行。
+   *
+   * 抽到宿主的原因：屏幕录制 / 辅助功能这套流程（弹框文案 → 深链 → 轮询 → 重启提示）
+   * 每个电脑操作类子应用都要走一遍，各写一份必然漂移（文案不一致、忘了 restartRequired、
+   * 轮询泄漏）。子应用只需声明 required + reason，UI 与边界全由宿主保证。
+   *
+   * 宿主未提供（旧宿主 / 非桌面端）时**直接渲染 children**，不挡人。
+   */
+  PermissionGate: (props: WorkspaceAppPermissionGateProps) => unknown;
 }
 
 /** 子应用内联品牌 Logo 扫光（无文案）。 */
@@ -962,6 +972,34 @@ export interface WorkspaceAppBrandLogoLoaderProps {
   /** 默认 96；侧栏级可用 48，面板级推荐 64。 */
   size?: number;
   testID?: string;
+}
+
+/**
+ * `host.ui.PermissionGate` 的 props。
+ *
+ * 用法：把主界面整个包进去即可，不需要自己管查询 / 申请 / 轮询：
+ * ```tsx
+ * <host.ui.PermissionGate required={["screen.capture"]} reason="需要看到你的桌面">
+ *   <MainPanel />
+ * </host.ui.PermissionGate>
+ * ```
+ */
+export interface WorkspaceAppPermissionGateProps {
+  /**
+   * 权限 API。**子应用不需要传** —— 宿主注入本 app 的 permissions，
+   * 这样门禁不必知道 appId，也不会串到别的子应用。
+   */
+  permissions?: WorkspaceAppPermissionApi;
+  /** 必需权限：缺一项就挡住 children。 */
+  required: readonly SystemPermissionId[];
+  /** 可选权限：只在门禁里展示状态，不阻塞。 */
+  optional?: readonly SystemPermissionId[];
+  /** 弹框里展示的用途说明（不写干巴巴的权限名）。 */
+  reason?: string;
+  /** 覆盖权限中文名。 */
+  labelOf?: (id: SystemPermissionId) => string;
+  /** 被门禁包住的主界面。 */
+  children: unknown;
 }
 
 /** 子应用内容区整块品牌 loading（与宿主 `BrandLogoLoaderPanel` 同源）。 */
