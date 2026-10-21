@@ -40,6 +40,19 @@ export interface PermissionDetailRowsOptions {
   hostAppLabel?: string;
   /** 分组标题，默认「系统权限」。 */
   groupTitle?: string;
+  /**
+   * 渲染「去系统设置」按钮。子应用用 JSX 传入（SDK 是纯 TS，不能自带 React 元素）。
+   * 返回 undefined 则该行只显示状态文本，没有按钮。
+   *
+   * 为什么必须有按钮：用户看到「未授权」却不知道该去哪改。让他在详情里
+   * 一步跳到系统设置，比让他自己找「系统设置 → 隐私与安全性 → 屏幕录制」强。
+   */
+  renderAction?: (input: {
+    id: SystemPermissionId;
+    label: string;
+    satisfied: boolean;
+    openSettings: () => void;
+  }) => unknown;
 }
 
 /** 单行状态文案。 */
@@ -101,6 +114,10 @@ export function buildPermissionDetailRows(
       });
   };
 
+  // activate 时先查一次：否则用户第一次打开「详情 → 配置」会看到全「未授权」，
+  // 而实际可能已授权 —— 首帧就错，比慢一拍更糟。
+  void refresh();
+
   return () => {
     // 每次构建行都触发一次后台重查，下次打开详情即是最新状态。
     refresh();
@@ -110,14 +127,24 @@ export function buildPermissionDetailRows(
       const label = PERMISSION_LABELS[row.id] ?? row.id;
       const status = lastStatuses?.find((item) => item.id === row.id);
       const satisfied = row.satisfied;
+      const openSettings = () => {
+        void openPermissionSettings(host, row.id as SystemPermissionId);
+      };
+      const action = options.renderAction?.({
+        id: row.id as SystemPermissionId,
+        label,
+        satisfied,
+        openSettings,
+      });
       return {
         label,
         value: describePermissionStatus(status),
         helpText: satisfied
           ? undefined
-          : `授权对象是「${hostAppLabel}」（不是本应用的名字）。点下方按钮打开系统设置，在列表里找到 ${hostAppLabel} 并打开开关。`,
+          : `授权对象是「${hostAppLabel}」（不是本应用的名字）。点右侧按钮打开系统设置，在列表里找到 ${hostAppLabel} 并打开开关。`,
         groupId: "system-permissions",
         groupTitle,
+        ...(action === undefined ? {} : { valueContent: action }),
       };
     });
 
