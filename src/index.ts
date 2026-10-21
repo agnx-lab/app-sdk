@@ -75,6 +75,14 @@ export type {
   WorkspaceAppPermissionApi,
 } from "./system-permission-host-api";
 
+// 权限做进「详情配置」：子应用一行接入，不再在 Tab 内容区遮挡。
+export {
+  buildPermissionDetailRows,
+  describePermissionStatus,
+  openPermissionSettings,
+} from "./permission-detail-rows";
+export type { PermissionDetailRowsOptions } from "./permission-detail-rows";
+
 // 门禁组件的 props（宿主通过 host.ui.PermissionGate 注入实现）。
 export type { WorkspaceAppPermissionGateProps } from "./host-api";
 
