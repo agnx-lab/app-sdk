@@ -1,5 +1,5 @@
 {
-  "name": "@getagnx/app-sdk",
+  "name": "@agnx-lab/app-sdk",
   "version": "1.0.0",
   "private": true,
   "description": "Agnx 工作区 Sub App 通用协议 surface（类型 + activate(host)）；与具体行业 App 无关。",

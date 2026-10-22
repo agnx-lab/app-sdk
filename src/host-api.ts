@@ -1,7 +1,7 @@
 // 场景：宿主注入给外置 Sub App 的运行时 API（通用；与具体行业 App 无关）。
 //
-// 第三方 / AI skill 只需依赖本包：`npm i @getagnx/app-sdk`，实现 `activate(host)`，
-// 把产物放到 `$AGNX_HOME/apps/<appId>/`。不要 import `@getagnx/app` 内部路径。
+// 第三方 / AI skill 只需依赖本包：`npm i @agnx-lab/app-sdk`，实现 `activate(host)`，
+// 把产物放到 `$AGNX_HOME/apps/<appId>/`。不要 import `@agnx-lab/app` 内部路径。
 import type {
   WorkspaceAppCommandContribution,
   WorkspaceAppIcon,
@@ -1022,7 +1022,7 @@ export type WorkspaceAppButtonSize = "xs" | "sm" | "md" | "lg";
 
 /**
  * 通用按钮原子（L0）。实现挂在宿主 `host.ui.Button`，薄封装现有 Button。
- * Sub App：`createElement(host.ui.Button, { … })`；禁止 import `@getagnx/app` 内部路径。
+ * Sub App：`createElement(host.ui.Button, { … })`；禁止 import `@agnx-lab/app` 内部路径。
  */
 export interface WorkspaceAppButtonProps {
   children?: unknown;
@@ -1186,7 +1186,7 @@ export interface WorkspaceAppConfirmRiskResult {
  *
  * @example
  * ```ts
- * import type { WorkspaceAppHostApi } from "@getagnx/app-sdk";
+ * import type { WorkspaceAppHostApi } from "@agnx-lab/app-sdk";
  *
  * export function activate(host: WorkspaceAppHostApi) {
  *   host.registerPrimarySegment({ id: "demo", appId: "com.example.demo", label: "Demo", order: 60 });

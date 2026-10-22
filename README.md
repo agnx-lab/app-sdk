@@ -1,11 +1,11 @@
-# `@getagnx/app-sdk`
+# `@agnx-lab/app-sdk`
 
-Agnx **工作区 Sub App** 的通用协议面。第三方 / AI skill **只应依赖本包**，不得 import `@getagnx/app` 或 desktop 内部路径。
+Agnx **工作区 Sub App** 的通用协议面。第三方 / AI skill **只应依赖本包**，不得 import `@agnx-lab/app` 或 desktop 内部路径。
 
 ## 安装（目标发布形态）
 
 ```bash
-npm i @getagnx/app-sdk
+npm i @agnx-lab/app-sdk
 ```
 
 当前仍在 monorepo 内（`"private": true`）；对外 `npm publish` 前会去掉 private 并补齐构建产物 `dist/`。
@@ -13,7 +13,7 @@ npm i @getagnx/app-sdk
 ## 最小例子
 
 ```ts
-import type { WorkspaceAppHostApi, WorkspaceAppModule } from "@getagnx/app-sdk";
+import type { WorkspaceAppHostApi, WorkspaceAppModule } from "@agnx-lab/app-sdk";
 
 export const appId = "com.example.demo";
 
@@ -114,7 +114,7 @@ export default mod;
 - **禁止**复制到 `~/.agents/skills/` 或 `~/.claude/skills/`（会泄漏到其他非 Agnx 项目）
 - **本机 Cursor 仅在本仓库生效：** `mkdir -p .cursor/skills && ln -sf ../../skills/agnx-app .cursor/skills/agnx-app`（`.cursor/` 已 gitignore，各开发者本地执行一次）
 
-流程：`npm i @getagnx/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
+流程：`npm i @agnx-lab/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
 
 ## UI / 氛围（Sub App 默认）
 
@@ -125,7 +125,7 @@ export default mod;
 
 ### 表单原子（`host.ui` L0）
 
-通用按钮 / 输入 / 芯片走宿主注入（**不要** import `@getagnx/app` 内部路径）：
+通用按钮 / 输入 / 芯片走宿主注入（**不要** import `@agnx-lab/app` 内部路径）：
 
 | 符号                | 用途                                   |
 | ------------------- | -------------------------------------- |
@@ -152,7 +152,7 @@ createElement(host.ui.Select, {
 
 ## Pane 级品牌扫光 · 子应用 boot 合同
 
-**子应用不 import 扫光组件。** `@getagnx/app-sdk` **未**导出 `BrandLogoLoader` / `BrandLogoLoaderPanel`，`host.ui` 也无对应 API。Pane / Tab 首屏 boot 由**宿主**在中间区统一盖 `workspace-pane-boot-overlay`（横向 Logo 扫光）。
+**子应用不 import 扫光组件。** `@agnx-lab/app-sdk` **未**导出 `BrandLogoLoader` / `BrandLogoLoaderPanel`，`host.ui` 也无对应 API。Pane / Tab 首屏 boot 由**宿主**在中间区统一盖 `workspace-pane-boot-overlay`（横向 Logo 扫光）。
 
 ### 子应用应做什么
 
@@ -190,7 +190,7 @@ host.registerMiniApp({
 
 ```tsx
 import type { ComponentType } from "react";
-import type { WorkspaceAppBrandLogoLoaderPanelProps } from "@getagnx/app-sdk";
+import type { WorkspaceAppBrandLogoLoaderPanelProps } from "@agnx-lab/app-sdk";
 
 const Panel = host.ui.BrandLogoLoaderPanel as ComponentType<WorkspaceAppBrandLogoLoaderPanelProps>;
 
