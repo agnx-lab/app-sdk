@@ -1,7 +1,6 @@
 {
   "name": "@agnx-lab/app-sdk",
   "version": "1.0.0",
-  "private": true,
   "description": "Agnx 工作区 Sub App 通用协议 surface（类型 + activate(host)）；与具体行业 App 无关。",
   "keywords": [
     "agnx",
@@ -10,6 +9,11 @@
     "workspace-app"
   ],
   "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agnx-lab/agnx.git",
+    "directory": "packages/app-sdk"
+  },
   "files": [
     "src",
     "README.md"
@@ -31,6 +35,9 @@
       "default": "./src/sidecar.ts"
     },
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "typecheck": "tsgo --noEmit -p tsconfig.json",
