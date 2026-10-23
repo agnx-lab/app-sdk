@@ -8,7 +8,8 @@ Agnx **工作区 Sub App** 的通用协议面。第三方 / AI skill **只应依
 npm i @agnx-lab/app-sdk
 ```
 
-当前仍在 monorepo 内（`"private": true`）；对外 `npm publish` 前会去掉 private 并补齐构建产物 `dist/`。
+当前已可发布（`private` 已移除）；包内直接发布 TypeScript 源码（`files: ["src"]`），
+消费方需自行用 esbuild / tsgo 处理，宿主运行时由 peer 注入提供实现。
 
 ## 最小例子
 
