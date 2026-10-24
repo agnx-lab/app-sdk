@@ -101,21 +101,20 @@ export default mod;
 - **`icon`** = 基础版（浅色主题首选）；**`iconDark`** = 深色主题版。
 - 宿主按**解析后的实际主题**选版：深色主题（`dark` / `darkZinc` / `darkMidnight` / `darkClaude` / `darkGhostty`）且声明了 `iconDark` → 用深色版；其余一律用 `icon`。
 - **`iconDark` 完全是可选的**：不写就是「只有一版图标」，深色主题沿用 `icon`，与改造前行为完全一致。
-- 两版走同一套门闩（相对仓根、文件存在、≤64KB、非脚手架占位图），`npm run sub-apps:assert-icon` 会一起校验；两版指向同一个文件会被判为无效。
+- 两版走同一套门闩（路径相对子应用根、文件存在、≤64KB、非占位图）；两版指向同一个文件会被判为无效。
 - **不要指望 SVG 里写 `@media (prefers-color-scheme: dark)` 自适应**：宿主拿到的是 `blob:` URL，主题切换不会让图片重新求值媒体查询。必须用 `iconDark` 显式给两版。
 - 打包分享时两版文件都要随 App 目录一起分发。
 
-详见 `skills/agnx-app/SKILL.md` §App 图标与 Logo。
+图标门闩的完整校验逻辑由宿主的 `sub-apps:assert-icon` 实现；子应用侧只需按上面四条准备两版文件。
 
-## 与 skill
+## 与 Agnx 宿主
 
-`agnx-app` skill（智能体代写子应用）：
+流程：`npm i @agnx-lab/app-sdk` → 按本 README / JSDoc 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps/<appId>/.agnx/`。
 
-- **唯一权威（本仓库）：** `skills/agnx-app/SKILL.md`
-- **禁止**复制到 `~/.agents/skills/` 或 `~/.claude/skills/`（会泄漏到其他非 Agnx 项目）
-- **本机 Cursor 仅在本仓库生效：** `mkdir -p .cursor/skills && ln -sf ../../skills/agnx-app .cursor/skills/agnx-app`（`.cursor/` 已 gitignore，各开发者本地执行一次）
+宿主运行时会把 SDK 实例**注入**进来（`workspace-app-peers`），所以：
 
-流程：`npm i @agnx-lab/app-sdk` → 按本 README / JSDoc / skill 实现 `activate(host)` → 放入或安装到 `$AGNX_HOME/apps`。
+- 子应用**不需要**把 `@agnx-lab/app-sdk` 打进自己的 bundle，标 `peerDependencies` + `optional` 即可；
+- 本包的 npm 依赖只用于**类型检查**和本地构建；运行期实现由宿主提供。
 
 ## UI / 氛围（Sub App 默认）
 
@@ -147,9 +146,9 @@ createElement(host.ui.Select, {
 });
 ```
 
-实现目录（宿主）：`packages/app/src/workspace-apps/ui/primitives/`。以后新控件往该目录加，再挂到 `host.ui`。
+实现位置在**宿主产品仓**（不在本 SDK 仓）：宿主把基础控件集中在自己的 `workspace-apps/ui/primitives/` 目录，再挂到 `host.ui` 暴露给子应用。
 
-详见仓内 [应用氛围宪法](../../docs/constitutions/应用氛围_app-atmosphere.md)、[应用氛围基准与进度](../../docs/应用氛围基准与进度_app-atmosphere-baseline-and-progress.md) 与 `agnx-app` skill「UI 主题与氛围」。
+氛围着色的具体规范由宿主产品维护（不随本 SDK 发布）；本 SDK 只保证 `host.ui` 暴露主题 token，子应用按「只用 token、不写死颜色」实现。
 
 ## Pane 级品牌扫光 · 子应用 boot 合同
 
@@ -204,5 +203,4 @@ return loading ? <Panel title="加载中…" /> : <ContentView />;
 
 ### 相关文档
 
-- [品牌加载全仓升级台账](../../docs/foundation/品牌加载全仓升级台账_brand-loading-rollout-progress.md) §6
-- [子应用加载模式与刷新语义](../../docs/sub-app/子应用加载模式与刷新语义需求_sub-app-load-mode-refresh-semantics-requirements.md) §4.4（F5 + React Compiler 踩坑）
+- 宿主侧的加载动画与刷新语义由宿主产品文档维护（不随本 SDK 发布）。子应用侧只需遵守本文件已写明的 `host.ui` 合同与 boot 就绪信号约定。
