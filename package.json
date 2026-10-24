@@ -1,6 +1,6 @@
 {
   "name": "@agnx-lab/app-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Agnx 工作区 Sub App 通用协议 surface（类型 + activate(host)）；与具体行业 App 无关。",
   "keywords": [
     "agnx",
@@ -11,13 +11,13 @@
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/agnx-lab/app-sdk.git"
+    "url": "https://github.com/agnx-lab/agnx.git",
+    "directory": "packages/app-sdk"
   },
   "files": [
     "src",
     "!src/**/*.test.ts",
-    "README.md",
-    "LICENSE"
+    "README.md"
   ],
   "type": "module",
   "main": "./src/index.ts",
@@ -49,9 +49,5 @@
     "@types/node": "^20.19.0",
     "@typescript/native-preview": "7.0.0-dev.20260423.1",
     "vitest": "^3.2.4"
-  },
-  "homepage": "https://github.com/agnx-lab/app-sdk#readme",
-  "bugs": {
-    "url": "https://github.com/agnx-lab/app-sdk/issues"
   }
 }

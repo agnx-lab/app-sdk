@@ -39,6 +39,19 @@ export interface WorkspaceAppGuestManifestLite {
   module?: string;
   rendererEntry?: string;
   preferStrategy?: WorkspaceAppGuestPreferStrategy;
+  /**
+   * 声明式开关：宿主接管「外部 Electron 主进程」已建好的 WebContents，而不是自己新建。
+   *
+   * 适用场景：上游是 Electron-only（功能全在 `electron/main.ts`），只挂 renderer 会因主进程不运行
+   * 导致 preload 的 IPC 无应答方（界面能看、功能全废）。
+   *
+   * 开启后子应用须通过 `runtime.sidecars` 拉起上游主进程，并把它的 `webContentsId`
+   * 经 `surface.attach` 报给宿主；宿主用 Electron 原生
+   * `new WebContentsView({ webContents })` 接管，此时 renderer/preload/handler 天然齐全。
+   *
+   * 约束：一个 WebContents 同时只能被一个 WebContentsView 呈现。
+   */
+  adoptExternalWebContents?: boolean;
 }
 
 export type WorkspaceAppGuestSurfaceState = "idle" | "mounting" | "ready" | "error" | "load-slow";
