@@ -42,10 +42,13 @@
   },
   "scripts": {
     "typecheck": "tsgo --noEmit -p tsconfig.json",
-    "prepublishOnly": "npm run typecheck"
+    "prepublishOnly": "npm run typecheck",
+    "test": "vitest run"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "@types/node": "^20.19.0",
+    "@typescript/native-preview": "7.0.0-dev.20260423.1",
+    "vitest": "^3.2.4"
   },
   "homepage": "https://github.com/agnx-lab/app-sdk#readme",
   "bugs": {
